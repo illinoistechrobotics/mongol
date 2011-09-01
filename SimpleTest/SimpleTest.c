@@ -21,8 +21,9 @@
 #define DEFAULT_BAUDNUM		1 // 1Mbps
 #define DEFAULT_ID		1
 
-int id = BROADCAST_ID;
+int id = 0;
 
+//prototypes
 int readByte(int addr);
 int readWord(int addr);
 int writeByte(int addr, char data);
@@ -42,9 +43,16 @@ int main(){
 
 		printf("Successfully initialized USB interface.\n");
 	}
-
+	
 	printf("Press ENTER to begin the test:");
 	getchar();
+
+	dxl_ping(id);
+	while(!isSuccess()){
+
+		dxl_ping(++id);
+	}
+	printf("Dynamixel ID: %d\n", id);
 
 	//Get model number of Dynamixel
 	int modelNum = readWord(P_MODEL_NUM);
@@ -106,6 +114,7 @@ int readWord(int addr){
 
 	int data = dxl_read_word(id, addr);
 	int result;
+	printf("Data: %d\n", data);
 
 	if(!(result = isSuccess()))
 		return result;
