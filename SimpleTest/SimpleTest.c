@@ -1,6 +1,7 @@
 //SimpleTest
 //By Allen Baker
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <termio.h>
 #include <unistd.h>
@@ -11,8 +12,7 @@
 #define P_ID			3
 
 // Control table address
-#define P_GOAL_POSITION_L	30
-#define P_GOAL_POSITION_H	31
+#define P_GOAL_POSITION		30
 #define P_PRESENT_POSITION_L	36
 #define P_PRESENT_POSITION_H	37
 #define P_MOVING		46
@@ -23,16 +23,21 @@
 
 int id = 0;
 
+char inputBuffer [100];
+
 //prototypes
 int readByte(int addr);
 int readWord(int addr);
 int writeByte(int addr, char data);
+int writeWord(int addr, short data);
 int isSuccess(void);
+char * readIn(void);
 void flushIn(void);
 
 int main(){
 
 	int deviceIndex = 0;
+	int validId = 0;
 
 	if(!(dxl_initialize(deviceIndex, DEFAULT_BAUDNUM))){
 
@@ -43,16 +48,61 @@ int main(){
 
 		printf("Successfully initialized USB interface.\n");
 	}
+
+	while(!validId){
+
+		printf("Enter the ID of the Dynamixel you want to test:");
+		id = atoi(readIn());
+
+		printf("Pinging ID %d...\n", id);
+
+		dxl_ping(id);
+		if(!isSuccess()){
+
+			printf("Incorrect ID. Try again (0) or autodetect (1)?");
+			
+			if(atoi(readIn())){	//If autodetect is chosen
+
+				id = 0;
+				dxl_ping(id);
+				while(!isSuccess()){
+
+					dxl_ping(++id);
+				}
+
+				validId = 1;
+			}
+		}
+		else
+			validId = 1;
+	}
+
+	printf("Using Dynamixel %d\n", id);
+	
+	printf("Assign different ID? (y/n):");
+	char a = getchar();
+	if(a == 'y'){
+
+		flushIn();
+		printf("Enter number from 1 to 253:");
+		char newId = atoi(readIn());
+
+		if(writeByte(P_ID, newId)){
+
+			id = (int) newId;
+			if(id == readByte(P_ID))
+				printf("Successfully assigned ID.\nNew ID: %d\n", id);
+			else
+				printf("Error: Could not assign ID.\n");
+		}
+
+		else
+			printf("Error: Could not assign ID.\n");
+	}
+	
 	
 	printf("Press ENTER to begin the test:");
 	getchar();
-
-	dxl_ping(id);
-	while(!isSuccess()){
-
-		dxl_ping(++id);
-	}
-	printf("Dynamixel ID: %d\n", id);
 
 	//Get model number of Dynamixel
 	int modelNum = readWord(P_MODEL_NUM);
@@ -62,37 +112,22 @@ int main(){
 	int fwVer = readByte(P_FW_VER);
 	printf("Firmware Version: %d\n", fwVer);
 
-	//Get ID of Dynamixel
-	id = readByte(P_ID);
-	printf("Dynamixel ID: %d\n", id);
-
-	printf("Assign different ID? (y/n):");
-	char a = getchar();
-	if(a == 'y'){
-
-		flushIn();
-		printf("Enter number from 0 to 9:");
-		char newId = getchar() - '0';
-
-	//	if(writeByte(newId, P_ID) && ((id = newId) == readByte(P_ID)))
-	//		printf("Successfully assigned ID.\n");
-
-		if(writeByte(newId, P_ID)){
-
-			id = (int) newId;
-			if(id == readByte(P_ID))
-				printf("Successfully assigned ID.\n");
-			else
-				printf("Error: Could not assign ID.\n");
-		}
-
-		else
-			printf("Error: Could not assign ID.\n");
-	}
-	
-	flushIn();
 	printf("Press ENTER to continue with the test:");
 	getchar();
+
+	/*
+	printf("Moving Dynamixel to Position 0...\n");
+	writeWord(P_GOAL_POSITION, 0);
+	while(dxl_read_byte(id, P_MOVING));
+	
+	printf("Moving Dynamixel to Position 1024...\n");
+	writeWord(P_GOAL_POSITION, 1024);
+	while(dxl_read_byte(id, P_MOVING));
+	
+	printf("Moving Dynamixel to Position 0...\n");
+	writeWord(P_GOAL_POSITION, 0);
+	while(dxl_read_byte(id, P_MOVING));
+	*/
 
 	printf("Exiting...\n");
 	dxl_terminate();
@@ -127,6 +162,27 @@ int writeByte(int addr, char data){
 	dxl_write_byte(id, addr, data);
 
 	return isSuccess();
+}
+
+int writeWord(int addr, short data){
+
+	dxl_write_word(id, addr, data);
+
+	return isSuccess();
+}
+
+char * readIn(){
+
+	int i = 0;
+	char a;
+	while((a = getchar()) != '\n' && a != EOF && i < 99){
+
+		inputBuffer[i++] = a;
+	}
+
+	inputBuffer[i] = '\0';
+
+	return &inputBuffer[0];
 }
 
 void flushIn(){
