@@ -7,19 +7,29 @@
 #include <unistd.h>
 #include <dynamixel.h>
 
-#define P_MODEL_NUM		0
-#define P_FW_VER		2
-#define P_ID			3
+#define P_MODEL_NUM		0	//Word
+#define P_FW_VER		2	//Byte
+#define P_ID			3	//Byte
 
-// Control table address
-#define P_GOAL_POSITION		30
-#define P_PRESENT_POSITION_L	36
-#define P_PRESENT_POSITION_H	37
-#define P_MOVING		46
+#define P_CW_ANG_LIMIT		6	//Word
+#define P_CCW_ANG_LIMIT		8	//Word
+#define P_MAX_TORQUE		14	//Word
+#define P_LED			25	//Byte
 
-// Defualt setting
-#define DEFAULT_BAUDNUM		1 // 1Mbps
-#define DEFAULT_ID		1
+#define P_GOAL_POS		30	//Word
+#define P_MOVING_SPEED		32	//Word
+#define P_PRESENT_POS		36	//Word
+#define P_PRESENT_V		42	//Byte
+#define P_MOVING		46	//Byte
+
+#define MAX_CW_POS		0
+#define MAX_CCW_POS		1023
+
+#define STOP_SPEED		0
+#define MED_SPEED		511
+#define MAX_SPEED		1023
+
+#define DEFAULT_BAUDNUM		1 	// 1Mbps
 
 int id = 0;
 
@@ -112,22 +122,61 @@ int main(){
 	int fwVer = readByte(P_FW_VER);
 	printf("Firmware Version: %d\n", fwVer);
 
+	printf("Voltage: %d\n", readByte(P_PRESENT_V));
+
+	//Get clockwise angle limit
+	printf("ClockWise Angle Limit: %d\n", readWord(P_CW_ANG_LIMIT));
+
+	printf("Counterclockwise Angle Limit: %d\n", readWord(P_CCW_ANG_LIMIT));
+
+	printf("Moving Speed: %d\n", readWord(P_MOVING_SPEED));
+
+	//Get present position of Dynamixel
+	int presPos = readWord(P_PRESENT_POS);
+	printf("Present Position: %d\n", presPos);
+
+	printf("Goal Position: %d\n", readWord(P_GOAL_POS));
+
 	printf("Press ENTER to continue with the test:");
 	getchar();
+ 
+	writeWord(P_MOVING_SPEED, MED_SPEED);
 
-	/*
 	printf("Moving Dynamixel to Position 0...\n");
-	writeWord(P_GOAL_POSITION, 0);
-	while(dxl_read_byte(id, P_MOVING));
+	if(writeWord(P_GOAL_POS, MAX_CW_POS)){
+		//sleep(1);
+		while(readByte(P_MOVING)); /*{sleep(1);}*/
+		printf("Moving completed.\n");
+	}
+	else
+		printf("Error: Could not make servo move.\n");
+
+	printf("Press ENTER to continue with the test:");
+	getchar();
 	
-	printf("Moving Dynamixel to Position 1024...\n");
-	writeWord(P_GOAL_POSITION, 1024);
-	while(dxl_read_byte(id, P_MOVING));
+	printf("Moving Dynamixel to Position 1023...\n");
+	if(writeWord(P_GOAL_POS, MAX_CCW_POS)){
+		//sleep(1);
+		while(readByte(P_MOVING)); /*{sleep(1);}*/
+		printf("Moving completed.\n");
+	}
+	else
+		printf("Error: Could not make servo move.\n");
+
+	printf("Press ENTER to continue with the test:");
+	getchar();
 	
 	printf("Moving Dynamixel to Position 0...\n");
-	writeWord(P_GOAL_POSITION, 0);
-	while(dxl_read_byte(id, P_MOVING));
-	*/
+	if(writeWord(P_GOAL_POS, MAX_CW_POS)){
+		//sleep(1);
+		while(readByte(P_MOVING)); /*{sleep(1);}*/
+		printf("Moving completed.\n");
+	}
+	else
+		printf("Error: Could not make servo move.\n");
+
+	printf("Press ENTER to continue with the test:");
+	getchar();
 
 	printf("Exiting...\n");
 	dxl_terminate();
@@ -149,7 +198,6 @@ int readWord(int addr){
 
 	int data = dxl_read_word(id, addr);
 	int result;
-	printf("Data: %d\n", data);
 
 	if(!(result = isSuccess()))
 		return result;
