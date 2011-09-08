@@ -23,6 +23,9 @@
 #define P_MOVING		46	//Byte
 
 #define MAX_CW_POS		0
+#define CW_POS			441
+#define CENTER_POS		511
+#define CCW_POS			581
 #define MAX_CCW_POS		1023
 
 #define STOP_SPEED		0
@@ -142,8 +145,8 @@ int main(){
  
 	writeWord(P_MOVING_SPEED, MED_SPEED);
 
-	printf("Moving Dynamixel to Position 0...\n");
-	if(writeWord(P_GOAL_POS, MAX_CW_POS)){
+	printf("Moving Dynamixel to Center Position...\n");
+	if(writeWord(P_GOAL_POS, CENTER_POS)){
 		//sleep(1);
 		while(readByte(P_MOVING)); /*{sleep(1);}*/
 		printf("Moving completed.\n");
@@ -151,32 +154,32 @@ int main(){
 	else
 		printf("Error: Could not make servo move.\n");
 
-	printf("Press ENTER to continue with the test:");
-	getchar();
+	printf("Moving Dynamixel in the CW direction...\n");
+	if(writeWord(P_GOAL_POS, CW_POS)){
+		//sleep(1);
+		while(readByte(P_MOVING)); /*{sleep(1);}*/
+		printf("Moving completed.\n");
+	}
+	else
+		printf("Error: Could not make servo move.\n");
 	
-	printf("Moving Dynamixel to Position 1023...\n");
-	if(writeWord(P_GOAL_POS, MAX_CCW_POS)){
+	printf("Moving Dynamixel in the CCW direction...\n");
+	if(writeWord(P_GOAL_POS, CCW_POS)){
 		//sleep(1);
 		while(readByte(P_MOVING)); /*{sleep(1);}*/
 		printf("Moving completed.\n");
 	}
 	else
 		printf("Error: Could not make servo move.\n");
-
-	printf("Press ENTER to continue with the test:");
-	getchar();
 	
-	printf("Moving Dynamixel to Position 0...\n");
-	if(writeWord(P_GOAL_POS, MAX_CW_POS)){
+	printf("Moving Dynamixel to Center Position...\n");
+	if(writeWord(P_GOAL_POS, CENTER_POS)){
 		//sleep(1);
 		while(readByte(P_MOVING)); /*{sleep(1);}*/
 		printf("Moving completed.\n");
 	}
 	else
 		printf("Error: Could not make servo move.\n");
-
-	printf("Press ENTER to continue with the test:");
-	getchar();
 
 	printf("Exiting...\n");
 	dxl_terminate();

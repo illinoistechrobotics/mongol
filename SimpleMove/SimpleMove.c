@@ -16,12 +16,17 @@
 #define P_CCW_ANG_LIMIT		8	//Word
 #define P_LED			25	//Byte
 
+#define P_GOAL_POS		30	//Word
+#define P_MOVE_SPEED		32	//Word
+
 #define P_PRES_POS		36	//Word
 #define P_PRES_V		42	//Byte
 #define P_MOVING		46	//Byte
 
 #define MAX_CW_POS		0
 #define MAX_CCW_POS		1023
+
+#define MED_POS			511
 
 #define STOP_SPEED		0
 #define MED_SPEED		511
@@ -39,12 +44,11 @@ int dxlCount = 0;
 
 int beSilent = 0;
 
-char idStr [] = "ID";
-char cwLimStr [] = "CW Lim";
-char ccwLimStr [] = "CCW Lim";
-char presPosStr [] = "Pres Pos";
-char goalPosStr [] = "Goal Pos";
-char presVoltStr [] = "Pres V";
+char idStr [] = "(1)ID";
+char cwLimStr [] = "(2)CW Limit";
+char ccwLimStr [] = "(3)CCW Limit";
+char presPosStr [] = "Current Position";
+char presVoltStr [] = "Current Voltage";
 
 int idVal [MAX_DXL_COUNT];
 int cwLimVal [MAX_DXL_COUNT];
@@ -58,9 +62,13 @@ char inputBuffer [100];
 int getIndex(int id);
 void printInfo(void);
 int readByte(int id, int addr);
+int readByteAll(int addr, int * start);
 int readWord(int id, int addr);
+int readWordAll(int addr, int * start);
 int writeByte(int id, int addr, char data);
+int writeByteAll(int addr, char * data);
 int writeWord(int id, int addr, short data);
+int writeWordAll(int addr, short * start);
 int isSuccess(void);
 char * readIn(void);
 void flushIn(void);
@@ -99,98 +107,32 @@ int main(){
 	}
 
 	printf("Found %d Dynamixels.\n", dxlCount);
+	printInfo();
+
+	printf("Press Enter to continue the test...\n");
+	getchar();
 
 	beSilent = 0;
 
+	printf("Moving servos...\n");
+
+	short moveSpeeds [dxlCount];
+	short goalSpeeds [dxlCount];
+	
+	int j;
+	for(j = 0; j < dxlCount; moveSpeeds[j++] = MED_SPEED);
+	for(j = 0; j < dxlCount; goalSpeeds[j++] = MED_POS);
+
+	//Write medium moving speed to all servos
+	writeWordAll(P_MOVE_SPEED, &moveSpeeds[0]);
+
+	//Write middle goal position to all servos	
+	writeWordAll(P_GOAL_POS, &goalSpeeds[0]);
+	sleep(3);
+
+	printf("Servos moved.\n");
+
 	printInfo();
-
-	int doExit = 0;
-	char * entry;
-	int selId;
-	int index;
-
-	while(!doExit){
-
-		printf("Enter Dynamixel ID to configure, 'refresh' to refresh, or 'quit' to exit:");
-
-		entry = readIn();
-
-		if(!strcmp(entry, &refreshStr[0])){
-
-			printf("Refreshing...\n");
-
-			int k;
-			for(k = 0; k < dxlCount; k ++){
-
-				cwLimVal[k] = readWord(idVal[k], P_CW_ANG_LIMIT);
-				ccwLimVal[k] = readWord(idVal[k], P_CCW_ANG_LIMIT);
-				presPosVal[k] = readWord(idVal[k], P_PRES_POS);
-				presVoltVal[k] = readByte(idVal[k], P_PRES_V);
-			}
-			printInfo();
-		}
-		else if(!strcmp(entry, &quitStr[0])){
-
-			doExit = 1;
-		}
-		else if(atoi(entry) > 0 && atoi(entry) <= MAX_DXL_COUNT && getIndex(atoi(entry)) >= 0){
-
-			selId = atoi(entry);
-			index = getIndex(selId);
-			int goBack = 0;
-
-			while(!goBack){
-
-				printf("Enter number of category to configure, or 0 to go back:");
-
-				switch(atoi(readIn())){
-
-					case 0:
-						goBack = 1;
-						break;
-					case 1:
-						printf("New ID; Enter a number from 1 to 253:");
-						int newId = atoi(readIn());
-						writeByte(selId, P_ID, newId);
-						if(readByte(newId, P_ID) == newId)
-							printf("ID successfully changed to %d.\n", newId);
-						else
-							printf("ID unsuccessfully changed.\n");
-						idVal[index] = newId;
-						goBack = 1;
-						break;
-					case 2:
-						printf("New CW Limit; Enter a number from 0 to 1023:");
-						int cwLimit = atoi(readIn());
-						writeWord(selId, P_CW_ANG_LIMIT, cwLimit);
-						if(readWord(selId, P_CW_ANG_LIMIT) == cwLimit)
-							printf("CW limit successfully changed to %.4d.\n", cwLimit);
-						else
-							printf("CW limit unsuccessfully changed.\n");
-						goBack = 1;
-						break;
-					case 3:
-						printf("New CCW Limit; Enter a number from 0 to 1023:");
-						int ccwLimit = atoi(readIn());
-						writeWord(selId, P_CCW_ANG_LIMIT, ccwLimit);
-						if(readWord(selId, P_CCW_ANG_LIMIT) == ccwLimit)
-							printf("CCW limit successfully changed to %.4d.\n", ccwLimit);
-						else
-							printf("CCW limit unsuccessfully changed.\n");
-						goBack = 1;
-						break;
-					default:
-						printf("Invalid Command.\n");
-						break;
-				}
-			}
-		}
-		else{
-
-			printf("Invalid Command.\n");
-		}
-	}
-
 	printf("Exiting...\n");
 	dxl_terminate();
 	return 0;
@@ -232,6 +174,24 @@ int readByte(int id, int addr){
 		return data;
 }
 
+//Stores data in int array, returned int is success bit
+int readByteAll(int addr, int * start){
+
+	int * p = start;
+	int result = 1;
+
+	int i;
+	for(i = 0; i < dxlCount; i ++){
+
+		*(p ++) = dxl_read_byte(idVal[i], addr);
+
+		if(!isSuccess())
+			result = 0;
+	}
+
+	return result;
+}
+
 int readWord(int id, int addr){
 
 	int data = dxl_read_word(id, addr);
@@ -243,6 +203,23 @@ int readWord(int id, int addr){
 		return data;
 }
 
+//Stores data in int array, returned int is success bit
+int readWordAll(int addr, int * start){ 
+	int * p = start;
+	int result = 1;
+
+	int i;
+	for(i = 0; i < dxlCount; i ++){
+
+		*(p ++) = dxl_read_word(idVal[i], addr);
+
+		if(!isSuccess())
+			result = 0;
+	}
+	
+	return result;
+}
+
 int writeByte(int id, int addr, char data){
 
 	dxl_write_byte(id, addr, data);
@@ -250,11 +227,45 @@ int writeByte(int id, int addr, char data){
 	return isSuccess();
 }
 
+int writeByteAll(int addr, char * start){
+
+	char * p = start;
+	int result = 1;
+
+	int i;
+	for(i = 0; i < dxlCount; i ++){
+		
+		dxl_write_byte(idVal[i], addr, *(p ++));
+		
+		if(!isSuccess())
+			result = 0;
+	}
+
+	return result;
+}
+
 int writeWord(int id, int addr, short data){
 
 	dxl_write_word(id, addr, data);
 
 	return isSuccess();
+}
+
+int writeWordAll(int addr, short * start){
+
+	short * p = start;
+	int result = 1;
+
+	int i;
+	for(i = 0; i < dxlCount; i ++){
+		
+		dxl_write_word(idVal[i], addr, *(p ++));
+		
+		if(!isSuccess())
+			result = 0;
+	}
+
+	return result;
 }
 
 char * readIn(){

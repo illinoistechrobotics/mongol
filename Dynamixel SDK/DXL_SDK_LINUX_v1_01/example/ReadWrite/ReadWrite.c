@@ -17,7 +17,7 @@
 
 // Defulat setting
 #define DEFAULT_BAUDNUM		1 // 1Mbps
-#define DEFAULT_ID		1
+#define DEFAULT_ID		9	
 
 void PrintCommStatus(int CommStatus);
 void PrintErrorCode(void);
@@ -43,6 +43,8 @@ int main()
 	}
 	else
 		printf( "Succeed to open USB2Dynamixel!\n" );
+	
+			
 
 	while(1)
 	{
