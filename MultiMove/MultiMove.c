@@ -30,13 +30,16 @@
 #define MAX_CCW_POS		1023
 
 #define STOP_SPEED		0
+#define X_SLW_SPEED		127
 #define SLW_SPEED		255
 #define MED_SPEED		511
 #define FST_SPEED		767
+#define X_FST_SPEED		895
 #define MAX_SPEED		1023
 
 #define DEFAULT_DEV_INDEX	0	// /dev/ttyUSB0
 #define DEFAULT_BAUDNUM		1 	// 1Mbps
+#define DEFAULT_DELAY		500	// microseconds
 
 #define MAX_DXL_COUNT		253
 
@@ -70,6 +73,7 @@ int writeByte(int id, int addr, char data);
 int writeByteAll(int addr, char * data);
 int writeWord(int id, int addr, short data);
 int writeWordAll(int addr, short * start);
+int pingDxl(int id);
 int isSuccess(void);
 char * readIn(void);
 void flushIn(void);
@@ -108,7 +112,7 @@ int main(){
 	short goalPos [dxlCount];
 	
 	int j;
-	for(j = 0; j < dxlCount; moveSpeed[j++] = SLW_SPEED);
+	for(j = 0; j < dxlCount; moveSpeed[j++] = X_SLW_SPEED);
 	for(j = 0; j < dxlCount; goalPos[j++] = MED_POS);
 
 	//Write medium moving speed to all servos
@@ -129,79 +133,27 @@ int main(){
 	printf("Press Enter to continue the test...\n");
 	getchar();
 
-	printf("Moving servos...\n");
-
-	//Write middle goal position to all servos	
-	writeWordAll(P_GOAL_POS, &goalPos[0]);
+	printf("Moving DXL %d to %d ...\n", dxlId[0], MAX_CW_POS);
+	printf("Moving DXL %d to %d ...\n", dxlId[1], MAX_CW_POS);
+	writeWord(dxlId[0], P_GOAL_POS, MAX_CW_POS);
+	if(pingDxl(dxlId[1]))
+		writeWord(dxlId[1], P_GOAL_POS, MAX_CW_POS);
 	waitForMove();
-	
-	readWordAll(P_PRES_POS, &dxlPresPos[0]);
-	readWordAll(P_GOAL_POS, &dxlGoalPos[0]);
-	readWordAll(P_MOVE_SPD, &dxlMoveSpd[0]);
-	readByteAll(P_MOVE_STATUS, &dxlMoveStatus[0]);
-	readByteAll(P_PRES_V, &dxlPresVolt[0]);
 
-	printf("Servos moved.\n");
-	printInfo();
-
-	printf("Press Enter to continue the test...\n");
-	getchar();
-
-	//Write medium moving speed to all servos
-	writeWordAll(P_MOVE_SPD, &moveSpeed[0]);
-
-	//Write cw goal position to all servos
-	for(j = 0; j < dxlCount; goalPos[j++] = CW_POS);
-	writeWordAll(P_GOAL_POS, &goalPos[0]);
+	printf("Moving DXL %d to %d ...\n", dxlId[0], MAX_CCW_POS);
+	printf("Moving DXL %d to %d ...\n", dxlId[1], MAX_CCW_POS);
+	writeWord(dxlId[0], P_GOAL_POS, MAX_CCW_POS);
+	if(pingDxl(dxlId[1]))
+		writeWord(dxlId[1], P_GOAL_POS, MAX_CCW_POS);
 	waitForMove();
-	
-	readWordAll(P_PRES_POS, &dxlPresPos[0]);
-	readWordAll(P_GOAL_POS, &dxlGoalPos[0]);
-	readWordAll(P_MOVE_SPD, &dxlMoveSpd[0]);
-	readByteAll(P_MOVE_STATUS, &dxlMoveStatus[0]);
-	readByteAll(P_PRES_V, &dxlPresVolt[0]);
 
-	printf("Servos moved.\n");
-	printInfo();
-
-	printf("Press Enter to continue the test...\n");
-	getchar();
-
-	//Write medium moving speed to all servos
-	writeWordAll(P_MOVE_SPD, &moveSpeed[0]);
-	
-	//Write ccw goal position to all servos
-	for(j = 0; j < dxlCount; goalPos[j++] = CCW_POS);
-	writeWordAll(P_GOAL_POS, &goalPos[0]);
+	printf("Moving DXL %d to %d ...\n", dxlId[0], MED_POS);
+	printf("Moving DXL %d to %d ...\n", dxlId[1], MED_POS);
+	writeWord(dxlId[0], P_GOAL_POS, MED_POS);
+	if(pingDxl(dxlId[1]))
+		writeWord(dxlId[1], P_GOAL_POS, MED_POS);
 	waitForMove();
-	
-	readWordAll(P_PRES_POS, &dxlPresPos[0]);
-	readWordAll(P_GOAL_POS, &dxlGoalPos[0]);
-	readWordAll(P_MOVE_SPD, &dxlMoveSpd[0]);
-	readByteAll(P_MOVE_STATUS, &dxlMoveStatus[0]);
-	readByteAll(P_PRES_V, &dxlPresVolt[0]);
 
-	printf("Servos moved.\n");
-	printInfo();
-
-	printf("Press Enter to continue the test...\n");
-	getchar();
-
-	//Write medium moving speed to all servos
-	writeWordAll(P_MOVE_SPD, &moveSpeed[0]);
-	
-	//Write medium goal position to all servos
-	for(j = 0; j < dxlCount; goalPos[j++] = MED_POS);
-	writeWordAll(P_GOAL_POS, &goalPos[0]);
-	waitForMove();
-	
-	readWordAll(P_PRES_POS, &dxlPresPos[0]);
-	readWordAll(P_GOAL_POS, &dxlGoalPos[0]);
-	readWordAll(P_MOVE_SPD, &dxlMoveSpd[0]);
-	readByteAll(P_MOVE_STATUS, &dxlMoveStatus[0]);
-	readByteAll(P_PRES_V, &dxlPresVolt[0]);
-
-	printf("Servos moved.\n");
 	printInfo();
 
 	printf("Exiting...\n");
@@ -264,6 +216,8 @@ int readByte(int id, int addr){
 	int data = dxl_read_byte(id, addr);
 	int result;
 
+	usleep(DEFAULT_DELAY);
+
 	if(!(result = isSuccess()))
 		return result;
 	else
@@ -281,6 +235,8 @@ int readByteAll(int addr, int * start){
 
 		*(p ++) = dxl_read_byte(dxlId[i], addr);
 
+		usleep(DEFAULT_DELAY);
+
 		if(!isSuccess())
 			result = 0;
 	}
@@ -292,6 +248,8 @@ int readWord(int id, int addr){
 
 	int data = dxl_read_word(id, addr);
 	int result;
+
+	usleep(DEFAULT_DELAY);
 
 	if(!(result = isSuccess()))
 		return result;
@@ -309,6 +267,8 @@ int readWordAll(int addr, int * start){
 
 		*(p ++) = dxl_read_word(dxlId[i], addr);
 
+		usleep(DEFAULT_DELAY);
+
 		if(!isSuccess())
 			result = 0;
 	}
@@ -319,6 +279,8 @@ int readWordAll(int addr, int * start){
 int writeByte(int id, int addr, char data){
 
 	dxl_write_byte(id, addr, data);
+
+	usleep(DEFAULT_DELAY);
 
 	return isSuccess();
 }
@@ -332,6 +294,8 @@ int writeByteAll(int addr, char * start){
 	for(i = 0; i < dxlCount; i ++){
 		
 		dxl_write_byte(dxlId[i], addr, *(p ++));
+
+		usleep(DEFAULT_DELAY);
 		
 		if(!isSuccess())
 			result = 0;
@@ -343,6 +307,8 @@ int writeByteAll(int addr, char * start){
 int writeWord(int id, int addr, short data){
 
 	dxl_write_word(id, addr, data);
+
+	usleep(DEFAULT_DELAY);
 
 	return isSuccess();
 }
@@ -356,6 +322,8 @@ int writeWordAll(int addr, short * start){
 	for(i = 0; i < dxlCount; i ++){
 		
 		dxl_write_word(dxlId[i], addr, *p);
+
+		usleep(DEFAULT_DELAY);
 		
 		if(!isSuccess())
 			result = 0;
@@ -366,6 +334,15 @@ int writeWordAll(int addr, short * start){
 	}
 
 	return result;
+}
+
+int pingDxl(int id){
+
+	dxl_ping(id);
+
+	usleep(DEFAULT_DELAY);
+
+	return isSuccess();
 }
 
 char * readIn(){

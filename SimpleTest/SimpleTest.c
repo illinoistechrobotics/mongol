@@ -7,6 +7,11 @@
 #include <unistd.h>
 #include <dynamixel.h>
 
+#define FR_H_DXL		4
+#define FR_V_DXL		2
+#define FL_H_DXL		3
+#define FL_V_DXL		1
+
 #define P_MODEL_NUM		0	//Word
 #define P_FW_VER		2	//Byte
 #define P_ID			3	//Byte
@@ -39,6 +44,7 @@ int id = 0;
 char inputBuffer [100];
 
 //prototypes
+void pingDxl(int anId);
 int readByte(int addr);
 int readWord(int addr);
 int writeByte(int addr, char data);
@@ -143,12 +149,12 @@ int main(){
 	printf("Press ENTER to continue with the test:");
 	getchar();
  
-	writeWord(P_MOVING_SPEED, MED_SPEED);
+	writeWord(P_MOVING_SPEED, 127/*MED_SPEED*/);
 
 	printf("Moving Dynamixel to Center Position...\n");
 	if(writeWord(P_GOAL_POS, CENTER_POS)){
 		//sleep(1);
-		while(readByte(P_MOVING)); /*{sleep(1);}*/
+		while(readByte(P_MOVING)); {pingDxl(id);}
 		printf("Moving completed.\n");
 	}
 	else
@@ -157,7 +163,7 @@ int main(){
 	printf("Moving Dynamixel in the CW direction...\n");
 	if(writeWord(P_GOAL_POS, CW_POS)){
 		//sleep(1);
-		while(readByte(P_MOVING)); /*{sleep(1);}*/
+		while(readByte(P_MOVING)) {pingDxl(id);}
 		printf("Moving completed.\n");
 	}
 	else
@@ -166,7 +172,7 @@ int main(){
 	printf("Moving Dynamixel in the CCW direction...\n");
 	if(writeWord(P_GOAL_POS, CCW_POS)){
 		//sleep(1);
-		while(readByte(P_MOVING)); /*{sleep(1);}*/
+		while(readByte(P_MOVING)) {pingDxl(id);}
 		printf("Moving completed.\n");
 	}
 	else
@@ -175,15 +181,24 @@ int main(){
 	printf("Moving Dynamixel to Center Position...\n");
 	if(writeWord(P_GOAL_POS, CENTER_POS)){
 		//sleep(1);
-		while(readByte(P_MOVING)); /*{sleep(1);}*/
+		while(readByte(P_MOVING)) {pingDxl(id);}
 		printf("Moving completed.\n");
 	}
 	else
 		printf("Error: Could not make servo move.\n");
+	
+	writeWord(P_MOVING_SPEED, STOP_SPEED);
 
 	printf("Exiting...\n");
 	dxl_terminate();
 	return 0;
+}
+
+void pingDxl(int anId){
+
+	dxl_ping(anId);
+
+	isSuccess();
 }
 
 int readByte(int addr){
