@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/546/trunk/pypose/tools
+END
+NukeEditor.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/546/trunk/pypose/tools/NukeEditor.py
+END
+Terminal.py
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/546/trunk/pypose/tools/Terminal.py
+END
+PoseEditor.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/546/trunk/pypose/tools/PoseEditor.py
+END
+SeqEditor.py
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/438/trunk/pypose/tools/SeqEditor.py
+END
+ToolPane.py
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/364/trunk/pypose/tools/ToolPane.py
+END

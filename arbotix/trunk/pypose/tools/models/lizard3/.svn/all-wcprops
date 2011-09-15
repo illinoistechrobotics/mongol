@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/545/trunk/pypose/tools/models/lizard3
+END
+lizard3.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/545/trunk/pypose/tools/models/lizard3/lizard3.py
+END
+leg.jpg
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/499/trunk/pypose/tools/models/lizard3/leg.jpg
+END
+neutral.jpg
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/407/trunk/pypose/tools/models/lizard3/neutral.jpg
+END
+body.jpg
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/499/trunk/pypose/tools/models/lizard3/body.jpg
+END
+template.ik
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/545/trunk/pypose/tools/models/lizard3/template.ik
+END

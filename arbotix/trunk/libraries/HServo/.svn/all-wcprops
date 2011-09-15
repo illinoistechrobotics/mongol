@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/523/trunk/libraries/HServo
+END
+keywords.txt
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/501/trunk/libraries/HServo/keywords.txt
+END
+HServo.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/523/trunk/libraries/HServo/HServo.cpp
+END
+HServo.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/503/trunk/libraries/HServo/HServo.h
+END
