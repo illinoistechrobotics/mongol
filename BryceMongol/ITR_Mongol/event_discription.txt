@@ -1,0 +1,71 @@
+This is a list of the events that happen in ITR_General.
+
+Command Structure
+ 
+U,command,index,value,check\n
+i.e. command = 0x80, index = 15 value = 127
+U,80,F,7F,E
+
+
+ROBOT_EVENT_CMD_NOOP		sent to robot every 100ms(10Hz)   
+							index 0 value 0
+							sent to computer every 1sec(1Hz)
+							index 0 value 0
+
+ROBOT_EVENT_CMD_START		sent to robot everytime the start button on gui is pressed
+							index 0 value 0
+
+ROBOT_EVENT_CMD_STOP		sent to robot everytime the stop button on gui is pressed
+							index 0 value 0
+							
+ROBOT_EVENT_CMD_REBOOT		not sent in general but on robot side if sent the arduino 
+							will do a reset through the watchdog timer only in using 
+							an uno or the uno bootloader
+							index 0 value 0 
+
+ROBOT_EVENT_CMD_SHUTDOWN	not sent out but is placed on computer queue when the exit 
+							is pressed and to leave the program. If recieved on robot 
+							the arduino program will exit(0);
+							index 0 value 0
+
+ROBOT_EVENT_NET				not used
+
+ROBOT_EVENT_NET_STATUS_OK   not used
+
+ROBOT_EVENT_NET_STATUS_ERR	placed on computer queue every 1sec that there is no signal from arduino. 
+							Can mean that there is no xbee plugged in or the robot is out of range or 
+							the arduino crashed. In general this is place on computer queue if there 
+							is no 1sec noop command comming to computer from arduino
+							index 0 value 0
+
+ROBOT_EVENT_NET_STATUS_NOTICE not used
+
+ROBOT_EVENT_JOY_AXIS		places on the computer queue updated axis values from the joystick. 
+							Only place if there is a change from last axis movement. Also to not 
+							overfill the queue if there is a joy_axis event with the same index the 
+							new value will be updated. 
+							index axis number (0,1,2,3) value (0-255) 0 max down/left 255 max up/right 127 nuetral 
+							
+ROBOT_EVENT_JOY_BUTTON		places on the computer queue updated button vlaues from the joystick.
+							index button number-1 (i.e index->0 is button 1 on joystick) value 0 released or up possition 1 pressed or down position
+							
+ROBOT_EVENT_JOY_HAT			places on the computer queue updated d-pad button presess 
+							index 0  value 0 in nuetral position(nothing pressed) 1-8 (1 starting a 9 o'clock position and moving clockwise) 
+							
+ROBOT_EVENT_JOY_STATUS		places on the computer queue a warning that the joystick was unpluged
+							index 0 value 0
+					
+ROBOT_EVENT_TIMER			places on the computer queue a timer event 
+							10 hz timer index 0 value 0
+							1 hz timer  index 0 value 1
+							on robot side timer are called directly from the timer functions instead of being placed on queue
+							
+ROBOT_EVENT_MOTOR			not used
+
+ROBOT_EVENT_ADC				not used
+
+ROBOT_EVENT_SET_VAR			not used
+
+ROBOT_EVENT_GET_VAR			not used
+
+ROBOT_EVENT_VAR				not used
