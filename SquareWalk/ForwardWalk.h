@@ -67,4 +67,7 @@ PROGMEM transition_t TURN_RIGHT[] = {{0,4} ,{TO_FR_FWD_RT,250} ,{FR_FWD_RT,250} 
 //left turning sequence
 PROGMEM transition_t TURN_LEFT[] = {{0,4} ,{TO_FL_FWD_LT,250} ,{FL_FWD_LT,250} ,{TO_FR_FWD_LT,250} ,{FR_FWD_LT,250} };
 
+//next up are strafing sequences :0
+//stay tuned!
+
 #endif
