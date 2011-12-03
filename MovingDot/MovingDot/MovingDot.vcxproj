@@ -37,10 +37,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Allen\Dropbox\Visual Studio\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\Debug;C:\Users\Allen\Dropbox\Visual Studio\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\graphics\include;C:\Users\Allen\Dropbox\Visual Studio\SDL_image-1.2.10\SDL_image-1.2.10;C:\Users\Allen\Dropbox\Visual Studio\SDL-devel-1.2.14-VC6\SDL-1.2.14\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\SDL-devel-1.2.14-VC6\SDL-1.2.14\include;..\..\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\graphics\include;..\..\SDL_image-1.2.10\SDL_image-1.2.10;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\Users\Allen\Dropbox\Visual Studio\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\Debug;C:\Users\Allen\Dropbox\Visual Studio\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\graphics\lib;C:\Users\Allen\Dropbox\Visual Studio\SDL-devel-1.2.14-VC6\SDL-1.2.14\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\SDL-devel-1.2.14-VC6\SDL-1.2.14\lib;..\..\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\graphics\lib;..\..\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

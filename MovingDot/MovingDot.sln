@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MovingDot", "MovingDot\MovingDot.vcxproj", "{1BBBB22F-E425-469A-97E2-FC7EAB36FFEF}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MovingDotSetup", "MovingDotSetup\MovingDotSetup.vdproj", "{19C923E7-111B-460A-A1CC-DB9FDE9E5833}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SDL Joystick Test", "SDL Joystick Test\SDL Joystick Test.vdproj", "{BC03756F-FF45-4E9D-85BC-6EEA273B78C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +15,8 @@ Global
 		{1BBBB22F-E425-469A-97E2-FC7EAB36FFEF}.Debug|Win32.Build.0 = Debug|Win32
 		{1BBBB22F-E425-469A-97E2-FC7EAB36FFEF}.Release|Win32.ActiveCfg = Release|Win32
 		{1BBBB22F-E425-469A-97E2-FC7EAB36FFEF}.Release|Win32.Build.0 = Release|Win32
-		{19C923E7-111B-460A-A1CC-DB9FDE9E5833}.Debug|Win32.ActiveCfg = Debug
-		{19C923E7-111B-460A-A1CC-DB9FDE9E5833}.Release|Win32.ActiveCfg = Release
+		{BC03756F-FF45-4E9D-85BC-6EEA273B78C0}.Debug|Win32.ActiveCfg = Debug
+		{BC03756F-FF45-4E9D-85BC-6EEA273B78C0}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

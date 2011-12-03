@@ -1,0 +1,81 @@
+﻿Build started 12/1/2011 9:16:50 AM.
+     1>Project "C:\Users\Allen\Dropbox\Visual Studio\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\SDL_image.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching ".\Debug\SDL_image.unsuccessfulbuild".
+       ClCompile:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Igraphics\include /ZI /nologo /W3 /WX- /Od /Oy- /D _DEBUG /D WIN32 /D _WINDOWS /D LOAD_BMP /D LOAD_GIF /D LOAD_JPG /D "LOAD_JPG_DYNAMIC=\"jpeg.dll\"" /D LOAD_LBM /D LOAD_PCX /D LOAD_PNG /D "LOAD_PNG_DYNAMIC=\"libpng12-0.dll\"" /D LOAD_PNM /D LOAD_TGA /D LOAD_TIF /D "LOAD_TIF_DYNAMIC=\"libtiff-3.dll\"" /D LOAD_XPM /D LOAD_XV /D PNG_USE_DLL /D ZLIB_DLL /D _VC80_UPGRADE=0x0600 /D _WINDLL /Gm /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Debug/" /Fd".\Debug/vc100.pdb" /Gd /TC /analyze- /errorReport:prompt ..\IMG.c ..\IMG_bmp.c ..\IMG_gif.c ..\IMG_jpg.c ..\IMG_lbm.c ..\IMG_pcx.c ..\IMG_png.c ..\IMG_pnm.c ..\IMG_tga.c ..\IMG_tif.c ..\IMG_xcf.c ..\IMG_xpm.c ..\IMG_xv.c ..\IMG_xxx.c
+         IMG_xxx.c
+         IMG_xv.c
+     1>c:\users\allen\dropbox\visual studio\sdl_image-1.2.10\sdl_image-1.2.10\img_xv.c(73): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+         IMG_xpm.c
+     1>c:\users\allen\dropbox\visual studio\sdl_image-1.2.10\sdl_image-1.2.10\img_xpm.c(350): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+         IMG_xcf.c
+         IMG_tif.c
+         IMG_tga.c
+         IMG_pnm.c
+         IMG_png.c
+         IMG_pcx.c
+         IMG_lbm.c
+         IMG_jpg.c
+         IMG_gif.c
+     1>c:\users\allen\dropbox\visual studio\sdl_image-1.2.10\sdl_image-1.2.10\img_gif.c(181): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files\microsoft visual studio 10.0\vc\include\string.h(188) : see declaration of 'strncpy'
+     1>c:\users\allen\dropbox\visual studio\sdl_image-1.2.10\sdl_image-1.2.10\img_gif.c(341): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+         IMG_bmp.c
+         IMG.c
+         Generating Code...
+       ResourceCompile:
+         c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D _DEBUG /D _VC80_UPGRADE=0x0600 /l"0x0409" /nologo /fo".\Debug\Version.res" Version.rc 
+       ManifestResourceCompile:
+         c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo".\Debug\SDL_image.dll.embed.manifest.res" .\Debug\SDL_image_manifest.rc 
+       Link:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Debug/SDL_image.dll" /INCREMENTAL /NOLOGO SDL.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:".\Debug\SDL_image.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:".\Debug/SDL_image.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Debug/SDL_image.lib" /MACHINE:X86 /DLL .\Debug\Version.res
+         .\Debug\SDL_image.dll.embed.manifest.res
+         .\Debug/IMG.obj
+         .\Debug/IMG_bmp.obj
+         .\Debug/IMG_gif.obj
+         .\Debug/IMG_jpg.obj
+         .\Debug/IMG_lbm.obj
+         .\Debug/IMG_pcx.obj
+         .\Debug/IMG_png.obj
+         .\Debug/IMG_pnm.obj
+         .\Debug/IMG_tga.obj
+         .\Debug/IMG_tif.obj
+         .\Debug/IMG_xcf.obj
+         .\Debug/IMG_xpm.obj
+         .\Debug/IMG_xv.obj
+         .\Debug/IMG_xxx.obj
+            Creating library .\Debug/SDL_image.lib and object .\Debug/SDL_image.exp
+       Manifest:
+         c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:".\Debug\SDL_image.dll.embed.manifest" /manifest .\Debug\SDL_image.dll.intermediate.manifest
+         c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo".\Debug\SDL_image.dll.embed.manifest.res" .\Debug\SDL_image_manifest.rc 
+       LinkEmbedManifest:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Debug/SDL_image.dll" /INCREMENTAL /NOLOGO SDL.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:".\Debug\SDL_image.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:".\Debug/SDL_image.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Debug/SDL_image.lib" /MACHINE:X86 /DLL .\Debug\Version.res
+         .\Debug\SDL_image.dll.embed.manifest.res
+         .\Debug/IMG.obj
+         .\Debug/IMG_bmp.obj
+         .\Debug/IMG_gif.obj
+         .\Debug/IMG_jpg.obj
+         .\Debug/IMG_lbm.obj
+         .\Debug/IMG_pcx.obj
+         .\Debug/IMG_png.obj
+         .\Debug/IMG_pnm.obj
+         .\Debug/IMG_tga.obj
+         .\Debug/IMG_tif.obj
+         .\Debug/IMG_xcf.obj
+         .\Debug/IMG_xpm.obj
+         .\Debug/IMG_xv.obj
+         .\Debug/IMG_xxx.obj
+            Creating library .\Debug/SDL_image.lib and object .\Debug/SDL_image.exp
+         SDL_image.vcxproj -> C:\Users\Allen\Dropbox\Visual Studio\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\.\Debug\SDL_image.dll
+       FinalizeBuildStatus:
+         Deleting file ".\Debug\SDL_image.unsuccessfulbuild".
+         Touching ".\Debug\SDL_image.lastbuildstate".
+     1>Done Building Project "C:\Users\Allen\Dropbox\Visual Studio\SDL_image-1.2.10\SDL_image-1.2.10\VisualC\SDL_image.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:13.38
