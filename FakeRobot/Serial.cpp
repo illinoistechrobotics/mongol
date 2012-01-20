@@ -4,7 +4,7 @@
 #define MSGBUFSIZ	100
 #define MAXERRORS	3
 
-FILE* dev;
+FILE *dev;
 char serBuf [SERBUFSIZ];
 char msgBuf [MSGBUFSIZ];
 int errors = 0;
@@ -113,7 +113,7 @@ int writeSerial (){
         }
     }
 
-	return 0;
+	return (errors == 3);
 }
 
 void closeSerial (){

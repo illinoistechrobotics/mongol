@@ -1,12 +1,8 @@
 #include "Serial.h"
 
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-
 #define TERMBUFSIZ 100
 
-char termBuffer [TERMBUFSIZ];
+char termBuf [TERMBUFSIZ];
 
 void waitForUser (){
 

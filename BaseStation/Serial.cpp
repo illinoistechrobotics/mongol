@@ -1,20 +1,12 @@
 #include "Serial.h"
 
-#include <stdio.h>
-#include <io.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <string.h>
-
 #define	SERBUFSIZ	100
 #define MSGBUFSIZ	100
 #define MAXERRORS	3
 
-int fd;
-char serBuffer [SERBUFSIZ];
-char msgBuffer [MSGBUFSIZ];
-int readCount = 0;
+FILE *dev;
+char serBuf [SERBUFSIZ];
+char msgBuf [MSGBUFSIZ];
 int errors = 0;
 
 int extractMessage (){
@@ -22,14 +14,14 @@ int extractMessage (){
     char * start;
     char * end;
 
-    if((start = strchr(serBuffer, PKT_BND)) && (end = strchr(start, PKT_BND))){
+    if((start = strchr(serBuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
 
         start ++;
         *end = '\0';
 
-        strcpy(msgBuffer, start);
+        strcpy(msgBuf, start);
 
-        return strlen(msgBuffer);
+        return strlen(msgBuf);
     }
     else{
 
@@ -43,10 +35,15 @@ int initSerial (char * port){
 
 	printf("Attempting to open %s...\n", port);
 
-	if((fd = open(port, O_RDWR)) < 0){
+	if((dev = fopen(port, "r+b"))){
+        
+        // Set stream to not block when reading
 
-		printf("ERROR: Failed to open port.\n");
-		return -1;
+        if(fcntl(fileno(dev), F_SETFL, O_NONBLOCK) < 0){
+
+            printf("ERROR: Failed to open port.\n");
+            return -1;
+        }
 	}
 	
 	printf("%s opened successfully.\n", port);
@@ -68,19 +65,16 @@ int initSerial (char * port){
 
 char * readSerial (){
 
+    fflush(dev);
+
 	for(errors = 0; errors < MAXERRORS; errors ++){
 
-		if((readCount = read(fd, serBuffer, SERBUFSIZ)) < 1){
+		if(!fgets(serBuf, SERBUFSIZ, dev)){
 
 			printf("ERROR: Failed to read from  port.\n");
 		}
 
-		else if(readCount < 3){
-
-			printf("ERROR: Corrupt packet.\n");
-		}
-
-        else if(extractMessage < 0){
+        else if(extractMessage() < 0){
 
 			printf("ERROR: Corrupt packet.\n");
         }
@@ -91,19 +85,19 @@ char * readSerial (){
 		}
 	}
 
-	return msgBuffer;
+	return msgBuf;
 }
 
 int writeSerial (){
-    
-    int msgSize = strlen(msgBuffer);
+
+    int msgSize = strlen(msgBuf);
     int writeCount;
 
-    msgSize = sprintf(serBuffer, "%c%s%c\n", PKT_BND, msgBuffer, PKT_BND);
+    msgSize = sprintf(serBuf, "%c%s%c\n", PKT_BND, msgBuf, PKT_BND);
 
     for(errors = 0; errors < MAXERRORS; errors++){
 
-        if((writeCount = write(fd, serBuffer, msgSize)) < 0){
+        if((writeCount = fputs(serBuf, dev)) < 0){
 
             printf("ERROR: Failed to write to port.\n");
         }
@@ -119,20 +113,19 @@ int writeSerial (){
         }
     }
 
-	return 0;
+	return (errors == 3);
 }
 
-void CloseSerial (){
+void closeSerial (){
     
-    close(fd);
+    fclose(dev);
 
 	return;
 }
 
-
 void sayHello(){
 
-    sprintf(msgBuffer, "%c", HELLO);
+    sprintf(msgBuf, "%c", HELLO);
 
     writeSerial();
 }
