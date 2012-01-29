@@ -8,6 +8,7 @@ FILE *dev;
 char serBuf [SERBUFSIZ];
 char msgBuf [MSGBUFSIZ];
 int errors = 0;
+int pall = 0;
 
 int extractMessage (){
 
@@ -39,7 +40,10 @@ int initSerial (char * port){
         
         // Set stream to not block when reading
 
-        if (fcntl(fileno(dev), F_SETFL, O_NONBLOCK) < 0){
+        fcntl(fileno(dev), F_SETFL, O_NONBLOCK);
+        int flags = fcntl(fileno(dev), F_GETFL);
+
+        if (!(flags & O_NONBLOCK)){
 
             printf("ERROR: Failed to open port.\n");
             return -1;
@@ -52,11 +56,10 @@ int initSerial (char * port){
 
 	printf("Waiting for handshake...\n");
 
-	if (readSerial()[0] != HELLO){
+    while (readSerial()[0] != HELLO){
 
-		printf("ERROR: Handshake not received.\n");
-		return -1;
-	}
+        sleep(1);
+    }
 
 	printf("Handshake successfully received.\n");
 
@@ -69,12 +72,12 @@ char * readSerial (){
 
 	for (errors = 0; errors < MAXERRORS; errors ++){
 
-		if (!fgets(serBuf, SERBUFSIZ, dev)){
+		if (!fgets(serBuf, SERBUFSIZ, dev) && pall){
 
 			printf("ERROR: Failed to read from  port.\n");
 		}
 
-        else if (extractMessage() < 0){
+        else if (extractMessage() < 0 && pall){
 
 			printf("ERROR: Corrupt packet.\n");
         }
