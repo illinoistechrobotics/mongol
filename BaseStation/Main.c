@@ -1,4 +1,5 @@
 #include "Serial.h"
+#include "SDL/SDL.h"
 
 #define TERMBUFSIZ 100
 
@@ -35,7 +36,37 @@ int main (int argc, char* argv[]){
 
     printf("Connected!\n");
 
+    // Initialize SDL (VIDEO flag also initializes event handling)
+
+    if(SDL_Init(SDL_INIT_VIDEO) < 0){
+
+        printf("ERROR: SDL Failed to initialize.\n");
+        return -1;
+    }
+
+    SDL_Event curEvent, lastEvent;
+
+    // Test keyboard press
+
+    while(lastEvent.key.keysym.sym != 'q' && SDL_PollEvent(&curEvent)){
+
+        lastEvent = curEvent;
+
+        switch(curEvent.type){
+
+            case SDL_KEYDOWN:
+                printf("Key %s was pressed.\n", curEvent.key.keysym.sym);
+                break;
+                
+            default:
+                printf("Unknown event ocurred: %d\n", curEvent.type);
+                break;
+        }
+    }
+
     waitForUser();
+
+    SDL_Quit();
 
 	return 0;
 }

@@ -25,7 +25,7 @@ int main (int argc, char * argv[]){
         return -1;
     }
 
-    printf("Spamming Hello...\n");
+    printf("Spamming \"Hello\"...\n");
 
     do{
 
