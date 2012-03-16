@@ -4,6 +4,7 @@ and may not be redestributed without written permission.*/
 //The headers
 #include "SDL.h"
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 #include <string>
 
 //Screen attributes
