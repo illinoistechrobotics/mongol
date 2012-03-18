@@ -56,7 +56,9 @@ int main (int argc, char* argv[]){
         return -1;
     }
 
-    while(readSerial()[0] != HELLO);
+    char msg;
+
+    while(!(msg = readSerial()[0]) && (msg != HELLO));
 
     sayHello();
 

@@ -55,12 +55,14 @@ int main (int argc, char * argv[]){
 
     printf("Spamming \"Hello\"...\n");
 
+    char msg;
+
     do{
 
         sayHello();
         sleep(1);
 
-    } while (readSerial()[0] != HELLO);
+    } while (!(msg = readSerial()[0]) && (msg != HELLO));
 
     printf("Received \"Hello\"!\n");
 
