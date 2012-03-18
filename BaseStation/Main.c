@@ -26,7 +26,7 @@ int main (int argc, char* argv[]){
         return -1;
     }
 
-	waitForUser();
+    waitForUser();
 
     printf("Connecting to robot... ");
 
@@ -55,7 +55,7 @@ int main (int argc, char* argv[]){
         switch(curEvent.type){
 
             case SDL_KEYDOWN:
-                printf("Key %s was pressed.\n", curEvent.key.keysym.sym);
+                printf("Key %d was pressed.\n", curEvent.key.keysym.sym);
                 break;
                 
             default:
