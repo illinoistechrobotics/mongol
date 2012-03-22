@@ -48,21 +48,17 @@ int main (int argc, char* argv[]){
 
     waitForUser();
 
-    printf("Connecting to robot... ");
+    printf("Connecting to robot...\n");
     
-    // Initialize serial port
+    // Initialize serial port (includes looking for HELLO packet
     if(initSerial(dev, printMode) < 0){
 
         return -1;
     }
 
-    char msg;
-
-    while(!(msg = readSerial()[0]) && (msg != HELLO));
-
     sayHello();
 
-    printf("Connected!\n");
+    printf("Connected!\n\n");
 
     // Initialize SDL (VIDEO flag also initializes event handling)
 

@@ -59,12 +59,10 @@ int initSerial (char * port, int printMode){
 
 	printf("Waiting for handshake...\n");
 
-    while (readSerial()[0] != HELLO){
+    while (readSerial()[0] != HELLO){sleep(1);}
+    sayHello();
 
-        sleep(1);
-    }
-
-	printf("Handshake successfully received.\n");
+	printf("Handshake received!\n");
 
 	return 0;
 }
