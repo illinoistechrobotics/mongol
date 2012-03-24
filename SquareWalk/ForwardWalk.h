@@ -27,18 +27,18 @@
 #define BR_V_DN     FR_V_DN
 #define BR_V_UP     FR_V_UP
         
-#define FL_V_UP     358
-#define FL_V_DN     205
+#define FL_V_UP     205
+#define FL_V_DN     358
         
 #define BL_V_UP     FL_V_UP
 #define BL_V_DN     FL_V_DN
 
 // foot rotation constants
-#define FR_F_DN     818
+#define FR_F_DN     808
 
 #define BR_F_DN     FR_F_DN
 
-#define FL_F_DN     205
+#define FL_F_DN     215
 
 #define BL_F_DN     FL_F_DN
 
@@ -47,9 +47,9 @@ PROGMEM prog_uint16_t START[]=          {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN,
 
 // forward and backward walking poses
 PROGMEM prog_uint16_t TO_FL_FWD[]=      {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_UP, BL_V_DN, BR_V_UP, FR_H_MID, FL_H_MID, BL_H_MID, BR_H_MID};
-PROGMEM prog_uint16_t FL_FWD[]=         {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_DN, BL_V_DN, BR_V_DN, FR_H_BKD, FL_H_FWD, BL_H_BKD, FR_H_BKD};
-PROGMEM prog_uint16_t TO_FR_FWD[]=      {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_UP, FL_V_DN, BL_V_UP, BR_V_DN, FR_H_MID, FL_H_MID, BL_H_MID, FR_H_MID};
-PROGMEM prog_uint16_t FR_FWD[]=         {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_DN, BL_V_DN, BR_V_DN, FR_H_FWD, FL_H_MID, BL_H_FWD, FR_H_FWD};
+PROGMEM prog_uint16_t FL_FWD[]=         {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_DN, BL_V_DN, BR_V_DN, FR_H_BKD, FL_H_FWD, BL_H_BKD, BR_H_FWD};
+PROGMEM prog_uint16_t TO_FR_FWD[]=      {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_UP, FL_V_DN, BL_V_UP, BR_V_DN, FR_H_MID, FL_H_MID, BL_H_MID, BR_H_MID};
+PROGMEM prog_uint16_t FR_FWD[]=         {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_DN, BL_V_DN, BR_V_DN, FR_H_FWD, FL_H_BKD, BL_H_FWD, BR_H_BKD};
 
 // right turning poses
 PROGMEM prog_uint16_t TO_FR_FWD_RT[]=   {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_UP, BL_V_DN, BR_V_UP, FR_H_MID, FL_H_MID, BL_H_MID, BR_H_MID};
@@ -61,7 +61,7 @@ PROGMEM prog_uint16_t FL_FWD_RT[]=      {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN,
 PROGMEM prog_uint16_t TO_FL_FWD_LT[]=   {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_UP, BL_V_DN, BR_V_UP, FR_H_MID, FL_H_MID, BL_H_MID, BR_H_MID};
 PROGMEM prog_uint16_t FL_FWD_LT[]=      {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_DN, BL_V_DN, BR_V_DN, FR_H_BKD, FL_H_BKD, BL_H_FWD, BR_H_FWD};
 PROGMEM prog_uint16_t TO_FR_FWD_LT[]=   {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_UP, FL_V_DN, BL_V_UP, BR_V_DN, FR_H_MID, FL_H_MID, BL_H_MID, BR_H_MID};
-PROGMEM prog_uint16_t FL_FWD_LT[]=      {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_DN, BL_V_DN, BR_V_DN, FR_H_FWD, FL_H_FWD, BL_H_BKD, BR_H_BKD};
+PROGMEM prog_uint16_t FR_FWD_LT[]=      {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN, FR_V_DN, FL_V_DN, BL_V_DN, BR_V_DN, FR_H_FWD, FL_H_FWD, BL_H_BKD, BR_H_BKD};
 
 // old eight-servo poses
 
@@ -84,10 +84,10 @@ PROGMEM prog_uint16_t FL_FWD_LT[]=      {12, FR_F_DN, FL_F_DN, BL_F_DN, BR_F_DN,
 // PROGMEM prog_uint16_t FR_FWD_LT[]=      {8, BR_V_DN, FR_V_DN, FR_H_FWD, BL_H_BKD, BL_V_DN, FL_V_DN, BR_H_BKD, FL_H_FWD};
 
 //forward walking sequence
-PROGMEM transition_t FORWARD[] =        {{0,4} ,{TO_FL_UP,250} ,{FL_UP,250} ,{TO_FR_UP,250} ,{FR_UP,250} };
+PROGMEM transition_t FORWARD[] =        {{0,4} ,{TO_FL_FWD,250} ,{FL_FWD,250} ,{TO_FR_FWD,250} ,{FR_FWD,250} };
 
 //backward walking sequence
-PROGMEM transition_t BACKWARD[] =       {{0,4} ,{FL_UP,250} ,{TO_FL_UP,250} ,{FR_UP,250} ,{TO_FR_UP,250} };
+PROGMEM transition_t BACKWARD[] =       {{0,4} ,{FL_FWD,250} ,{TO_FL_FWD,250} ,{FR_FWD,250} ,{TO_FR_FWD,250} };
 
 //right turning sequence
 PROGMEM transition_t TURN_RIGHT[] =     {{0,4} ,{TO_FR_FWD_RT,250} ,{FR_FWD_RT,250} ,{TO_FL_FWD_RT,250} ,{FL_FWD_RT,250} };
