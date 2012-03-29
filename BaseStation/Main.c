@@ -1,9 +1,11 @@
-#include "Serial.h"
 #include "SDL/SDL.h"
+#include "Serial.h"
 
 #define TERMBUFSIZ 100
 
 char termBuf [TERMBUFSIZ];
+char * dev;
+int printMode;
 
 void waitForUser (){
 
@@ -11,30 +13,52 @@ void waitForUser (){
 	fgetc(stdin);
 }
 
-int main (int argc, char* argv[]){
+// Function to parse command line arguements
+void parseArgs (int argc, char * argv[]){
 
     if(argc < 2){
 
         printf("ERROR: No port name given.\n");
-        waitForUser();
-        return -1;
+        exit(-1);
+    }
+    else{
+
+        dev = argv[1];
     }
 
-    if(initSerial(argv[1]) < 0){
+    int i;
+    for(i = 2; i < argc-1; i ++){
 
-        waitForUser();
+        switch(argv[i][1]){ // Get character after dash
+
+            case 'v':
+                printMode = 1;
+                break;
+        }
+    }
+}
+
+int main (int argc, char* argv[]){
+
+    // Set initial values
+    printMode = 0;
+
+    // Parse command line arguements
+    parseArgs(argc, argv);
+
+    waitForUser();
+
+    printf("Connecting to robot...\n");
+    
+    // Initialize serial port (includes looking for HELLO packet
+    if(initSerial(dev, printMode) < 0){
+
         return -1;
     }
-
-	waitForUser();
-
-    printf("Connecting to robot... ");
-
-    while(readSerial()[0] != HELLO);
 
     sayHello();
 
-    printf("Connected!\n");
+    printf("Connected!\n\n");
 
     // Initialize SDL (VIDEO flag also initializes event handling)
 
@@ -55,7 +79,7 @@ int main (int argc, char* argv[]){
         switch(curEvent.type){
 
             case SDL_KEYDOWN:
-                printf("Key %s was pressed.\n", curEvent.key.keysym.sym);
+                printf("Key %d was pressed.\n", curEvent.key.keysym.sym);
                 break;
                 
             default:

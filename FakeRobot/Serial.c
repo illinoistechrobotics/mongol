@@ -5,24 +5,25 @@
 #define MAXERRORS	3
 
 FILE *dev;
-char serBuf [SERBUFSIZ];
-char msgBuf [MSGBUFSIZ];
+char inSerBuf [SERBUFSIZ];
+char inMsgBuf [MSGBUFSIZ];
+char outSerBuf [SERBUFSIZ];
+char outMsgBuf [MSGBUFSIZ];
 int errors = 0;
-int pall = 0;
 
 int extractMessage (){
 
     char * start;
     char * end;
 
-    if ((start = strchr(serBuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
+    if ((start = strchr(inSerBuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
 
         start ++;
         *end = '\0';
 
-        strcpy(msgBuf, start);
+        strcpy(inMsgBuf, start);
 
-        return strlen(msgBuf);
+        return strlen(inMsgBuf);
     }
     else{
 
@@ -30,7 +31,9 @@ int extractMessage (){
     }
 }
 
-int initSerial (char * port){
+int initSerial (char * port, int printMode){
+
+    printAll = printMode;
 
 	// Attempt to open port
 
@@ -68,16 +71,14 @@ int initSerial (char * port){
 
 char * readSerial (){
 
-    fflush(dev);
-
 	for (errors = 0; errors < MAXERRORS; errors ++){
 
-		if (!fgets(serBuf, SERBUFSIZ, dev) && pall){
+		if (!fgets(inSerBuf, SERBUFSIZ, dev) && printAll){
 
 			printf("ERROR: Failed to read from  port.\n");
 		}
 
-        else if (extractMessage() < 0 && pall){
+        else if (extractMessage() < 0 && printAll){
 
 			printf("ERROR: Corrupt packet.\n");
         }
@@ -88,7 +89,7 @@ char * readSerial (){
 		}
 	}
 
-	return msgBuf;
+	return inMsgBuf;
 }
 
 int writeSerial(char *msg){
@@ -97,18 +98,18 @@ int writeSerial(char *msg){
     int writeCount;
 
     if (msg)
-        strcpy(msgBuf, msg);
+        strcpy(outMsgBuf, msg);
 
-    msgSize = sprintf(serBuf, "%c%s%c\n", PKT_BND, msgBuf, PKT_BND);
+    msgSize = sprintf(outSerBuf, "%c%s%c\n", PKT_BND, outMsgBuf, PKT_BND);
 
     for (errors = 0; errors < MAXERRORS; errors++){
 
-        if ((writeCount = fputs(serBuf, dev)) < 0){
+        if ((writeCount = fputs(outSerBuf, dev) && printAll) < 0){
 
             printf("ERROR: Failed to write to port.\n");
         }
 
-        else if (writeCount < msgSize){
+        else if (writeCount < msgSize && printAll){
 
             printf("ERROR: Write operation interrupted.\n");
         }
@@ -131,7 +132,7 @@ void closeSerial(){
 
 void sayHello(){
 
-    sprintf(msgBuf, "%c", HELLO);
+    sprintf(outMsgBuf, "%c", HELLO);
 
     writeSerial(NULL);
 }
