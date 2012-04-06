@@ -1,0 +1,60 @@
+﻿Build started 3/29/2012 12:27:17 PM.
+     1>Project "C:\Users\Allen\documents\visual studio 2010\Projects\BaseStation-Win32\BaseStation-Win32\BaseStation-Win32.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\BaseStation-Win32.unsuccessfulbuild".
+       ClCompile:
+         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt BaseStation.c Controller.c GUI.c Serial.c
+         Serial.c
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\serial.c(25): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\serial.c(41): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(234) : see declaration of 'fopen'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\serial.c(44): warning C4996: 'fileno': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _fileno. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(723) : see declaration of 'fileno'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\serial.c(90): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(105) : see declaration of 'strcpy'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\serial.c(92): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\serial.c(124): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+         GUI.c
+         Controller.c
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\controller.c(44): warning C4029: declared formal parameter list different from definition
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\controller.c(52): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\controller.c(57): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\controller.c(63): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\controller.c(71): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\controller.c(76): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\controller.c(80): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\controller.c(84): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\allen\documents\visual studio 2010\projects\basestation-win32\basestation-win32\controller.c(88): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+         BaseStation.c
+         Generating Code...
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Allen\documents\visual studio 2010\Projects\BaseStation-Win32\Debug\BaseStation-Win32.exe" /NOLOGO Ws2_32.lib SDL.lib SDLmain.lib "glib-2.0.lib" "gtk-win32-2.0.lib" "gdk-win32-2.0.lib" "gobject-2.0.lib" "gdk_pixbuf-2.0.lib" "gthread-2.0.lib" "gmodule-2.0.lib" "pango-1.0.lib" "atk-1.0.lib" cairo.lib expat.lib fontconfig.lib gailutil.lib "gio-2.0.lib" intl.lib libpng.lib "pangocairo-1.0.lib" "pangoft2-1.0.lib" "pangowin32-1.0.lib" zdll.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\BaseStation-Win32.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Allen\documents\visual studio 2010\Projects\BaseStation-Win32\Debug\BaseStation-Win32.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Allen\documents\visual studio 2010\Projects\BaseStation-Win32\Debug\BaseStation-Win32.lib" /MACHINE:X86 Debug\BaseStation.obj
+         Debug\Controller.obj
+         Debug\GUI.obj
+         Debug\Serial.obj
+     1>GUI.obj : error LNK2019: unresolved external symbol _gtk_main referenced in function _initGUI
+     1>GUI.obj : error LNK2019: unresolved external symbol _gtk_widget_show referenced in function _initGUI
+     1>GUI.obj : error LNK2019: unresolved external symbol _g_signal_connect_data referenced in function _initGUI
+     1>GUI.obj : error LNK2019: unresolved external symbol _g_type_check_instance_cast referenced in function _initGUI
+     1>GUI.obj : error LNK2019: unresolved external symbol _gtk_main_quit referenced in function _initGUI
+     1>GUI.obj : error LNK2019: unresolved external symbol _gtk_window_new referenced in function _initGUI
+     1>GUI.obj : error LNK2019: unresolved external symbol _gtk_init_abi_check referenced in function _initGUI
+     1>GUI.obj : error LNK2019: unresolved external symbol _gtk_set_locale referenced in function _initGUI
+     1>C:\Users\Allen\documents\visual studio 2010\Projects\BaseStation-Win32\Debug\BaseStation-Win32.exe : fatal error LNK1120: 8 unresolved externals
+     1>Done Building Project "C:\Users\Allen\documents\visual studio 2010\Projects\BaseStation-Win32\BaseStation-Win32\BaseStation-Win32.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:05.84

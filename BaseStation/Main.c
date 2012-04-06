@@ -1,96 +1,108 @@
-#include "SDL/SDL.h"
+#include "Controller.h"
 #include "Serial.h"
+#include "GUI.h"
 
-#define TERMBUFSIZ 100
-
-char termBuf [TERMBUFSIZ];
 char * dev;
-int printMode;
 
+uiMode = CMD_MODE;
+printMode = QUIET;
+ 
 void waitForUser (){
 
-	printf("Press enter to continue...");
+	sprintf(termBuf,"Press enter to continue...");
+    printMsg();
 	fgetc(stdin);
+
+    return;
 }
 
 // Function to parse command line arguements
 void parseArgs (int argc, char * argv[]){
 
-    if(argc < 2){
+    int a;
 
-        printf("ERROR: No port name given.\n");
-        exit(-1);
-    }
-    else{
+    for(a = 1; a < argc; a ++){
 
-        dev = argv[1];
-    }
+        // Get character after dash
+        switch(argv[a][1]){
 
-    int i;
-    for(i = 2; i < argc-1; i ++){
+        // Port specifier flag (-d): defaults to /dev/ttyUSB0 if not used (for Linux)
+        case 'd':
+            dev = argv[++a];
+            printf("Port specified: %s\n", dev);
+            break;
 
-        switch(argv[i][1]){ // Get character after dash
+        // Joystick mode flag (-j)
 
-            case 'v':
-                printMode = 1;
-                break;
+        // GUI mode flag (-g)
+        case 'g':
+            uiMode = GUI_MODE;
+            printf("Graphical mode activated\n");
+            break;
+     
+        // Verbose mode flag (-v): prints all non-critical error messages
+        case 'v':  
+            printMode = VERBOSE;    
+            printf("Verbose mode activated.\n");    
+            break;
+
+        // Print help flag (-h)
+        case 'h':
+            printf("\nRobotic Control BaseStation Program\n");
+            printf("Written by Allen Baker for Illinois Tech Robotics\n\n");
+            printf("*** ARGS ***\n");
+            printf("-d <port name>  : Specify port to use (default is COM1)\n");
+            printf("-v              : Set verbose mode\n");
+            printf("-h              : Print help information\n\n");
+            exit(0);
+            break;
         }
     }
 }
 
 int main (int argc, char* argv[]){
 
-    // Set initial values
-    printMode = 0;
-
     // Parse command line arguements
     parseArgs(argc, argv);
 
-    waitForUser();
-
-    printf("Connecting to robot...\n");
-    
-    // Initialize serial port (includes looking for HELLO packet
-    if(initSerial(dev, printMode) < 0){
-
-        return -1;
-    }
-
-    sayHello();
-
-    printf("Connected!\n\n");
+    if(uiMode == GUI_MODE){
+        initGUI(&argc, &argv);
+    } 
 
     // Initialize SDL (VIDEO flag also initializes event handling)
+    sprintf(termBuf,"Initializing SDL... ");
+    printMsg();
+    if(!(initCtrl())){
 
-    if(SDL_Init(SDL_INIT_VIDEO) < 0){
-
-        printf("ERROR: SDL Failed to initialize.\n");
-        return -1;
+        sprintf(termBuf,"\nERROR: Controller Failed to initialize.\n");
+        printMsg();
+        waitForUser();
+        exit(-1);
     }
+    sprintf(termBuf,"Controller Initialized.\n");
+    printMsg();
+    waitForUser();
 
-    SDL_Event curEvent, lastEvent;
+    // Initialize serial port (includes looking for HELLO packet
+    // If not port name specified, default to /dev/ttyUSB0 (for Linux)
+    sprintf(termBuf,"Connecting to robot...\n");
+    printMsg();
+    if((dev ? initSerial(dev, printMode) : initSerial("/dev/ttyUSB0", printMode)) < 0){
+
+        exit(-1);
+    }
+    sayHello();
+    sprintf(termBuf,"Connected!\n\n");
+    printMsg();
 
     // Test keyboard press
+    for(;;){
 
-    while(lastEvent.key.keysym.sym != 'q' && SDL_PollEvent(&curEvent)){
-
-        lastEvent = curEvent;
-
-        switch(curEvent.type){
-
-            case SDL_KEYDOWN:
-                printf("Key %d was pressed.\n", curEvent.key.keysym.sym);
-                break;
-                
-            default:
-                printf("Unknown event ocurred: %d\n", curEvent.type);
-                break;
-        }
+        getNextEvent();
     }
 
     waitForUser();
-
-    SDL_Quit();
-
-	return 0;
+    closeSDL();
+    closeSerial();
+	exit(0);
 }
