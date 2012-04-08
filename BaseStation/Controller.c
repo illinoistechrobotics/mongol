@@ -35,16 +35,25 @@ int initCtrl (){
 SDL_Event * getNextEvent (){
 
     if(SDL_PollEvent(&curEvent)){
-        printEventType(&curEvent, PRINT_ALL);
+        printEventInfo(&curEvent, SDL_KEYUP);
+
+        if(curEvent.type == SDL_KEYUP &&
+           curEvent.key.keysym.sym == SDLK_q && 
+           curEvent.key.keysym.mod == KMOD_CTRL){
+            closeCtrl();
+            closeSerial();
+            exit(0);
+        }
+
         return &curEvent;
     }
 
     return NULL;
 }
 
-void printEventType (SDL_Event * event, int flags){
+void printEventInfo (SDL_Event * event, int flags){
             
-    char typeStr [20];
+    char typeStr [256];
     typeStr[0] = '\0';
 
     switch(event->type & flags){
@@ -55,7 +64,9 @@ void printEventType (SDL_Event * event, int flags){
 
     case SDL_KEYDOWN:
     case SDL_KEYUP:
-        sprintf(typeStr, "KEYBOARDEVENT\n");
+        sprintf(typeStr, "KEYBOARDEVENT: Key:%c Modifier: %d\n",
+                event->key.keysym.sym,
+                event->key.keysym.mod);
         break;
 
     case SDL_MOUSEMOTION:

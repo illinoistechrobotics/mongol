@@ -81,7 +81,6 @@ int main (int argc, char* argv[]){
     }
     sprintf(termBuf,"Controller Initialized.\n");
     printMsg();
-    waitForUser();
 
     // Initialize serial port (includes looking for HELLO packet
     // If not port name specified, default to /dev/ttyUSB0 (for Linux)
@@ -101,8 +100,7 @@ int main (int argc, char* argv[]){
         getNextEvent();
     }
 
-    waitForUser();
-    closeSDL();
+    closeCtrl();
     closeSerial();
 	exit(0);
 }

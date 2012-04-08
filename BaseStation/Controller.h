@@ -6,6 +6,6 @@ int initCtrl (void);
 
 SDL_Event * getNextEvent (void);
 
-void printEventType (SDL_Event * event, int flags);
+void printEventInfo (SDL_Event * event, int flags);
 
 void closeCtrl (void);
