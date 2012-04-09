@@ -4,9 +4,6 @@
 
 char * dev;
 
-uiMode = CMD_MODE;
-printMode = QUIET;
- 
 void waitForUser (){
 
 	sprintf(termBuf,"Press enter to continue...");
@@ -50,17 +47,22 @@ void parseArgs (int argc, char * argv[]){
         case 'h':
             printf("\nRobotic Control BaseStation Program\n");
             printf("Written by Allen Baker for Illinois Tech Robotics\n\n");
+            printf("Usage:\n");
+            printf("BaseStation [-d <port-name>] [-v] [-h]\n\n");
             printf("*** ARGS ***\n");
-            printf("-d <port name>  : Specify port to use (default is COM1)\n");
-            printf("-v              : Set verbose mode\n");
-            printf("-h              : Print help information\n\n");
+            printf(" -d <port-name>  : Specify port to use (default is /dev/ttyUSB0)\n");
+            printf(" -v              : Set verbose mode\n");
+            printf(" -h              : Print help information\n\n");
             exit(0);
-            break;
         }
     }
 }
 
 int main (int argc, char* argv[]){
+
+    // Set initial values
+    uiMode = CMD_MODE;
+    printMode = QUIET;
 
     // Parse command line arguements
     parseArgs(argc, argv);
