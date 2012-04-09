@@ -40,13 +40,20 @@ int initSerial (char * port, int printMode){
 	printf("Attempting to open %s...\n", port);
 
 	if ((dev = fopen(port, "r+b"))){
+
+        int devFD = fileno(dev);
         
         // Set stream to not block when reading
-
-        fcntl(fileno(dev), F_SETFL, O_NONBLOCK);
+        fcntl(devFD, F_SETFL, O_NONBLOCK);
         int flags = fcntl(fileno(dev), F_GETFL);
 
-        if (!(flags & O_NONBLOCK)){
+        // Set baud rate to 34800
+        struct termios devConfig;
+        tcgetattr(devFD, &devConfig);
+        cfsetspeed(&devConfig, B38400);
+        int baudSet = tcsetattr(devFD, TCSANOW, &devConfig);
+
+        if (!(flags & O_NONBLOCK) && !(baudSet)){
 
             printf("ERROR: Failed to open port.\n");
             return -1;
