@@ -23,7 +23,7 @@ int initCtrl (){
     
     if(!(SDL_Init(SDL_INIT_EVERYTHING))){
 
-        SDL_SetEventFilter(eventFilter);
+        // SDL_SetEventFilter(eventFilter);
         // SDL_WM_GrabInput(SDL_GRAB_ON);
         return -1;
     }

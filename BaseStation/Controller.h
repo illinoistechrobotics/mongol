@@ -1,6 +1,6 @@
 #include "SDL/SDL.h"
 
-#define PRINT_ALL   (-1)
+#define PRINT_ALL   0xFFFF 
 
 int initCtrl (void);
 

@@ -4,9 +4,6 @@
 
 char * dev;
 
-uiMode = CMD_MODE;
-printMode = QUIET;
- 
 void waitForUser (){
 
 	sprintf(termBuf,"Press enter to continue...");
@@ -32,7 +29,14 @@ void parseArgs (int argc, char * argv[]){
             printf("Port specified: %s\n", dev);
             break;
 
-        // Joystick mode flag (-j)
+        // Joystick mode flag (-j): If not specified, defaults to keyboard control
+
+
+        // Calibrate flag (-c): Do not attempt to connect; used for testing input devices
+        case 'c':
+            commMode = OFFLINE;
+            printf("Controller calibration activated.\n");
+            break;
 
         // GUI mode flag (-g)
         case 'g':
@@ -62,6 +66,11 @@ void parseArgs (int argc, char * argv[]){
 
 int main (int argc, char* argv[]){
 
+    // Set intial values
+    commMode = ONLINE;
+    uiMode = CMD_MODE;
+    printMode = QUIET;
+ 
     // Parse command line arguements
     parseArgs(argc, argv);
 
@@ -70,7 +79,7 @@ int main (int argc, char* argv[]){
     } 
 
     // Initialize SDL (VIDEO flag also initializes event handling)
-    sprintf(termBuf,"Initializing SDL... ");
+    sprintf(termBuf,"Initializing Controller... ");
     printMsg();
     if(!(initCtrl())){
 
@@ -85,23 +94,25 @@ int main (int argc, char* argv[]){
 
     // Initialize serial port (includes looking for HELLO packet
     // If not port name specified, default to /dev/ttyUSB0 (for Linux)
-    sprintf(termBuf,"Connecting to robot...\n");
-    printMsg();
-    if((dev ? initSerial(dev, printMode) : initSerial("/dev/ttyUSB0", printMode)) < 0){
+    if(commMode == ONLINE){
+        sprintf(termBuf,"Connecting to robot...\n");
+        printMsg();
+        if((dev ? initSerial(dev, printMode) : initSerial("/dev/ttyUSB0", printMode)) < 0){
 
-        exit(-1);
+            exit(-1);
+        }
+        sayHello();
+        sprintf(termBuf,"Connected!\n\n");
+        printMsg();
     }
-    sayHello();
-    sprintf(termBuf,"Connected!\n\n");
-    printMsg();
 
     // Test keyboard press
     for(;;){
 
         getNextEvent();
+        sleep(1);
     }
 
-    waitForUser();
     closeSDL();
     closeSerial();
 	exit(0);
