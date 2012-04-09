@@ -9,9 +9,6 @@ int eventFilter (const SDL_Event * event){
 
     // Events to be posted to queue
     case SDL_KEYDOWN:
-    case SDL_KEYUP:
-    case SDL_MOUSEBUTTONDOWN:
-    case SDL_MOUSEBUTTONUP:
         return 1;
     }
 
@@ -35,16 +32,15 @@ int initCtrl (){
 SDL_Event * getNextEvent (){
 
     if(SDL_PollEvent(&curEvent)){
-        printEventInfo(&curEvent, SDL_KEYUP);
 
-        if(curEvent.type == SDL_KEYUP &&
-           curEvent.key.keysym.sym == SDLK_q && 
-           curEvent.key.keysym.mod == KMOD_CTRL){
+        printEventInfo(&curEvent, SDL_KEYDOWN);
+        if(curEvent.type == SDL_KEYDOWN &&
+           (curEvent.key.keysym.sym == SDLK_q) && 
+           (curEvent.key.keysym.mod & KMOD_CTRL)){
             closeCtrl();
-            closeSerial();
+            // closeSerial();
             exit(0);
         }
-
         return &curEvent;
     }
 
