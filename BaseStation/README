@@ -1,0 +1,34 @@
+BaseStation Controller Program for Mongol
+Written by Allen Baker
+    for Illinois Tech Robotics
+
+***** Overview *****
+
+***** File Descriptions *****
+
+***** Keyboard Control Scheme (no mouse)  *****
+
+TURNING:
+
+Turn Left           A
+Turn Right          D
+
+MOVING:
+
+Move Forward        W
+Move Backward       S
+Strafe Left         Left-Shift + A
+Strafe Right        Left-Shift + D
+* NOTE: Mongol cannot turn while moving
+
+AIMING:
+
+Turn Gun Up         O
+Turn Gun Down       L
+Turn Gun Left       K
+Turn Gun Right      ;
+
+MISCELLANEOUS:
+
+FIRE                Right-Shift (hold)
+TURBO               /

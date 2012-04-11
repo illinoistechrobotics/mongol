@@ -11,9 +11,14 @@
 #define	PKT_BND	0xFF
 #define	HELLO	0x01
 
-int printAll;   // Flag to control output of serial communication errors
-
-int commMode;   // Flage to control mode of communication to robot
+// Packet structure definition
+typedef struct packetStruct{
+    byte frontBnd;
+    byte walkDir;           // Walking Direction Variable
+    byte gunDir;            // Gun-Turning Direction Variable
+    byte actions;           // Action Variable
+    byte endBnd;
+} serPacket;
 
 int initSerial(char *port);
 
