@@ -1,3 +1,4 @@
+#include "BaseStation.h"
 #include "Serial.h"
 
 #define	SERBUFSIZ	100
@@ -5,16 +6,16 @@
 #define MAXERRORS	3
 
 FILE *dev;
-char inSerBuf [SERBUFSIZ];
-char inMsgBuf [MSGBUFSIZ];
-char outSerBuf [SERBUFSIZ];
-char outMsgBuf [MSGBUFSIZ];
+byte inSerBuf [SERBUFSIZ];
+byte inMsgBuf [MSGBUFSIZ];
+byte outSerBuf [SERBUFSIZ];
+byte outMsgBuf [MSGBUFSIZ];
 int errors = 0;
 
 int extractMessage (){
 
-    char * start;
-    char * end;
+    byte * start;
+    byte * end;
 
     if ((start = strchr(inSerBuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
 
@@ -31,9 +32,7 @@ int extractMessage (){
     }
 }
 
-int initSerial (char * port, int printMode){
-
-    printAll = printMode;
+int initSerial (char * port){
 
 	// Attempt to open port
 
@@ -66,7 +65,11 @@ int initSerial (char * port, int printMode){
 
 	printf("Waiting for handshake...\n");
 
-    while (readSerial()[0] != HELLO){sleep(1);}
+    byte * handshake;
+    while ((handshake = readSerial()) &&
+           (handshake[0] != HELLO)){
+        sleep(1);
+    }
     sayHello();
 
 	printf("Handshake received!\n");
@@ -74,30 +77,30 @@ int initSerial (char * port, int printMode){
 	return 0;
 }
 
-char * readSerial (){
+byte * readSerial (){
 
 	for (errors = 0; errors < MAXERRORS; errors ++){
 
-		if (!fgets(inSerBuf, SERBUFSIZ, dev) && printAll){
+		if (!fgets(inSerBuf, SERBUFSIZ, dev) && (printMode == VERBOSE)){
 
 			printf("ERROR: Failed to read from  port.\n");
 		}
 
-        else if (extractMessage() < 0 && printAll){
+        else if (extractMessage() < 0 && (printMode == VERBOSE)){
 
 			printf("ERROR: Corrupt packet.\n");
         }
 
 		else{
 
-			break;
+            return inMsgBuf;
 		}
 	}
 
-	return inMsgBuf;
+    return NULL;
 }
 
-int writeSerial(char *msg){
+int writeSerial(byte *msg){
 
     int msgSize;
     int writeCount;
@@ -109,12 +112,12 @@ int writeSerial(char *msg){
 
     for (errors = 0; errors < MAXERRORS; errors++){
 
-        if ((writeCount = fputs(outSerBuf, dev) && printAll) < 0){
+        if ((writeCount = fputs(outSerBuf, dev) && (printMode == VERBOSE)) < 0){
 
             printf("ERROR: Failed to write to port.\n");
         }
 
-        else if (writeCount < msgSize && printAll){
+        else if (writeCount < msgSize && (printMode == VERBOSE)){
 
             printf("ERROR: Write operation interrupted.\n");
         }
@@ -125,7 +128,7 @@ int writeSerial(char *msg){
         }
     }
 
-	return (errors == 3) ? (-1) : 0;
+	return (errors == MAXERRORS) ? (-1) : 0;
 }
 
 void closeSerial(){

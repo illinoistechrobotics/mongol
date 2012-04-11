@@ -1,12 +1,5 @@
+#include "BaseStation.h"
 #include "GUI.h"
-
-void printMsg (){
-
-    if(uiMode == CMD_MODE)
-        puts(termBuf);
-
-    return;
-}
 
 int initGUI (int * argc, char *** argv){
 

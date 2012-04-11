@@ -1,3 +1,4 @@
+#include "BaseStation.h"
 #include "Controller.h"
 
 SDL_Event curEvent, lastEvent;
@@ -37,9 +38,8 @@ SDL_Event * getNextEvent (){
         if(curEvent.type == SDL_KEYDOWN &&
            (curEvent.key.keysym.sym == SDLK_q) && 
            (curEvent.key.keysym.mod & KMOD_CTRL)){
-            closeCtrl();
-            // closeSerial();
-            exit(0);
+
+            quitBase();
         }
         return &curEvent;
     }
@@ -60,7 +60,7 @@ void printEventInfo (SDL_Event * event, int flags){
 
     case SDL_KEYDOWN:
     case SDL_KEYUP:
-        sprintf(typeStr, "KEYBOARDEVENT: Key:%c Modifier: %d\n",
+        sprintf(typeStr, "KEYBOARDEVENT: Key: %c Modifier: %d\n",
                 event->key.keysym.sym,
                 event->key.keysym.mod);
         break;

@@ -1,3 +1,4 @@
+#include "BaseStation.h"
 #include "Controller.h"
 #include "Serial.h"
 #include "GUI.h"
@@ -11,6 +12,21 @@ void waitForUser (){
 	fgetc(stdin);
 
     return;
+}
+
+void printMsg (){
+
+    if(uiMode == CMD_LINE)
+        puts(termBuf);
+
+    return;
+}
+
+void quitBase (){
+
+    closeCtrl();
+    closeSerial();
+	exit(0);
 }
 
 // Function to parse command line arguements
@@ -30,7 +46,10 @@ void parseArgs (int argc, char * argv[]){
             break;
 
         // Joystick mode flag (-j): If not specified, defaults to keyboard control
-
+        case 'j':
+            ctrlMode = GAMEPAD;
+            printf("Joystick mode activated.\n");
+            break;
 
         // Calibrate flag (-c): Do not attempt to connect; used for testing input devices
         case 'c':
@@ -40,8 +59,8 @@ void parseArgs (int argc, char * argv[]){
 
         // GUI mode flag (-g)
         case 'g':
-            uiMode = GUI_MODE;
-            printf("Graphical mode activated\n");
+            uiMode = GRAPH_UI;
+            printf("Graphical mode activated.\n");
             break;
      
         // Verbose mode flag (-v): prints all non-critical error messages
@@ -56,8 +75,9 @@ void parseArgs (int argc, char * argv[]){
             printf("Written by Allen Baker for Illinois Tech Robotics\n\n");
             printf("Usage:\n");
             printf("BaseStation [-d <port-name>] [-v] [-h]\n\n");
-            printf("*** ARGS ***\n");
+            printf("***** Arguements *****\n");
             printf(" -d <port-name>  : Specify port to use (default is /dev/ttyUSB0)\n");
+            printf(" -j              : Activate joystick mode (default is keyboard mode)\n");
             printf(" -v              : Set verbose mode\n");
             printf(" -h              : Print help information\n\n");
             exit(0);
@@ -67,15 +87,15 @@ void parseArgs (int argc, char * argv[]){
 
 int main (int argc, char* argv[]){
 
-    // Set intial values
+    // Set default values
     commMode = ONLINE;
-    uiMode = CMD_MODE;
-    printMode = QUIET;
- 
+    uiMode = CMD_LINE;
+    printMode = QUIET; 
+
     // Parse command line arguements
     parseArgs(argc, argv);
 
-    if(uiMode == GUI_MODE){
+    if(uiMode == GRAPH_UI){
         initGUI(&argc, &argv);
     } 
 
@@ -85,9 +105,7 @@ int main (int argc, char* argv[]){
     if(!(initCtrl())){
 
         sprintf(termBuf,"\nERROR: Controller Failed to initialize.\n");
-        printMsg();
-        waitForUser();
-        exit(-1);
+        quitBase();
     }
     sprintf(termBuf,"Controller Initialized.\n");
     printMsg();
@@ -97,9 +115,9 @@ int main (int argc, char* argv[]){
     if(commMode == ONLINE){
         sprintf(termBuf,"Connecting to robot...\n");
         printMsg();
-        if((dev ? initSerial(dev, printMode) : initSerial("/dev/ttyUSB0", printMode)) < 0){
+        if((dev ? initSerial(dev) : initSerial("/dev/ttyUSB0")) < 0){
 
-            exit(-1);
+            quitBase();
         }
         sayHello();
         sprintf(termBuf,"Connected!\n\n");
@@ -112,7 +130,5 @@ int main (int argc, char* argv[]){
         getNextEvent();
     }
 
-    closeCtrl();
-    closeSerial();
-	exit(0);
+    quitBase();
 }
