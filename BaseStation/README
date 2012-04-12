@@ -4,6 +4,8 @@ Written by Allen Baker
 
 ***** Overview *****
 
+Press "Ctrl + Q" to exit the program.
+
 ***** File Descriptions *****
 
 ***** Keyboard Control Scheme (no mouse)  *****
@@ -30,5 +32,33 @@ Turn Gun Right      ;
 
 MISCELLANEOUS:
 
-FIRE                Right-Shift (hold)
-TURBO               /
+Fire                Right-Shift (hold)
+Turbo               /
+
+
+***** XBOX Gamepad Control Scheme *****
+
+TURNING:
+
+Turn Left           Left Joystick Left
+Turn Right          Left Joystick Right
+
+MOVING:
+
+Move Forward        Right Trigger (hold)
+Move Backward       Left Trigger (hold)
+Strafe Left         Left Bumper (hold)
+Strafe Right        Right Bumper (hold)
+* NOTE: Mongol cannot turn while moving
+
+AIMING:
+
+Turn Gun Up         Right Joystick Up
+Turn Gun Down       Right Joystick Down
+Turn Gun Left       Right Joystick Left
+Turn Gun Right      Right Joystick Right
+
+MISCELLANEOUS:
+
+Fire                A Button
+Turbo               X Button

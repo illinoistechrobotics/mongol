@@ -24,6 +24,12 @@ enum{
     SIEGE =     0x20        // Toggle siege mode
 };
 
+// Gamepad index variable
+int pad_index;
+
+// Gamepad SDL struct pointer
+SDL_Joystick * pad;
+
 int initCtrl (void);
 
 SDL_Event * getNextEvent (void);

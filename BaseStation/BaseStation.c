@@ -7,17 +7,17 @@ char * dev;
 
 void waitForUser (){
 
-	sprintf(termBuf,"Press enter to continue...");
-    printMsg();
+	sprintf(termbuf,"Press enter to continue...");
+    printmsg();
 	fgetc(stdin);
 
     return;
 }
 
-void printMsg (){
+void printmsg (){
 
     if(uiMode == CMD_LINE)
-        puts(termBuf);
+        puts(termbuf);
 
     return;
 }
@@ -47,7 +47,7 @@ void parseArgs (int argc, char * argv[]){
 
         // Joystick mode flag (-j): If not specified, defaults to keyboard control
         case 'j':
-            ctrlMode = GAMEPAD;
+            ctrlmode = GAMEPAD;
             printf("Joystick mode activated.\n");
             break;
 
@@ -100,28 +100,28 @@ int main (int argc, char* argv[]){
     } 
 
     // Initialize SDL (VIDEO flag also initializes event handling)
-    sprintf(termBuf,"Initializing Controller... ");
-    printMsg();
+    sprintf(termbuf,"Initializing Controller... ");
+    printmsg();
     if(!(initCtrl())){
 
-        sprintf(termBuf,"\nERROR: Controller Failed to initialize.\n");
+        sprintf(termbuf,"\nERROR: Controller Failed to initialize.\n");
         quitBase();
     }
-    sprintf(termBuf,"Controller Initialized.\n");
-    printMsg();
+    sprintf(termbuf,"Controller Initialized.\n");
+    printmsg();
 
     // Initialize serial port (includes looking for HELLO packet
     // If not port name specified, default to /dev/ttyUSB0 (for Linux)
     if(commMode == ONLINE){
-        sprintf(termBuf,"Connecting to robot...\n");
-        printMsg();
+        sprintf(termbuf,"Connecting to robot...\n");
+        printmsg();
         if((dev ? initSerial(dev) : initSerial("/dev/ttyUSB0")) < 0){
 
             quitBase();
         }
         sayHello();
-        sprintf(termBuf,"Connected!\n\n");
-        printMsg();
+        sprintf(termbuf,"Connected!\n\n");
+        printmsg();
     }
 
     // Test keyboard press

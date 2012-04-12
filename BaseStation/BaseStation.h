@@ -1,11 +1,13 @@
 // Main header file for BaseStation
 
+#include <stdio.h>
+
 // Matter of preference
 typedef char byte;
 
 // Controller mode variable
 
-int ctrlMode;
+int ctrlmode;
 
 enum{
     KEYBOARD,   // Use keyboard keys to control robot
@@ -39,9 +41,10 @@ enum{
     VERBOSE     // Print messages about minor communication and input errors
 };
 
-// Message printing function
+// Message printing function and buffer
 
-void printMsg (void);
+char termbuf [BUFSIZ];
+void printmsg (void);
 
 // Exit function
 
