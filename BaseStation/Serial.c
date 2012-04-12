@@ -63,7 +63,7 @@ int initSerial (char * port){
 	
 	// Wait for handshake
 
-	printf("Waiting for handshake...\n");
+	printf("Waiting for \"Hello\"... ");
 
     byte * handshake;
     while ((handshake = readSerial()) &&
@@ -72,7 +72,7 @@ int initSerial (char * port){
     }
     sayHello();
 
-	printf("Handshake received!\n");
+	printf("\"Hello\" received.\n");
 
 	return 0;
 }
