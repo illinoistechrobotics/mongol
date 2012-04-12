@@ -6,25 +6,19 @@
 #define MAXERRORS	3
 
 FILE *dev;
-byte inSerBuf [SERBUFSIZ];
-byte inMsgBuf [MSGBUFSIZ];
-byte outSerBuf [SERBUFSIZ];
-byte outMsgBuf [MSGBUFSIZ];
+byte inbuf [BUFSIZ];
+packet * inpacket;
+byte outbuf [BUFSIZ];
 int errors = 0;
 
-int extractMessage (){
+int extract_msg (){
 
     byte * start;
     byte * end;
 
-    if ((start = strchr(inSerBuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
-
-        start ++;
-        *end = '\0';
-
-        strcpy(inMsgBuf, start);
-
-        return strlen(inMsgBuf);
+    if ((start = strchr(inbuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
+        inpacket = start;
+        return (end-start);
     }
     else{
 
@@ -32,7 +26,7 @@ int extractMessage (){
     }
 }
 
-int initSerial (char * port){
+int init_serial (char * port){
 
 	// Attempt to open port
 
@@ -40,10 +34,10 @@ int initSerial (char * port){
 
 	if ((dev = fopen(port, "r+b"))){
 
-        int devFD = fileno(dev);
+        int dev_fd = fileno(dev);
         
         // Set stream to not block when reading
-        fcntl(devFD, F_SETFL, O_NONBLOCK);
+        fcntl(dev_fd, F_SETFL, O_NONBLOCK);
         int flags = fcntl(fileno(dev), F_GETFL);
 
         // Set baud rate to 34800
