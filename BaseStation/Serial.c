@@ -6,25 +6,19 @@
 #define MAXERRORS	3
 
 FILE *dev;
-byte inSerBuf [SERBUFSIZ];
-byte inMsgBuf [MSGBUFSIZ];
-byte outSerBuf [SERBUFSIZ];
-byte outMsgBuf [MSGBUFSIZ];
+byte inbuf [BUFSIZ];
+packet * inpacket;
+byte outbuf [BUFSIZ];
 int errors = 0;
 
-int extractMessage (){
+int extract_msg (){
 
     byte * start;
     byte * end;
 
-    if ((start = strchr(inSerBuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
-
-        start ++;
-        *end = '\0';
-
-        strcpy(inMsgBuf, start);
-
-        return strlen(inMsgBuf);
+    if ((start = strchr(inbuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
+        inpacket = (packet *)start;
+        return (end-start);
     }
     else{
 
@@ -32,7 +26,7 @@ int extractMessage (){
     }
 }
 
-int initSerial (char * port){
+int init_serial (char * port){
 
 	// Attempt to open port
 
@@ -40,17 +34,17 @@ int initSerial (char * port){
 
 	if ((dev = fopen(port, "r+b"))){
 
-        int devFD = fileno(dev);
+        int dev_fd = fileno(dev);
         
         // Set stream to not block when reading
-        fcntl(devFD, F_SETFL, O_NONBLOCK);
+        fcntl(dev_fd, F_SETFL, O_NONBLOCK);
         int flags = fcntl(fileno(dev), F_GETFL);
 
         // Set baud rate to 34800
         struct termios devConfig;
-        tcgetattr(devFD, &devConfig);
+        tcgetattr(dev_fd, &devConfig);
         cfsetspeed(&devConfig, B38400);
-        int baudSet = tcsetattr(devFD, TCSANOW, &devConfig);
+        int baudSet = tcsetattr(dev_fd, TCSANOW, &devConfig);
 
         if (!(flags & O_NONBLOCK) && !(baudSet)){
 
@@ -66,7 +60,7 @@ int initSerial (char * port){
 	printf("Waiting for \"Hello\"... ");
 
     byte * handshake;
-    while ((handshake = readSerial()) &&
+    while ((handshake = (byte *)read_serial()) &&
            (handshake[0] != HELLO)){
         sleep(1);
     }
@@ -77,42 +71,42 @@ int initSerial (char * port){
 	return 0;
 }
 
-byte * readSerial (){
+byte * read_serial (){
 
 	for (errors = 0; errors < MAXERRORS; errors ++){
 
-		if (!fgets(inSerBuf, SERBUFSIZ, dev) && (printMode == VERBOSE)){
+		if (!fgets(inbuf, SERBUFSIZ, dev) && (printMode == VERBOSE)){
 
 			printf("ERROR: Failed to read from  port.\n");
 		}
 
-        else if (extractMessage() < 0 && (printMode == VERBOSE)){
+        else if (extract_msg() < 0 && (printMode == VERBOSE)){
 
 			printf("ERROR: Corrupt packet.\n");
         }
 
 		else{
 
-            return inMsgBuf;
+            return inbuf;
 		}
 	}
 
     return NULL;
 }
 
-int writeSerial(byte *msg){
+int write_serial(byte *msg){
 
     int msgSize;
     int writeCount;
 
     if (msg)
-        strcpy(outMsgBuf, msg);
+        strcpy(outbuf, msg);
 
-    msgSize = sprintf(outSerBuf, "%c%s%c\n", PKT_BND, outMsgBuf, PKT_BND);
+    msgSize = sprintf(outbuf, "%c%s%c\n", PKT_BND, outbuf, PKT_BND);
 
     for (errors = 0; errors < MAXERRORS; errors++){
 
-        if ((writeCount = fputs(outSerBuf, dev) && (printMode == VERBOSE)) < 0){
+        if ((writeCount = fputs(outbuf, dev) && (printMode == VERBOSE)) < 0){
 
             printf("ERROR: Failed to write to port.\n");
         }
@@ -140,7 +134,7 @@ void closeSerial(){
 
 void sayHello(){
 
-    sprintf(outMsgBuf, "%c", HELLO);
+    sprintf(outbuf, "%c", HELLO);
 
-    writeSerial(NULL);
+    write_serial(NULL);
 }
