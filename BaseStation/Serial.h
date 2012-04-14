@@ -17,13 +17,13 @@ typedef struct packetStruct{
     byte gunDir;            // Gun-Turning Direction Variable
     byte actions;           // Action Variable
     byte endBnd;
-} serPacket;
+} packet;
 
-int initSerial(char *port);
+int init_serial(char *port);
 
-char * readSerial();
+byte * read_serial();
 
-int writeSerial(char *msg);
+int write_serial(char *msg);
 
 void closeSerial();
 

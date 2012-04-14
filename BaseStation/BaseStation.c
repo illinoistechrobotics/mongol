@@ -115,7 +115,7 @@ int main (int argc, char* argv[]){
     if(commMode == ONLINE){
         sprintf(termbuf,"Connecting to robot...\n");
         printmsg();
-        if((dev ? initSerial(dev) : initSerial("/dev/ttyUSB0")) < 0){
+        if((dev ? init_serial(dev) : init_serial("/dev/ttyUSB0")) < 0){
 
             quitBase();
         }
