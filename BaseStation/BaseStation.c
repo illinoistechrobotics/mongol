@@ -25,7 +25,10 @@ void printmsg (){
 void quitBase (){
 
     closeCtrl();
-    closeSerial();
+
+    if(commMode == ONLINE)
+        closeSerial();
+
 	exit(0);
 }
 

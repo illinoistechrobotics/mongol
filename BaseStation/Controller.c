@@ -16,6 +16,67 @@ int eventFilter (const SDL_Event * event){
              (event->type == SDL_JOYBUTTONDOWN) ||
              (event->type == SDL_JOYBUTTONUP))){
 
+
+        // Further filtering of joystick movements
+        if(event->type == SDL_JOYAXISMOTION){
+
+            SDL_JoyAxisEvent jevent = event->jaxis;
+
+            switch(jevent.axis){
+
+                case XRSTICK_X:
+                    if(jevent.value < JOY_THRESH_LEFT){         // If joystick is on left side
+
+                        if(cur_move == MOV_LTURN)               // If robot is already turning
+                            return 0;                           // Do not place in queue
+                        else
+                            return 1;                           // Else, place in queue
+                    }
+                    else if(jevent.value > JOY_THRESH_RIGHT){
+
+                        if(cur_move == MOV_RTURN)
+                            return 0;
+                        else
+                            return 1;
+                    }
+                    else{
+
+                        if(cur_move == MOV_STOP)
+                            return 0;
+                        else
+                            return 1;
+                    }
+                    break;
+
+                case XLSTICK_Y:
+                    if(jevent.value < JOY_THRESH_DOWN){         // If joystick is down
+
+                        if(cur_move == MOV_BKD)                 // If robot is already backing up
+                            return 0;                           // Do not place in queue
+                        else
+                            return 1;                           // Else, place in queue
+                    }
+                    else if(jevent.value > JOY_THRESH_UP){
+
+                        if(cur_move == MOV_FWD)
+                            return 0;
+                        else
+                            return 1;
+                    }
+                    else{
+
+                        if(cur_move == MOV_STOP)
+                            return 0;
+                        else
+                            return 1;
+                    }
+                    break;
+
+                default:
+                    return 0;
+            }
+        }
+
         return 1;
     }
     else
@@ -48,6 +109,8 @@ int initCtrl (){
                 sprintf(termbuf, "%s opened successfully.\n",
                         SDL_JoystickName(pad_index));
                 printmsg();
+                cur_move = MOV_STOP;                // Set initial modes
+                cur_look = LOOK_STRGHT;
                 SDL_JoystickEventState(SDL_ENABLE);
             }
             else{
@@ -69,14 +132,15 @@ SDL_Event * getNextEvent (){
 
     if(SDL_PollEvent(&curEvent)){
 
-        printEventInfo(&curEvent, 
-                       (GAMEPAD ? (SDL_JOYAXISMOTION |
-                                   SDL_JOYBALLMOTION |
-                                   SDL_JOYHATMOTION |
-                                   SDL_JOYBUTTONUP |
-                                   SDL_JOYBUTTONDOWN) :
-                                  (SDL_KEYDOWN |
-                                   SDL_KEYUP)));
+        if(printMode == VERBOSE){
+
+            printEventInfo(&curEvent, 
+                           (GAMEPAD ? (SDL_JOYAXISMOTION |
+                                       SDL_JOYBUTTONUP |
+                                       SDL_JOYBUTTONDOWN) :
+                                      (SDL_KEYDOWN |
+                                       SDL_KEYUP)));
+        }
                  
         if(curEvent.type == SDL_KEYDOWN &&
            (curEvent.key.keysym.sym == SDLK_q) && 
@@ -84,6 +148,7 @@ SDL_Event * getNextEvent (){
 
             quitBase();
         }
+
         return &curEvent;
     }
 

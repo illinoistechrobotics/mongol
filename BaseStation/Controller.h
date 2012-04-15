@@ -24,6 +24,58 @@ enum{
     SIEGE =     0x20        // Toggle siege mode
 };
 
+// Current joystick mode variables and values
+
+// Joystick mode thresholds
+#define JOY_THRESH_UP      16383
+#define JOY_THRESH_LEFT    -16384
+#define JOY_THRESH_RIGHT   16383
+#define JOY_THRESH_DOWN    -16384
+
+// XBOX gamepad button index
+enum{
+    XBTN_A,
+    XBTN_B,
+    XBTN_X,
+    XBTN_Y,
+    XBTN_LBUMP,
+    XBTN_RBUMP
+};
+
+// XBOX joystick/button axis index
+enum{
+    XLSTICK_X,
+    XLSTICK_Y,
+    XRSTICK_X,
+    XRSTICK_Y,
+    XLTRIG,
+    XRTRIG
+};
+
+// Current movement mode variable
+int cur_move;
+
+// Movement modes
+enum{
+    MOV_STOP,               // Joystick center
+    MOV_FWD,
+    MOV_LTURN,
+    MOV_RTURN,
+    MOV_BKD
+};
+
+// Current looking mode vairable
+int cur_look;
+
+// Look modes
+enum{
+    LOOK_STRGHT,            // Do not adjust turret
+    LOOK_UP,
+    LOOK_LEFT,
+    LOOK_RIGHT,
+    LOOK_DOWN
+};
+
 // Gamepad index variable
 int pad_index;
 
