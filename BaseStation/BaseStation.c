@@ -24,6 +24,9 @@ void printmsg (){
 
 void quitBase (){
 
+    sprintf(termbuf,"Exiting...\n");
+    printmsg();
+
     closeCtrl();
 
     if(commMode == ONLINE)

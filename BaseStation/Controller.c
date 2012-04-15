@@ -24,56 +24,85 @@ int eventFilter (const SDL_Event * event){
             switch(jevent.axis){
 
                 case XLSTICK_X:
-                    if(jevent.value < JOY_THRESH_LEFT){         // If joystick is on left side
+                    if((jevent.value < JOY_THRESH_LEFT) &&
+                       (cur_turn != TRN_LEFT))
+                        return 1;
 
-                        if(cur_turn == TRN_LEFT)               // If robot is already turning
-                            return 0;                           // Do not place in queue
-                        else
-                            return 1;                           // Else, place in queue
-                    }
-                    else if(jevent.value > JOY_THRESH_RIGHT){
+                    else if((jevent.value > JOY_THRESH_RIGHT) &&
+                            (cur_turn != TRN_RIGHT))
+                        return 1;
 
-                        if(cur_turn == TRN_RIGHT)
-                            return 0;
-                        else
-                            return 1;
-                    }
-                    else{
+                    else if((jevent.value > JOY_THRESH_LEFT) &&
+                            (jevent.value < JOY_THRESH_RIGHT) &&
+                            (cur_turn != TRN_NONE))
+                        return 1;
 
-                        if(cur_turn == TRN_NONE)
-                            return 0;
-                        else
-                            return 1;
-                    }
                     break;
 
                 case XLSTICK_Y:
-                    if(jevent.value < JOY_THRESH_DOWN){         // If joystick is down
+                    if((jevent.value > JOY_THRESH_DOWN) &&
+                       (cur_move != MOV_BKD))
+                        return 1;
 
-                        if(cur_move == MOV_BKD)                 // If robot is already backing up
-                            return 0;                           // Do not place in queue
-                        else
-                            return 1;                           // Else, place in queue
-                    }
-                    else if(jevent.value > JOY_THRESH_UP){
+                    else if((jevent.value < JOY_THRESH_UP) &&
+                            (cur_move != MOV_FWD))
+                        return 1;
 
-                        if(cur_move == MOV_FWD)
-                            return 0;
-                        else
-                            return 1;
-                    }
-                    else{
+                    else if((jevent.value < JOY_THRESH_DOWN) &&
+                            (jevent.value > JOY_THRESH_UP) &&
+                            (cur_move != MOV_STOP))
+                        return 1;
+                
+                    break;
 
-                        if(cur_move == MOV_STOP)
-                            return 0;
-                        else
-                            return 1;
-                    }
+                case XRSTICK_X:
+                    if((jevent.value < JOY_THRESH_LEFT) &&
+                       (cur_h_aim != AIM_H_LEFT))
+                        return 1;
+
+                    else if((jevent.value > JOY_THRESH_RIGHT) &&
+                            (cur_h_aim != AIM_H_RIGHT))
+                        return 1;
+
+                    else if((jevent.value > JOY_THRESH_LEFT) &&
+                            (jevent.value < JOY_THRESH_RIGHT) &&
+                            (cur_h_aim != AIM_H_STRGHT))
+                        return 1;
+
+                    break;
+
+                case XRSTICK_Y:
+                    if((jevent.value > JOY_THRESH_DOWN) &&
+                       (cur_v_aim != AIM_V_DWN))
+                        return 1;
+
+                    else if((jevent.value < JOY_THRESH_UP) &&
+                            (cur_v_aim != AIM_V_UP))
+                        return 1;
+
+                    else if((jevent.value < JOY_THRESH_DOWN) &&
+                            (jevent.value > JOY_THRESH_UP) &&
+                            (cur_v_aim != AIM_V_STRGHT))
+                        return 1;
+
+                    break;
+
+                case XRTRIG:
+                    if((jevent.value < TRIG_THRESH) &&
+                       (cur_fire != FIRE_OFF))
+                        return 1;
+                    
+                    else if((jevent.value > TRIG_THRESH) &&
+                            (cur_fire != FIRE_ON))
+                        return 1;
+
                     break;
 
                 default:
                     return 0;
             }
+
+            return 0;
         }
 
         return 1;
@@ -108,10 +137,14 @@ int initCtrl (){
                 sprintf(termbuf, "%s opened successfully.\n",
                         SDL_JoystickName(pad_index));
                 printmsg();
-                cur_move = MOV_STOP;                // Set initial modes
+                
+                // Set initial modes
+                cur_move = MOV_STOP;
                 cur_turn = TRN_NONE;
                 cur_h_aim = AIM_H_STRGHT;
                 cur_v_aim = AIM_V_STRGHT;
+                cur_fire = FIRE_OFF;
+
                 SDL_JoystickEventState(SDL_ENABLE);
             }
             else{
@@ -164,14 +197,44 @@ SDL_Event * getNextEvent (){
                     break;
 
                 case XLSTICK_Y:
-                    if(jevent.value < JOY_THRESH_DOWN)
+                    if(jevent.value > JOY_THRESH_DOWN)
                         cur_move = MOV_BKD;
 
-                    else if(jevent.value > JOY_THRESH_UP)
+                    else if(jevent.value < JOY_THRESH_UP)
                         cur_move = MOV_FWD;
 
                     else
                         cur_move = MOV_STOP;
+                    break;
+                
+                case XRSTICK_X:
+                    if(jevent.value < JOY_THRESH_LEFT)
+                        cur_h_aim = AIM_H_LEFT;
+                    
+                    else if(jevent.value > JOY_THRESH_RIGHT)
+                        cur_h_aim = AIM_H_RIGHT;
+
+                    else
+                        cur_h_aim = AIM_H_STRGHT;
+                    break;
+
+                case XRSTICK_Y:
+                    if(jevent.value > JOY_THRESH_DOWN)
+                        cur_v_aim = AIM_V_DWN;
+                    
+                    else if(jevent.value < JOY_THRESH_UP)
+                        cur_v_aim = AIM_V_UP;
+
+                    else
+                        cur_v_aim = AIM_V_STRGHT;
+                    break;
+
+                case XRTRIG:
+                    if(jevent.value < TRIG_THRESH)
+                        cur_fire = FIRE_OFF;
+
+                    else
+                        cur_fire = FIRE_ON;
                     break;
             }
         }

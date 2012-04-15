@@ -27,10 +27,11 @@ enum{
 // Current joystick mode variables and values
 
 // Joystick mode thresholds
-#define JOY_THRESH_UP      16383
-#define JOY_THRESH_LEFT    -16384
-#define JOY_THRESH_RIGHT   16383
-#define JOY_THRESH_DOWN    -16384
+#define JOY_THRESH_UP       -16384
+#define JOY_THRESH_LEFT     -16384
+#define JOY_THRESH_RIGHT    16383
+#define JOY_THRESH_DOWN     16383
+#define TRIG_THRESH         0
 
 // XBOX gamepad button index
 enum{
@@ -46,9 +47,9 @@ enum{
 enum{
     XLSTICK_X,
     XLSTICK_Y,
+    XLTRIG,
     XRSTICK_X,
     XRSTICK_Y,
-    XLTRIG,
     XRTRIG
 };
 
@@ -86,6 +87,14 @@ enum{
     AIM_V_STRGHT,
     AIM_V_DWN,
     AIM_V_UP
+};
+
+// Current firing mode variable
+int cur_fire;
+// Firing modes
+enum{
+    FIRE_ON,
+    FIRE_OFF
 };
 
 // Gamepad index variable
