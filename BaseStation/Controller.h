@@ -54,26 +54,38 @@ enum{
 
 // Current movement mode variable
 int cur_move;
-
 // Movement modes
 enum{
-    MOV_STOP,               // Joystick center
+    MOV_STOP,               // Joystick vertical center
     MOV_FWD,
-    MOV_LTURN,
-    MOV_RTURN,
     MOV_BKD
 };
 
-// Current looking mode vairable
-int cur_look;
-
-// Look modes
+// Current turn mode variable
+int cur_turn;
+// Turn modes
 enum{
-    LOOK_STRGHT,            // Do not adjust turret
-    LOOK_UP,
-    LOOK_LEFT,
-    LOOK_RIGHT,
-    LOOK_DOWN
+    TRN_NONE,               // Joystick horizonatal center
+    TRN_LEFT,
+    TRN_RIGHT
+};
+
+// Current horizontal aiming mode vairable
+int cur_h_aim;
+// Horizontal aiming modes
+enum{
+    AIM_H_STRGHT,
+    AIM_H_LEFT,
+    AIM_H_RIGHT
+};
+
+// Current vertical aiming mode variable
+int cur_v_aim;
+// Vertical aiming modes
+enum{
+    AIM_V_STRGHT,
+    AIM_V_DWN,
+    AIM_V_UP
 };
 
 // Gamepad index variable

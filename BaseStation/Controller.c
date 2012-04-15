@@ -16,32 +16,31 @@ int eventFilter (const SDL_Event * event){
              (event->type == SDL_JOYBUTTONDOWN) ||
              (event->type == SDL_JOYBUTTONUP))){
 
-
-        // Further filtering of joystick movements
+        // Filtering of joystick movements
         if(event->type == SDL_JOYAXISMOTION){
 
             SDL_JoyAxisEvent jevent = event->jaxis;
 
             switch(jevent.axis){
 
-                case XRSTICK_X:
+                case XLSTICK_X:
                     if(jevent.value < JOY_THRESH_LEFT){         // If joystick is on left side
 
-                        if(cur_move == MOV_LTURN)               // If robot is already turning
+                        if(cur_turn == TRN_LEFT)               // If robot is already turning
                             return 0;                           // Do not place in queue
                         else
                             return 1;                           // Else, place in queue
                     }
                     else if(jevent.value > JOY_THRESH_RIGHT){
 
-                        if(cur_move == MOV_RTURN)
+                        if(cur_turn == TRN_RIGHT)
                             return 0;
                         else
                             return 1;
                     }
                     else{
 
-                        if(cur_move == MOV_STOP)
+                        if(cur_turn == TRN_NONE)
                             return 0;
                         else
                             return 1;
@@ -110,7 +109,9 @@ int initCtrl (){
                         SDL_JoystickName(pad_index));
                 printmsg();
                 cur_move = MOV_STOP;                // Set initial modes
-                cur_look = LOOK_STRGHT;
+                cur_turn = TRN_NONE;
+                cur_h_aim = AIM_H_STRGHT;
+                cur_v_aim = AIM_V_STRGHT;
                 SDL_JoystickEventState(SDL_ENABLE);
             }
             else{
@@ -135,11 +136,44 @@ SDL_Event * getNextEvent (){
         if(printMode == VERBOSE){
 
             printEventInfo(&curEvent, 
-                           (GAMEPAD ? (SDL_JOYAXISMOTION |
-                                       SDL_JOYBUTTONUP |
-                                       SDL_JOYBUTTONDOWN) :
-                                      (SDL_KEYDOWN |
-                                       SDL_KEYUP)));
+                           ((ctrlmode == GAMEPAD) ?
+                            (SDL_JOYAXISMOTION |
+                             SDL_JOYBUTTONUP |
+                             SDL_JOYBUTTONDOWN |
+                             SDL_KEYDOWN |
+                             SDL_KEYUP) :
+                            (SDL_KEYDOWN |
+                             SDL_KEYUP)));
+        }
+
+        if(curEvent.type == SDL_JOYAXISMOTION){
+
+            SDL_JoyAxisEvent jevent = curEvent.jaxis;
+
+            switch(jevent.axis){
+
+                case XLSTICK_X:
+                    if(jevent.value < JOY_THRESH_LEFT)
+                        cur_turn = TRN_LEFT;
+                    
+                    else if(jevent.value > JOY_THRESH_RIGHT)
+                        cur_turn = TRN_RIGHT;
+
+                    else
+                        cur_turn = TRN_NONE;
+                    break;
+
+                case XLSTICK_Y:
+                    if(jevent.value < JOY_THRESH_DOWN)
+                        cur_move = MOV_BKD;
+
+                    else if(jevent.value > JOY_THRESH_UP)
+                        cur_move = MOV_FWD;
+
+                    else
+                        cur_move = MOV_STOP;
+                    break;
+            }
         }
                  
         if(curEvent.type == SDL_KEYDOWN &&
@@ -179,7 +213,7 @@ void printEventInfo (SDL_Event * event, int flags){
         break;
 
     case SDL_JOYAXISMOTION:
-        sprintf(termbuf, "JOYAXISMOTION: Axis: %d, Value: %d",
+        sprintf(termbuf, "JOYAXISMOTION: Axis: %d, Value: %d\n",
                 (event->jaxis.axis),
                 (event->jaxis.value));
         break;
