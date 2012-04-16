@@ -6,7 +6,6 @@
 #include <sys/stat.h>
 #include <string.h>
 
-// Packet frame types
 #define	PKT_BND	0xFF
 
 int init_serial(char *port);
