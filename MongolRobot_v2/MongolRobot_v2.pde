@@ -1,6 +1,6 @@
 #include <ax12.h>
 #include <BioloidController.h>
-#include "ForwardWalk.h"
+#include "MongolMotions.h"
 
 #define MSGBUFSIZ   126
 #define SERBUFSIZ   128
