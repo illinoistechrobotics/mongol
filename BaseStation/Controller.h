@@ -53,50 +53,6 @@ enum{
     XRTRIG
 };
 
-// Current movement mode variable
-int cur_move;
-// Movement modes
-enum{
-    MOV_STOP,               // Joystick vertical center
-    MOV_FWD,
-    MOV_BKD
-};
-
-// Current turn mode variable
-int cur_turn;
-// Turn modes
-enum{
-    TRN_NONE,               // Joystick horizonatal center
-    TRN_LEFT,
-    TRN_RIGHT
-};
-
-// Current horizontal aiming mode vairable
-int cur_h_aim;
-// Horizontal aiming modes
-enum{
-    AIM_H_STRGHT,
-    AIM_H_LEFT,
-    AIM_H_RIGHT
-};
-
-// Current vertical aiming mode variable
-int cur_v_aim;
-// Vertical aiming modes
-enum{
-    AIM_V_STRGHT,
-    AIM_V_DWN,
-    AIM_V_UP
-};
-
-// Current firing mode variable
-int cur_fire;
-// Firing modes
-enum{
-    FIRE_ON,
-    FIRE_OFF
-};
-
 // Gamepad index variable
 int pad_index;
 
@@ -105,8 +61,8 @@ SDL_Joystick * pad;
 
 int initCtrl (void);
 
-SDL_Event * getNextEvent (void);
+void next_event (packet * next_pkt);
 
 void printEventInfo (SDL_Event * event, int flags);
 
-void closeCtrl (void);
+void close_ctrl (void);

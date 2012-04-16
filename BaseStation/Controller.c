@@ -2,7 +2,13 @@
 #include "Controller.h"
 
 SDL_Event curEvent, lastEvent;
-SDL_EventFilter mouseMotionFilter;
+byte cur_move;              // Current movement mode variable
+byte cur_turn;              // Current turning mode variable
+byte cur_h_aim;             // Current horizontal aim mode variable
+byte cur_v_aim;             // Current vertical aim mode variable
+byte cur_fire;              // Current firing mode variable
+byte cur_l_strf;            // Current left-strafing mode variable
+byte cur_r_strf;            // Current right-strafing mode variable
 
 int eventFilter (const SDL_Event * event){
 
@@ -105,6 +111,24 @@ int eventFilter (const SDL_Event * event){
             return 0;
         }
 
+        // Filtering of joystick buttons
+        else if((event->type == SDL_JOYBUTTONUP) ||
+                (event->type == SDL_JOYBUTTONDOWN)){
+
+            SDL_JoyButtonEvent bevent = event->jbutton;
+
+            switch(bevent.button){
+
+                case XBTN_LBUMP:
+                case XBTN_RBUMP:
+                    return 1;
+
+                default:
+                    return 0;
+
+            }
+        }
+
         return 1;
     }
     else
@@ -144,6 +168,8 @@ int initCtrl (){
                 cur_h_aim = AIM_H_STRGHT;
                 cur_v_aim = AIM_V_STRGHT;
                 cur_fire = FIRE_OFF;
+                cur_l_strf = STRF_L_OFF;
+                cur_r_strf = STRF_R_OFF;
 
                 SDL_JoystickEventState(SDL_ENABLE);
             }
@@ -162,7 +188,7 @@ int initCtrl (){
     return 0;
 }
 
-SDL_Event * getNextEvent (){
+void next_event (packet * next_pkt){
 
     if(SDL_PollEvent(&curEvent)){
 
@@ -186,6 +212,7 @@ SDL_Event * getNextEvent (){
             switch(jevent.axis){
 
                 case XLSTICK_X:
+
                     if(jevent.value < JOY_THRESH_LEFT)
                         cur_turn = TRN_LEFT;
                     
@@ -194,9 +221,13 @@ SDL_Event * getNextEvent (){
 
                     else
                         cur_turn = TRN_NONE;
+
+                    next_pkt->type = PKT_TURN;
+                    next_pkt->value = cur_turn;
                     break;
 
                 case XLSTICK_Y:
+
                     if(jevent.value > JOY_THRESH_DOWN)
                         cur_move = MOV_BKD;
 
@@ -205,9 +236,13 @@ SDL_Event * getNextEvent (){
 
                     else
                         cur_move = MOV_STOP;
+
+                    next_pkt->type = PKT_MOVE;
+                    next_pkt->value = cur_move;
                     break;
                 
                 case XRSTICK_X:
+
                     if(jevent.value < JOY_THRESH_LEFT)
                         cur_h_aim = AIM_H_LEFT;
                     
@@ -216,9 +251,13 @@ SDL_Event * getNextEvent (){
 
                     else
                         cur_h_aim = AIM_H_STRGHT;
+
+                    next_pkt->type = PKT_AIM_H;
+                    next_pkt->value = cur_h_aim;
                     break;
 
                 case XRSTICK_Y:
+
                     if(jevent.value > JOY_THRESH_DOWN)
                         cur_v_aim = AIM_V_DWN;
                     
@@ -227,29 +266,67 @@ SDL_Event * getNextEvent (){
 
                     else
                         cur_v_aim = AIM_V_STRGHT;
+
+                    next_pkt->type = PKT_AIM_V;
+                    next_pkt->value = cur_v_aim;
                     break;
 
                 case XRTRIG:
+
                     if(jevent.value < TRIG_THRESH)
                         cur_fire = FIRE_OFF;
 
                     else
                         cur_fire = FIRE_ON;
+
+                    next_pkt->type = PKT_FIRE;
+                    next_pkt->value = cur_fire;
+                    break;
+            }
+        }
+
+        else if((curEvent.type == SDL_JOYBUTTONDOWN) &&
+                (curEvent.type == SDL_JOYBUTTONUP)){
+
+            SDL_JoyButtonEvent bevent = curEvent.jbutton;
+
+            switch(bevent.button){
+
+                case XBTN_LBUMP:
+
+                    if(bevent.state == SDL_PRESSED)
+                        cur_l_strf = STRF_L_ON;
+
+                    else
+                        cur_l_strf = STRF_L_OFF;
+
+                    next_pkt->type = PKT_STRF_L;
+                    next_pkt->value = cur_l_strf;
+                    break;
+
+                case XBTN_RBUMP:
+
+                    if(bevent.state == SDL_PRESSED)
+                        cur_r_strf = STRF_R_ON;
+
+                    else
+                        cur_r_strf = STRF_R_OFF;
+
+                    next_pkt->type = PKT_STRF_R;
+                    next_pkt->value = cur_r_strf;
                     break;
             }
         }
                  
-        if(curEvent.type == SDL_KEYDOWN &&
+        else if(curEvent.type == SDL_KEYDOWN &&
            (curEvent.key.keysym.sym == SDLK_q) && 
            (curEvent.key.keysym.mod & KMOD_CTRL)){
 
-            quitBase();
+            quit_base();
         }
-
-        return &curEvent;
     }
-
-    return NULL;
+    else                                // If no pending events
+        next_pkt->type = PKT_STDBY;
 }
 
 void printEventInfo (SDL_Event * event, int flags){
@@ -311,7 +388,7 @@ void printEventInfo (SDL_Event * event, int flags){
         printf("SDL Event: %s", termbuf);
 }
 
-void closeCtrl(){
+void close_ctrl(){
 
     if(ctrlmode == GAMEPAD)
         SDL_JoystickClose(pad);

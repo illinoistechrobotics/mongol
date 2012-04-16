@@ -1,8 +1,6 @@
 #include "BaseStation.h"
 #include "Serial.h"
 
-#define	SERBUFSIZ	100
-#define MSGBUFSIZ	100
 #define MAXERRORS	3
 
 FILE *dev;
@@ -58,24 +56,24 @@ int init_serial (char * port){
 	// Wait for handshake
 
 	printf("Waiting for \"Hello\"... ");
+    packet * in_shake;
 
-    byte * handshake;
-    while ((handshake = (byte *)read_serial()) &&
-           (handshake[0] != HELLO)){
+    while ((in_shake = read_serial()) &&
+           !((in_shake->type) == PKT_HELLO)){
         sleep(1);
     }
-    sayHello();
+    say_hello();
 
 	printf("\"Hello\" received.\n");
 
 	return 0;
 }
 
-byte * read_serial (){
+packet * read_serial (){
 
 	for (errors = 0; errors < MAXERRORS; errors ++){
 
-		if (!fgets(inbuf, SERBUFSIZ, dev) && (printMode == VERBOSE)){
+		if (!fgets(inbuf, BUFSIZ, dev) && (printMode == VERBOSE)){
 
 			printf("ERROR: Failed to read from  port.\n");
 		}
@@ -87,54 +85,61 @@ byte * read_serial (){
 
 		else{
 
-            return inbuf;
+            return inpacket;
 		}
 	}
 
     return NULL;
 }
 
-int write_serial(byte *msg){
+int write_serial(packet * msg){
 
-    int msgSize;
-    int writeCount;
+    int msg_size;
+    int write_count;
 
-    if (msg)
-        strcpy(outbuf, msg);
+    msg->front_bnd = PKT_BND;
+    msg->end_bnd = PKT_BND;
 
-    msgSize = sprintf(outbuf, "%c%s%c\n", PKT_BND, outbuf, PKT_BND);
+    if(msg){
 
-    for (errors = 0; errors < MAXERRORS; errors++){
+        strcpy(outbuf, (char *)msg);
+        msg_size = strlen(outbuf);
 
-        if ((writeCount = fputs(outbuf, dev) && (printMode == VERBOSE)) < 0){
+        for(errors = 0; errors < MAXERRORS; errors++){
 
-            printf("ERROR: Failed to write to port.\n");
+            if((write_count = fputs(outbuf, dev) && (printMode == VERBOSE)) < 0){
+
+                printf("ERROR: Failed to write to port.\n");
+            }
+
+            else if(write_count < msg_size && (printMode == VERBOSE)){
+
+                printf("ERROR: Write operation interrupted.\n");
+            }
+
+            else {
+
+                break;
+            }
         }
-
-        else if (writeCount < msgSize && (printMode == VERBOSE)){
-
-            printf("ERROR: Write operation interrupted.\n");
-        }
-
-        else {
-
-            break;
-        }
+        return (errors == MAXERRORS) ? (-1) : 0;
     }
-
-	return (errors == MAXERRORS) ? (-1) : 0;
+    return -1;
 }
 
-void closeSerial(){
-    
-    fclose(dev);
+void close_serial(){
 
+    packet goodbye;
+    goodbye.type = PKT_GDBY;
+    write_serial(&goodbye);
+    fclose(dev);
 	return;
 }
 
-void sayHello(){
+void say_hello(){
 
-    sprintf(outbuf, "%c", HELLO);
-
-    write_serial(NULL);
+    packet greeting;
+    greeting.type = PKT_HELLO;
+    write_serial(&greeting);
+    return;
 }

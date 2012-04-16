@@ -6,9 +6,39 @@ Written by Allen Baker
 
 Press "Ctrl + Q" to exit the program.
 
+
 ***** File Descriptions *****
 
-***** Keyboard Control Scheme (no mouse)  *****
+
+***** XBOX Gamepad Control Scheme *****
+
+TURNING:
+
+Move Forward        Left Joystick Up (hold)
+Turn Left           Left Joystick Left
+Turn Right          Left Joystick Right
+Move Backward       Left Joystick Down (hold)
+* NOTE: Mongol cannot turn while moving
+
+MOVING:
+
+Strafe Left         Left Bumper (hold)
+Strafe Right        Right Bumper (hold)
+
+AIMING:
+
+Turn Gun Up         Right Joystick Up
+Turn Gun Down       Right Joystick Down
+Turn Gun Left       Right Joystick Left
+Turn Gun Right      Right Joystick Right
+
+MISCELLANEOUS:
+
+Fire                Right Trigger (hold)
+Turbo               X Button
+
+
+***** Keyboard Control Scheme (not yet implemented)  *****
 
 TURNING:
 
@@ -35,30 +65,3 @@ MISCELLANEOUS:
 Fire                Right-Shift (hold)
 Turbo               /
 
-
-***** XBOX Gamepad Control Scheme *****
-
-TURNING:
-
-Move Forward        Left Joystick Up (hold)
-Turn Left           Left Joystick Left
-Turn Right          Left Joystick Right
-Move Backward       Left Joystick Down (hold)
-
-MOVING:
-
-Strafe Left         Left Bumper (hold)
-Strafe Right        Right Bumper (hold)
-* NOTE: Mongol cannot turn while moving
-
-AIMING:
-
-Turn Gun Up         Right Joystick Up
-Turn Gun Down       Right Joystick Down
-Turn Gun Left       Right Joystick Left
-Turn Gun Right      Right Joystick Right
-
-MISCELLANEOUS:
-
-Fire                Right Trigger (hold)
-Turbo               X Button

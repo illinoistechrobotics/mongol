@@ -8,23 +8,13 @@
 
 // Packet frame types
 #define	PKT_BND	0xFF
-#define	HELLO	0x01
-
-// Packet structure definition
-typedef struct packetStruct{
-    byte frontBnd;
-    byte walkDir;           // Walking Direction Variable
-    byte gunDir;            // Gun-Turning Direction Variable
-    byte actions;           // Action Variable
-    byte endBnd;
-} packet;
 
 int init_serial(char *port);
 
-byte * read_serial();
+packet * read_serial();
 
-int write_serial(char *msg);
+int write_serial(packet * msg);
 
-void closeSerial();
+void close_serial();
 
-void sayHello();
+void say_hello();

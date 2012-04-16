@@ -22,15 +22,15 @@ void printmsg (){
     return;
 }
 
-void quitBase (){
+void quit_base (){
 
     sprintf(termbuf,"Exiting...\n");
     printmsg();
 
-    closeCtrl();
+    close_ctrl();
 
     if(commMode == ONLINE)
-        closeSerial();
+        close_serial();
 
 	exit(0);
 }
@@ -94,6 +94,7 @@ void parseArgs (int argc, char * argv[]){
 int main (int argc, char* argv[]){
 
     // Set default values
+    ctrlmode = GAMEPAD;
     commMode = ONLINE;
     uiMode = CMD_LINE;
     printMode = QUIET; 
@@ -111,7 +112,7 @@ int main (int argc, char* argv[]){
     if(!(initCtrl())){
 
         sprintf(termbuf,"\nERROR: Controller Failed to initialize.\n");
-        quitBase();
+        quit_base();
     }
     sprintf(termbuf,"Controller Initialized.\n");
     printmsg();
@@ -123,18 +124,29 @@ int main (int argc, char* argv[]){
         printmsg();
         if((dev ? init_serial(dev) : init_serial("/dev/ttyUSB0")) < 0){
 
-            quitBase();
+            quit_base();
         }
-        sayHello();
         sprintf(termbuf,"Connected!\n\n");
         printmsg();
     }
 
-    // Test keyboard press
+    packet out_pkt;
+    packet * in_pkt;
+
+    // Main loop
     for(;;){
 
-        getNextEvent();
+        next_event(&out_pkt);
+
+        if(commMode == ONLINE){
+
+            write_serial(&out_pkt);
+
+            while((in_pkt = read_serial()) &&
+                  (in_pkt->type == PKT_RDY));
+
+        }
     }
 
-    quitBase();
+    return 0;
 }
