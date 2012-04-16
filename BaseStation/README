@@ -1,0 +1,67 @@
+BaseStation Controller Program for Mongol
+Written by Allen Baker
+    for Illinois Tech Robotics
+
+***** Overview *****
+
+Press "Ctrl + Q" to exit the program.
+
+
+***** File Descriptions *****
+
+
+***** XBOX Gamepad Control Scheme *****
+
+TURNING:
+
+Move Forward        Left Joystick Up (hold)
+Turn Left           Left Joystick Left
+Turn Right          Left Joystick Right
+Move Backward       Left Joystick Down (hold)
+* NOTE: Mongol cannot turn while moving
+
+MOVING:
+
+Strafe Left         Left Bumper (hold)
+Strafe Right        Right Bumper (hold)
+
+AIMING:
+
+Turn Gun Up         Right Joystick Up
+Turn Gun Down       Right Joystick Down
+Turn Gun Left       Right Joystick Left
+Turn Gun Right      Right Joystick Right
+
+MISCELLANEOUS:
+
+Fire                Right Trigger (hold)
+Turbo               X Button
+
+
+***** Keyboard Control Scheme (not yet implemented)  *****
+
+TURNING:
+
+Turn Left           A
+Turn Right          D
+
+MOVING:
+
+Move Forward        W
+Move Backward       S
+Strafe Left         Left-Shift + A
+Strafe Right        Left-Shift + D
+* NOTE: Mongol cannot turn while moving
+
+AIMING:
+
+Turn Gun Up         O
+Turn Gun Down       L
+Turn Gun Left       K
+Turn Gun Right      ;
+
+MISCELLANEOUS:
+
+Fire                Right-Shift (hold)
+Turbo               /
+

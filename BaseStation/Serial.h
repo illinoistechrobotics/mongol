@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
@@ -8,16 +7,13 @@
 #include <string.h>
 
 #define	PKT_BND	0xFF
-#define	HELLO	0x01
 
-int printAll;   // Flag to control output of serial communication errors
+int init_serial(char *port);
 
-int initSerial(char *port, int printMode);
+packet * read_serial();
 
-char *readSerial();
+int write_serial(packet * msg);
 
-int writeSerial(char *msg);
+void close_serial();
 
-void closeSerial();
-
-void sayHello();
+void say_hello();

@@ -62,9 +62,6 @@ int main (int argc, char* argv[]){
     // Parse command line arguements
     parseArgs(argc, argv);
 
-    // Initialize the GUI
-    initGUI(argc, argv);
-
     // Initialize SDL
     printf("Initializing SDL... ");
     if(!(initSDL())){
