@@ -1,0 +1,23 @@
+MongolRobot Program for Mongol
+Version 2
+Written by Allen Baker and Bryce Shurts
+    for Illinois Tech Robotics
+
+***** Overview *****
+
+Takes input in form of packets from computer running BaseStation and takes action corresponding to type of packet received.
+
+A packet is four bytes in length. The first and last bytes are packet frames and will always be 0xFF. The second byte will be the packet type, which specifies what function the packet serves. These are described alongside the packet type enumerations in Serial.h. The third byte is the value that corresponds to the appropriate type. For example, a packet of type PKT_MOVE could have a value of MOV_STOP, MOV_FWD, or MOV_BKD, which would direct the robot to not move, walk forward, or walk backward, respectively.
+
+Packets of type PKT_HELLO, PKT_GDBY, PKT_STDBY, or PKT_RDY are used primarily to set up, synchronize, and close down communications with BaseStation and have no corresponding values.
+
+When Mongol is powered on, it should continually send a packet of type PKT_HELLO until it receives a packet of the same type. At that point, it should continuously wait for packets, take appropriate action when received, and return a packet of type PKT_RDY when the action is completed.
+
+When a packet of type PKT_GDBY is received, that indicates that BaseStation has terminated on the host computer. At that point, Mongol should go back to it's initial state and repeatedly send hello packets until it is either answered or shut down.
+
+
+***** File Descriptions *****
+
++ MongolRobot_v2.pde: Main arbotix program
++ MongolMotions.h: Contains poses and sequences for walking and turning
++ Serial.h: Contains serial communication packet structure and content.
