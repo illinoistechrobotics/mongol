@@ -3,14 +3,14 @@
 #define	PKT_BND	0xFF
 
 // Matter of preference
-typedef char byte;
+typedef char abyte;
 
 // Packet structure definition
 typedef struct packet_struct{
-    byte front_bnd;         // Always 0xFF
-    byte type;              // Type of packet
-    byte value;             // Relevant value of type (null for HELLO, GDBY, and STDBY)
-    byte end_bnd;           // Always 0xFF
+    abyte front_bnd;         // Always 0xFF
+    abyte type;              // Type of packet
+    abyte value;             // Relevant value of type (null for HELLO, GDBY, and STDBY)
+    abyte end_bnd;           // Always 0xFF
 } packet;
 
 // Packet types
