@@ -1,29 +1,21 @@
 #include "Serial.h"
 
-#define	SERBUFSIZ	100
-#define MSGBUFSIZ	100
 #define MAXERRORS	3
 
 FILE *dev;
-char inSerBuf [SERBUFSIZ];
-char inMsgBuf [MSGBUFSIZ];
-char outSerBuf [SERBUFSIZ];
-char outMsgBuf [MSGBUFSIZ];
+byte inbuf [BUFSIZ];
+packet * inpacket;
+byte outbuf [BUFSIZ];
 int errors = 0;
 
-int extractMessage (){
+int extract_msg (){
 
-    char * start;
-    char * end;
+    byte * start;
+    byte * end;
 
-    if ((start = strchr(inSerBuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
-
-        start ++;
-        *end = '\0';
-
-        strcpy(inMsgBuf, start);
-
-        return strlen(inMsgBuf);
+    if ((start = strchr(inbuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
+        inpacket = (packet *)start;
+        return (end-start);
     }
     else{
 
@@ -31,22 +23,27 @@ int extractMessage (){
     }
 }
 
-int initSerial (char * port, int printMode){
-
-    printAll = printMode;
+int init_serial (char * port){
 
 	// Attempt to open port
 
 	printf("Attempting to open %s...\n", port);
 
 	if ((dev = fopen(port, "r+b"))){
+
+        int dev_fd = fileno(dev);
         
         // Set stream to not block when reading
-
-        fcntl(fileno(dev), F_SETFL, O_NONBLOCK);
+        fcntl(dev_fd, F_SETFL, O_NONBLOCK);
         int flags = fcntl(fileno(dev), F_GETFL);
 
-        if (!(flags & O_NONBLOCK)){
+        // Set baud rate to 34800
+        struct termios devConfig;
+        tcgetattr(dev_fd, &devConfig);
+        cfsetspeed(&devConfig, B38400);
+        int baudSet = tcsetattr(dev_fd, TCSANOW, &devConfig);
+
+        if (!(flags & O_NONBLOCK) && !(baudSet)){
 
             printf("ERROR: Failed to open port.\n");
             return -1;
@@ -57,82 +54,109 @@ int initSerial (char * port, int printMode){
 	
 	// Wait for handshake
 
-	printf("Waiting for handshake...\n");
+	printf("Spamming \"Hello\"...\n");
+    packet * in_shake;
+    packet out_shake;
+    out_shake.type = PKT_HELLO;
 
-    while (readSerial()[0] != HELLO){
-
-        sleep(1);
+    while ((in_shake = read_serial()) &&
+           !((in_shake->type) == PKT_HELLO)){
+        say_hello();
     }
-
-	printf("Handshake successfully received.\n");
+	printf("\"Hello\" received.\n");
+    say_ready();
 
 	return 0;
 }
 
-char * readSerial (){
+packet * read_serial (){
 
 	for (errors = 0; errors < MAXERRORS; errors ++){
 
-		if (!fgets(inSerBuf, SERBUFSIZ, dev) && printAll){
+		if (!fgets(inbuf, BUFSIZ, dev) && (printMode == VERBOSE)){
 
 			printf("ERROR: Failed to read from  port.\n");
 		}
 
-        else if (extractMessage() < 0 && printAll){
+        else if (extract_msg() < 0 && (printMode == VERBOSE)){
 
 			printf("ERROR: Corrupt packet.\n");
         }
 
 		else{
 
-			break;
+            return inpacket;
 		}
 	}
 
-	return inMsgBuf;
+    return NULL;
 }
 
-int writeSerial(char *msg){
+int write_serial(packet * msg){
 
-    int msgSize;
-    int writeCount;
+    int msg_size;
+    int write_count;
 
-    if (msg)
-        strcpy(outMsgBuf, msg);
+    if(msg && (msg->type)){
 
-    msgSize = sprintf(outSerBuf, "%c%s%c\n", PKT_BND, outMsgBuf, PKT_BND);
+        msg->front_bnd = PKT_BND;
+        msg->end_bnd = PKT_BND;
 
-    for (errors = 0; errors < MAXERRORS; errors++){
+        // These packet types have no defined values, but must be filled anyways
+        if((msg->type == PKT_HELLO) ||
+           (msg->type == PKT_GDBY) ||
+           (msg->type == PKT_STDBY) ||
+           (msg->type == PKT_RDY))
+            msg->value = VAL_NUL;
 
-        if ((writeCount = fputs(outSerBuf, dev) && printAll) < 0){
+        msg->null_term = 0;
 
-            printf("ERROR: Failed to write to port.\n");
+        strcpy(outbuf, (char *)msg);
+        msg_size = strlen(outbuf);
+
+        for(errors = 0; errors < MAXERRORS; errors++){
+
+            if((write_count = fputs(outbuf, dev) && (printMode == VERBOSE)) < 0){
+
+                printf("ERROR: Failed to write to port.\n");
+            }
+
+            else if(write_count < msg_size && (printMode == VERBOSE)){
+
+                printf("ERROR: Write operation interrupted.\n");
+            }
+
+            else {
+
+                break;
+            }
         }
-
-        else if (writeCount < msgSize && printAll){
-
-            printf("ERROR: Write operation interrupted.\n");
-        }
-
-        else {
-
-            break;
-        }
+        return (errors == MAXERRORS) ? (-1) : 0;
     }
-
-	return (errors == 3) ? (-1) : 0;
+    return -1;
 }
 
-void closeSerial(){
-    
-    fclose(dev);
+void close_serial(){
 
+    packet goodbye;
+    goodbye.type = PKT_GDBY;
+    write_serial(&goodbye);
+    fclose(dev);
 	return;
 }
 
-void sayHello(){
+void say_hello(){
 
-    sprintf(outMsgBuf, "%c", HELLO);
+    packet greeting;
+    greeting.type = PKT_HELLO;
+    write_serial(&greeting);
+    return;
+}
 
-    writeSerial(NULL);
+void say_ready(){
+
+    packet ready;
+    ready.type = PKT_RDY;
+    write_serial(&ready);
+    return;
 }
