@@ -97,10 +97,19 @@ int write_serial(packet * msg){
     int msg_size;
     int write_count;
 
-    msg->front_bnd = PKT_BND;
-    msg->end_bnd = PKT_BND;
+    if(msg && (msg->type)){
 
-    if(msg){
+        msg->front_bnd = PKT_BND;
+        msg->end_bnd = PKT_BND;
+
+        // These packet types have no defined values, but must be filled anyways
+        if((msg->type == PKT_HELLO) ||
+           (msg->type == PKT_GDBY) ||
+           (msg->type == PKT_STDBY) ||
+           (msg->type == PKT_RDY))
+            msg->value = VAL_NUL;
+
+        msg->null_term = 0;
 
         strcpy(outbuf, (char *)msg);
         msg_size = strlen(outbuf);

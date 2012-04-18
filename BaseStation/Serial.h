@@ -7,6 +7,7 @@
 #include <string.h>
 
 #define	PKT_BND	0xFF
+#define VAL_NUL 0x55        // Value filler for hello, standby, goodbye, and ready packets
 
 int init_serial(char *port);
 
