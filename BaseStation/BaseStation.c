@@ -22,6 +22,23 @@ void printmsg (){
     return;
 }
 
+void type2str(char * buf, byte type){
+    
+    switch(type){
+        case PKT_HELLO : sprintf(buf, "HELLO");  break;
+        case PKT_GDBY  : sprintf(buf, "GDBY");   break;
+        case PKT_STDBY : sprintf(buf, "STDBY");  break;
+        case PKT_MOVE  : sprintf(buf, "MOVE");   break;
+        case PKT_TURN  : sprintf(buf, "TURN");   break;
+        case PKT_AIM_H : sprintf(buf, "AIM_H");  break;
+        case PKT_AIM_V : sprintf(buf, "AIM_V");  break;
+        case PKT_FIRE  : sprintf(buf, "FIRE");   break;
+        case PKT_STRF_L: sprintf(buf, "STRF_L"); break;
+        case PKT_STRF_R: sprintf(buf, "STRF_R"); break;
+        case PKT_RDY   : sprintf(buf, "RDY");    break;
+    }
+}
+
 void quit_base (){
 
     sprintf(termbuf,"Exiting...\n");
@@ -123,7 +140,8 @@ int main (int argc, char* argv[]){
         sprintf(termbuf,"Connecting to robot...\n");
         printmsg();
         if((dev ? init_serial(dev) : init_serial("/dev/ttyUSB0")) < 0){
-
+            
+            commMode = OFFLINE;
             quit_base();
         }
         sprintf(termbuf,"Connected!\n\n");
@@ -132,19 +150,24 @@ int main (int argc, char* argv[]){
 
     packet out_pkt;
     packet * in_pkt;
+    char typebuf [128];
 
     // Main loop
     for(;;){
 
         next_event(&out_pkt);
+        if((commMode == ONLINE) &&
+           (in_pkt = read_serial())){
+            
+            type2str(typebuf,in_pkt->type);
+            printf("Received:%s\n", typebuf);
 
-        if(commMode == ONLINE){
+            if((in_pkt->type) == PKT_RDY){
 
-            write_serial(&out_pkt);
-
-            while((in_pkt = read_serial()) &&
-                  (in_pkt->type == PKT_RDY));
-
+                write_serial(&out_pkt);
+                type2str(typebuf, out_pkt.type);
+                printf("Sent:%s\n", typebuf);
+            }
         }
     }
 

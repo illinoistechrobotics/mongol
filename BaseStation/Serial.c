@@ -36,7 +36,7 @@ int init_serial (char * port){
         
         // Set stream to not block when reading
         fcntl(dev_fd, F_SETFL, O_NONBLOCK);
-        int flags = fcntl(fileno(dev), F_GETFL);
+        int flags = fcntl(dev_fd, F_GETFL);
 
         // Set baud rate to 34800
         struct termios devConfig;
@@ -44,49 +44,55 @@ int init_serial (char * port){
         cfsetspeed(&devConfig, B38400);
         int baudSet = tcsetattr(dev_fd, TCSANOW, &devConfig);
 
-        if (!(flags & O_NONBLOCK) && !(baudSet)){
+        if (!(flags & O_NONBLOCK) || baudSet){
 
             printf("ERROR: Failed to open port.\n");
             return -1;
         }
+        
+        printf("%s opened successfully.\n", port);
+        
+        // Wait for handshake
+
+        printf("Waiting for \"Hello\"... ");
+        packet * in_shake;
+
+        int i = 0;
+        while ((!(in_shake = read_serial()) ||
+               ((in_shake->type) != PKT_HELLO)) &&
+               (i < 10)){
+            i++;
+            sleep(1);
+        }
+        if(i == 10)
+            return -1;
+
+        say_hello();
+
+        printf("\"Hello\" received.\n");
+
+        return 0;
 	}
-	
-	printf("%s opened successfully.\n", port);
-	
-	// Wait for handshake
-
-	printf("Waiting for \"Hello\"... ");
-    packet * in_shake;
-
-    while ((in_shake = read_serial()) &&
-           !((in_shake->type) == PKT_HELLO)){
-        sleep(1);
-    }
-    say_hello();
-
-	printf("\"Hello\" received.\n");
-
-	return 0;
+            
+    printf("ERROR: Failed to open port.\n");
+    return -1;
 }
 
 packet * read_serial (){
 
 	for (errors = 0; errors < MAXERRORS; errors ++){
 
-		if (!fgets(inbuf, BUFSIZ, dev) && (printMode == VERBOSE)){
+		if (!fgets(inbuf, BUFSIZ, dev) &&
+            ferror(dev) &&
+            (printMode == VERBOSE))
+            printf("ERROR: Failed to read from  port.\n");
 
-			printf("ERROR: Failed to read from  port.\n");
-		}
-
-        else if (extract_msg() < 0 && (printMode == VERBOSE)){
-
+        else if ((extract_msg() < 0) &&
+                 (printMode == VERBOSE))
 			printf("ERROR: Corrupt packet.\n");
-        }
 
-		else{
-
+		else
             return inpacket;
-		}
 	}
 
     return NULL;
