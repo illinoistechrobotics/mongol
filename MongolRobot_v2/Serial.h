@@ -1,21 +1,13 @@
 // Mongol header file for serial communication
 
+#define SER_BUFSIZ 100
 #define	PKT_BND	0xFF
-
-// Matter of preference
-typedef char byte;
-
-// Packet structure definition
-typedef struct packet_struct{
-    byte front_bnd;         // Always 0xFF
-    byte type;              // Type of packet
-    byte value;             // Relevant value of type (null for HELLO, GDBY, and STDBY)
-    byte end_bnd;           // Always 0xFF
-} packet;
+#define PKT_FIL 0x55
+#define PKT_LEN 4
 
 // Packet types
 enum{
-    PKT_HELLO,              // Hello packet: used to initialize communications
+    PKT_HELLO = 1,          // Hello packet: used to initialize communications
     PKT_GDBY,               // Goodbye packet: used to close connections
     PKT_STDBY,              // Standby packet: no robot updates (most common)
     PKT_MOVE,               // Move packet: update moving
@@ -30,46 +22,46 @@ enum{
 
 // Movement mode values
 enum{
-    MOV_STOP,
+    MOV_STOP = 1,           // Joystick vertical center
     MOV_FWD,
     MOV_BKD
 };
 
 // Turning mode values
 enum{
-    TRN_NONE,
+    TRN_NONE = 1,           // Joystick horizontal center
     TRN_LEFT,
     TRN_RIGHT
 };
 
 // Horizontal aiming mode values
 enum{
-    AIM_H_STRGHT,
+    AIM_H_STRGHT = 1,
     AIM_H_LEFT,
     AIM_H_RIGHT
 };
 
 // Vertical aiming mode values
 enum{
-    AIM_V_STRGHT,
+    AIM_V_STRGHT = 1,
     AIM_V_DWN,
     AIM_V_UP
 };
 
 // Firing mode values
 enum{
-    FIRE_ON,
+    FIRE_ON = 1,
     FIRE_OFF
 };
 
 // Left-strafing mode values
 enum{
-    STRF_L_OFF,
+    STRF_L_OFF = 1,
     STRF_L_ON
 };
 
 // Right-strafing mode values
 enum{
-    STRF_R_OFF,
+    STRF_R_OFF = 1,
     STRF_R_ON
 };
