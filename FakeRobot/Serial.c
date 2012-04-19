@@ -57,11 +57,11 @@ int init_serial (char * port){
 	printf("Spamming \"Hello\"...\n");
     packet * in_shake;
     packet out_shake;
-    out_shake.type = PKT_HELLO;
 
-    while ((in_shake = read_serial()) &&
-           !((in_shake->type) == PKT_HELLO)){
+    while (!(in_shake = read_serial()) ||
+           ((in_shake->type) != PKT_HELLO)){
         say_hello();
+        sleep(1);
     }
 	printf("\"Hello\" received.\n");
     say_ready();
@@ -73,12 +73,12 @@ packet * read_serial (){
 
 	for (errors = 0; errors < MAXERRORS; errors ++){
 
-		if (!fgets(inbuf, BUFSIZ, dev) && (printMode == VERBOSE)){
+		if (!fgets(inbuf, BUFSIZ, dev)){
 
 			printf("ERROR: Failed to read from  port.\n");
 		}
 
-        else if (extract_msg() < 0 && (printMode == VERBOSE)){
+        else if (extract_msg() < 0){
 
 			printf("ERROR: Corrupt packet.\n");
         }
@@ -126,8 +126,9 @@ int write_serial(packet * msg){
                 printf("ERROR: Write operation interrupted.\n");
             }
 
-            else {
+            else{
 
+                fflush(dev);
                 break;
             }
         }
