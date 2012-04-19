@@ -1,14 +1,8 @@
 #include <ax12.h>
 #include <BioloidController.h>
+#include <string.h>
 #include "MongolMotions.h"
 #include "Serial.h"
-
-#define MSGBUFSIZ   126
-#define SERBUFSIZ   128
-#define MAXERR      3
-
-#define	PKT_BND	0xFF
-#define	HELLO	0x01
 
 #define OFF    0x00
 #define ON     0x10
@@ -17,20 +11,25 @@
 
 #define TUR_SPEED 50
 
-byte outMsgBuf [MSGBUFSIZ];
-byte outSerBuf [SERBUFSIZ];
-int outPktLen;
+// Packet structure definition
+typedef struct packet_struct{
+    byte front_bnd;
+    byte type;              // Type of packet
+    byte value;             // Relevant value of type (null for HELLO, GDBY, and STDBY)
+    byte end_bnd;
+    byte null_term;         // Null terminator to ensure proper operation with string functions
+} packet;
 
-byte inMsgBuf [MSGBUFSIZ];
-byte inSerBuf [SERBUFSIZ];
-int inPktLen;
+byte inbuf [SER_BUFSIZ];
+byte outbuf [SER_BUFSIZ];
+packet* inpacket;
 
 BioloidController bioloid = BioloidController(1000000);
 
 void setup(){
   
   // Initialize serial communications (includes first HELLO packet)
-  initSerial();
+  init_serial();
 }
 
 void loop(){
@@ -42,10 +41,10 @@ void loop(){
   static byte curPose = 1;
   static byte strafeMode = OFF;
 	
-  if(readSerial() == 0)
+  if(read_serial())
   {
-    byte pktType = inMsgBuf[0];
-    byte pktInfo = inMsgBuf[1];
+    byte pktType = inpacket->type;
+    byte pktInfo = inpacket->value;
     int offset = 0;
     if(pktType == PKT_MOVE || pktType == PKT_TURN || pktType == PKT_STRF_L || pktType == PKT_STRF_R)
     {
@@ -180,6 +179,7 @@ void loop(){
     
     bioloid.interpolateSetup(75);
     bioloid.interpolateStep();
+    say_ready();
   }
   else
   {
@@ -188,70 +188,102 @@ void loop(){
 }
 
 /*** SERIAL COMMUNICATION FUNCTIONS ***/
+int extract_msg (){
 
-int initSerial (){
+    byte* start;
+    byte* end;
+
+    if ((start = strchr(inbuf, PKT_BND)) && (end = strchr(start, PKT_BND))){
+        inpacket = (packet*)start;
+        return (end-start);
+    }
+    else{
+
+        return -1;
+    }
+}
+
+int init_serial(){
 
     Serial.begin(38400);
     
     do{
-        outMsgBuf[0] = HELLO;
-        writeSerial(1);
-        readSerial();
+        say_hello();
+        inpacket = readSerial();
         delay(1000);
-    } while(inMsgBuf[0] != HELLO);
+    } while(!(inpacket) &&
+             (inpacket->type == PKT_HELLO));
+             
+    say_ready();
     
     return 0;
 }
 
-int readSerial(){
+packet*  read_serial(){
 
-    inPktLen = 0;
+    inpkt_len = 0;
+    byte nxt_byte;
 
-    while(Serial.available()){
+    while(Serial.available() && ((nxt_byte = Serial.read()) > 0)){
     
-        inSerBuf[inPktLen++] = Serial.read();
+        inbuf[inpkt_len++] = nxt_byte;
     }
+    inbuf[inpkt_len] = 0;
     
-    if(inPktLen < 3)
-        return -1;
+    if(extract_msg() < 0)
+        return NULL;
     
-    int inMsgLen = inPktLen - 2;  
-    
-    for(int i = 0; i < inMsgLen; i++){
-    
-        inMsgBuf[i] = inSerBuf[i+1];
-    }
-    
-    return 0;
+    return inpacket;
 }
 
-int writeSerial (int msgLen){
+int write_serial(packet * msg){
 
-    outPktLen = msgLen + 2;
-    outSerBuf[0] = PKT_BND;
-    
-    for (int i = 0; i < msgLen; i++){
-    
-        outSerBuf[i+1] = outMsgBuf[i];
+    int msg_size;
+    int write_count;
+
+    if(msg && (msg->type)){
+
+        msg->front_bnd = PKT_BND;
+        msg->end_bnd = PKT_BND;
+
+        // These packet types have no defined values, but must be filled anyways
+        if((msg->type == PKT_HELLO) ||
+           (msg->type == PKT_GDBY) ||
+           (msg->type == PKT_STDBY) ||
+           (msg->type == PKT_RDY))
+            msg->value = VAL_NUL;
+
+        msg->null_term = 0;
+
+        strcpy(outbuf, (char *)msg);
+        msg_size = strlen(outbuf);
+
+        for(errors = 0; errors < MAXERRORS; errors++){
+
+            if(msg_size == Serial.write(outbuf, sizeof(packet)){
+
+                break;
+            }
+        }
+        return (errors == MAXERRORS) ? (-1) : 0;
     }
+    return -1;
+}
+
+void say_hello(){
     
-    int bytesSent;
-    outSerBuf[outPktLen-1] = PKT_BND;
+    packet greeting;
+    greeting.type = PKT_HELLO;
+    write_serial(&greeting);
+    return;
+}
+
+void say_ready(){
     
-    Serial.write(outSerBuf, outPktLen);
-    Serial.flush();
-    
-    return 0;
-    
-    // for (int j = 0; j < MAXERR; j++){
-    // 
-    //     if((bytesSent = Serial.write(outSerBuf, outPktLen)) == outPktLen)
-    //         return 0;
-    // }
-    
-    // Insert error indicator here?
-    
-    // return -1;
+    packet ready;
+    ready.type = PKT_HELLO;
+    write_serial(&ready);
+    return;
 }
 
 void closeSerial (){
