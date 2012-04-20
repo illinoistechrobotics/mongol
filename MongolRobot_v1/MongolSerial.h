@@ -4,7 +4,7 @@
 #define MAXERRORS   3
 #define	PKT_BND	    0xFF
 #define PKT_FIL     0x55
-#define PKT_LEN     sizeof(packet)
+#define PKT_LEN     4
 
 typedef unsigned char byte;
 
