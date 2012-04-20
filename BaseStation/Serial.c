@@ -1,7 +1,7 @@
 #include "BaseStation.h"
 #include "Serial.h"
 
-#define MAXERRORS	3
+#define MAXERRORS	10
 
 FILE *dev;
 byte inbuf [BUFSIZ];
@@ -66,10 +66,21 @@ int init_serial (char * port){
         }
         if(i == 10)
             return -1;
-
-        say_hello();
-
+        
         printf("\"Hello\" received.\n");
+
+        int j = 0;
+        while ((!(in_shake = read_serial()) ||
+               ((in_shake->type) != PKT_RDY)) &&
+               (j < 10)){
+            j++;
+            say_hello();
+            sleep(1);
+        }
+        if(i == 10)
+            return -1;
+
+        printf("Mongol is Ready!\n");
 
         return 0;
 	}
@@ -82,17 +93,16 @@ packet * read_serial (){
 
 	for (errors = 0; errors < MAXERRORS; errors ++){
 
-		if (!fgets(inbuf, BUFSIZ, dev) &&
-            ferror(dev) &&
-            (printMode == VERBOSE))
-            printf("ERROR: Failed to read from  port.\n");
+        fgets(inbuf, BUFSIZ, dev);
 
-        else if ((extract_msg() < 0) &&
+       if ((extract_msg() < 0) &&
                  (printMode == VERBOSE))
 			printf("ERROR: Corrupt packet.\n");
 
 		else
             return inpacket;
+
+        usleep(10);
 	}
 
     return NULL;
@@ -122,18 +132,14 @@ int write_serial(packet * msg){
 
         for(errors = 0; errors < MAXERRORS; errors++){
 
-            if((write_count = fputs(outbuf, dev) && (printMode == VERBOSE)) < 0){
+            if((fputs(outbuf, dev) == EOF) &&
+               ((printMode == VERBOSE) < 0)){
 
                 printf("ERROR: Failed to write to port.\n");
             }
-
-            else if(write_count < msg_size && (printMode == VERBOSE)){
-
-                printf("ERROR: Write operation interrupted.\n");
-            }
-
             else {
 
+                fflush(dev);
                 break;
             }
         }
