@@ -14,30 +14,195 @@ void say_hello (void);
 void say_ready (void);
 void close_serial (void);
 
+packet cur_pkt;
+packet prev_pkt;
+
+byte cur_move;              // Current movement mode variable
+byte cur_turn;              // Current turning mode variable
+byte cur_h_aim;             // Current horizontal aim mode variable
+byte cur_v_aim;             // Current vertical aim mode variable
+byte cur_fire;              // Current firing mode variable
+byte cur_l_strf;            // Current left-strafing mode variable
+byte cur_r_strf;            // Current right-strafing mode variable
+
+int mov_fwd_indx;
+int mov_bkd_indx;
+int trn_l_indx;
+int trn_r_indx;
+
+int intpol_spd = 67;
+
+
 BioloidController servos = BioloidController(1000000);
 
 void setup(){
   
-  // Initialize serial communications (includes first HELLO packet)
-  init_serial();
-}
+    // Initialize serial communications (includes first HELLO packet)
+    init_serial();
 
-packet out_pkt;
-packet in_pkt;
+    cur_move = MOV_STOP;
+    cur_turn = TRN_NONE;
+    cur_h_aim = AIM_H_STRGHT;
+    cur_v_aim = AIM_V_STRGHT;
+    cur_fire = FIRE_OFF;
+    cur_l_strf = STRF_L_OFF;
+    cur_r_strf = STRF_R_OFF;
+
+    mov_fwd_indx = 1;
+    mov_bkd_indx = 1;
+    trn_l_indx = 1;
+    trn_r_indx = 1;
+
+}
 
 // Main loop of program
 void loop(){
     
     say_ready();
-    while(read_serial(&in_pkt) < 0)
+    while(read_serial(&cur_pkt) < 0)
         delay(10);      // Allow time for a complete packet to arrive
+
+    if(cur_pkt.type == PKT_STDBY)
+        cur_pkt = prev_pkt;
     
-    switch(in_pkt.type){
+    switch(cur_pkt.type){
+
+        case PKT_HELLO:
+        case PKT_RDY:
+            break;
+
+        case PKT_MOVE:
+            switch(cur_pkt.value){
+
+                case MOV_STOP:
+                    cur_move = MOV_STOP;
+                    interpolate(START);
+                    mov_fwd_indx = 1;
+                    mov_bkd_indx = 1;
+                    break;
+
+                case MOV_FWD:
+                    cur_move = MOV_FWD;
+                    if(mov_fwd_indx == 5)
+                        mov_fwd_indx = 1;
+                    interpolate(FORWARD[mov_fwd_indx ++].pose);
+                    break;
+                
+                case MOV_BKD:
+                    cur_move = MOV_BKD;
+                    if(mov_bkd_indx == 5)
+                        mov_bkd_indx =1;
+                    interpolate(BACKWARD[mov_bkd_indx ++].pose);
+                    break;
+            }
+            break;
+
+        case PKT_TURN:
+            if(cur_move != MOV_STOP)
+                break;
+
+            switch(cur_pkt.value){
+
+                case TRN_NONE:
+                    cur_turn = TRN_NONE;
+                    interpolate(START);
+                    trn_l_indx = 1;
+                    trn_r_indx = 1;
+                    break;
+
+                case TRN_LEFT:
+                    cur_turn = TRN_LEFT;
+                    if(trn_l_indx == 5)
+                        trn_l_indx = 1;
+                    interpolate(TURN_LEFT[trn_l_indx ++].pose);
+                    break;
+
+                case TRN_RIGHT:
+                    cur_turn = TRN_RIGHT;
+                    if(trn_r_indx == 5)
+                        trn_r_indx = 1;
+                    interpolate(TURN_RIGHT[trn_r_indx ++].pose);
+                    break;
+            }
+            break;
+
+        case PKT_AIM_H:
+            if((cur_move != MOV_STOP) &&
+               (cur_turn != TRN_NONE))
+                break;
+
+            switch(cur_pkt.value){
+
+                case AIM_H_STRGHT:
+                    break;
+
+                case AIM_H_LEFT:
+                    SetPosition(GUN_H,
+                                ax12GetRegister(GUN_H, AX_PRESENT_POSITION_L, 2) + 10);
+                    while(ax12GetRegister(GUN_H, AX_MOVING, 1));
+                    break;
+                
+                case AIM_H_RIGHT:
+                    SetPosition(GUN_H,
+                                ax12GetRegister(GUN_H, AX_PRESENT_POSITION_L, 2) - 10);
+                    while(ax12GetRegister(GUN_H, AX_MOVING, 1));
+                    break;
+            }
+            break;
+        
+        case PKT_AIM_V:
+            if((cur_move != MOV_STOP) &&
+               (cur_turn != TRN_NONE))
+                break;
+
+            switch(cur_pkt.value){
+
+                case AIM_V_STRGHT:
+                    break;
+
+                case AIM_V_DWN:
+                    SetPosition(GUN_V,
+                                ax12GetRegister(GUN_H, AX_PRESENT_POSITION_L, 2) + 10);
+                    while(ax12GetRegister(GUN_V, AX_MOVING, 1));
+                    break;
+                
+                case AIM_V_UP:
+                    SetPosition(GUN_V,
+                                ax12GetRegister(GUN_V, AX_PRESENT_POSITION_L, 2) - 10);
+                    while(ax12GetRegister(GUN_V, AX_MOVING, 1));
+                    break;
+            }
+            break;
+
+        case PKT_FIRE:
+            if (cur_pkt.value == FIRE_ON)
+                digitalWrite(GUN_FIRE, HIGH);
+            else
+                digitalWrite(GUN_FIRE, LOW);
+            break;
+
+        case PKT_STRF_L:
+        case PKT_STRF_R:
+            break;
     
         case PKT_GDBY:
             reconnect();
             break;
     }
+}
+
+/*** SERVO MANIPULATION FUNCTIONS ***/
+
+void interpolate(const unsigned int * pose){
+    
+    servos.loadPose(pose);
+    servos.interpolateSetup(intpol_spd);
+    while(servos.interpolating > 0){
+        servos.interpolateStep();
+        delay(1);
+    }
+
+    return;
 }
 
 /*** SERIAL COMMUNICATION FUNCTIONS ***/
