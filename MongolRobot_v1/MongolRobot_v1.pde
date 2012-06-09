@@ -29,6 +29,7 @@ int mov_fwd_indx;
 int mov_bkd_indx;
 int trn_l_indx;
 int trn_r_indx;
+int intpol_spd = 67;
 
 BioloidController servos = BioloidController(1000000);
 
@@ -44,7 +45,6 @@ void setup(){
     cur_fire = FIRE_OFF;
     cur_l_strf = STRF_L_OFF;
     cur_r_strf = STRF_R_OFF;
-
     mov_fwd_indx = 1;
     mov_bkd_indx = 1;
     trn_l_indx = 1;
@@ -178,8 +178,8 @@ void loop(){
                 digitalWrite(GUN_FIRE, LOW);
             break;
 
-        case PKT_L_STRF:
-        case PKT_R_STRF:
+        case PKT_STRF_L:
+        case PKT_STRF_R:
             break;
     
         case PKT_GDBY:
@@ -306,9 +306,3 @@ void close_serial (){
 
     Serial.end();
 }
-
-
-
-  
-
-
