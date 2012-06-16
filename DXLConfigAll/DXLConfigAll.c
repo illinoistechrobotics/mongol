@@ -66,8 +66,11 @@ char * readIn(void);
 void flushIn(void);
 
 int main(){
+
+    // TODO: Implement command line arguement parser to enable
+    // selection of different serial ports
 	
-	if(!(dxl_initialize(DEFAULT_DEV_INDEX, DEFAULT_BAUDNUM))){
+	if(!(dxl_initialize(1, DEFAULT_BAUDNUM))){
 
 		printf("Failed to initialize USB interface.\n");
 		return 1;

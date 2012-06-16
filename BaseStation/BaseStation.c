@@ -77,6 +77,7 @@ void parseArgs (int argc, char * argv[]){
         // Calibrate flag (-c): Do not attempt to connect; used for testing input devices
         case 'c':
             commMode = OFFLINE;
+            printMode = VERBOSE;
             printf("Controller calibration activated.\n");
             break;
 
@@ -150,23 +151,29 @@ int main (int argc, char* argv[]){
 
     packet out_pkt;
     packet * in_pkt;
-    char typebuf [128];
+    char intype_buf [128];
+    char outtype_buf [128];
+    int print_nxt_received = 0;
 
     // Main loop
     for(;;){
 
         next_event(&out_pkt);
-        if((commMode == ONLINE) &&
-           (in_pkt = read_serial())){
-            
-            type2str(typebuf,in_pkt->type);
-            printf("Received:%s\n", typebuf);
 
-            if((in_pkt->type) == PKT_RDY){
+        if(commMode == ONLINE){
 
+            do{
                 write_serial(&out_pkt);
-                type2str(typebuf, out_pkt.type);
-                printf("Sent:%s\n", typebuf);
+                usleep(10);
+            } while (((in_pkt = read_serial()) == NULL) ||
+                     (in_pkt->type != PKT_RDY));
+
+            if(out_pkt.type != PKT_STDBY){
+
+                type2str(intype_buf, out_pkt.type);
+                printf("Sent: %s\n", intype_buf);
+                type2str(outtype_buf, in_pkt->type);
+                printf("Received: %s\n", outtype_buf);
             }
         }
     }
