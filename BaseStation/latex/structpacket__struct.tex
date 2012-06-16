@@ -1,0 +1,44 @@
+\hypertarget{structpacket__struct}{\section{packet\-\_\-struct \-Struct \-Reference}
+\label{structpacket__struct}\index{packet\-\_\-struct@{packet\-\_\-struct}}
+}
+
+
+{\ttfamily \#include $<$\-Base\-Station.\-h$>$}
+
+\subsection*{\-Data \-Fields}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structpacket__struct_a955dcaa9b04b3f2fe476a34ceb17c404}{byte {\bfseries front\-\_\-bnd}}\label{structpacket__struct_a955dcaa9b04b3f2fe476a34ceb17c404}
+
+\item 
+byte \hyperlink{structpacket__struct_a0c99ddd42751de2947657294da9ea03b}{type}
+\item 
+byte \hyperlink{structpacket__struct_a08939832a1beaf4beda91d0d2e084d41}{value}
+\item 
+\hypertarget{structpacket__struct_ac6a5a443447f01d023101a9e05b83a13}{byte {\bfseries end\-\_\-bnd}}\label{structpacket__struct_ac6a5a443447f01d023101a9e05b83a13}
+
+\item 
+byte \hyperlink{structpacket__struct_a186f2116990358664c9b0db168d03265}{null\-\_\-term}
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\-Packet structure definition.
+
+\-Packet bounds should always be set to 0x\-F\-F. \-Packet type should be set to a \-P\-K\-T\-\_\-\-Type. \-Values must be specified for every type except \-H\-E\-L\-L\-O, \-G\-D\-B\-Y, \-S\-T\-D\-B\-Y, and \-R\-D\-Y. 
+
+\subsection{\-Field \-Documentation}
+\hypertarget{structpacket__struct_a186f2116990358664c9b0db168d03265}{\index{packet\-\_\-struct@{packet\-\_\-struct}!null\-\_\-term@{null\-\_\-term}}
+\index{null\-\_\-term@{null\-\_\-term}!packet_struct@{packet\-\_\-struct}}
+\subsubsection[{null\-\_\-term}]{\setlength{\rightskip}{0pt plus 5cm}byte {\bf packet\-\_\-struct\-::null\-\_\-term}}}\label{structpacket__struct_a186f2116990358664c9b0db168d03265}
+\-Null terminator to ensure proper operation with string functions \hypertarget{structpacket__struct_a0c99ddd42751de2947657294da9ea03b}{\index{packet\-\_\-struct@{packet\-\_\-struct}!type@{type}}
+\index{type@{type}!packet_struct@{packet\-\_\-struct}}
+\subsubsection[{type}]{\setlength{\rightskip}{0pt plus 5cm}byte {\bf packet\-\_\-struct\-::type}}}\label{structpacket__struct_a0c99ddd42751de2947657294da9ea03b}
+\-Type of packet \hypertarget{structpacket__struct_a08939832a1beaf4beda91d0d2e084d41}{\index{packet\-\_\-struct@{packet\-\_\-struct}!value@{value}}
+\index{value@{value}!packet_struct@{packet\-\_\-struct}}
+\subsubsection[{value}]{\setlength{\rightskip}{0pt plus 5cm}byte {\bf packet\-\_\-struct\-::value}}}\label{structpacket__struct_a08939832a1beaf4beda91d0d2e084d41}
+\-Relevant value for type of packet 
+
+\-The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{BaseStation_8h}{\-Base\-Station.\-h}\end{DoxyCompactItemize}

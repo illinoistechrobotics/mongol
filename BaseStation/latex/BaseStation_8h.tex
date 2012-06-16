@@ -1,0 +1,326 @@
+\hypertarget{BaseStation_8h}{\section{\-Base\-Station.\-h \-File \-Reference}
+\label{BaseStation_8h}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\*
+\subsection*{\-Data \-Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structpacket__struct}{packet\-\_\-struct}
+\end{DoxyCompactItemize}
+\subsection*{\-Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{BaseStation_8h_a2b7e7856b48ec3327148ac994ad95cd5}{typedef char {\bfseries byte}}\label{BaseStation_8h_a2b7e7856b48ec3327148ac994ad95cd5}
+
+\item 
+typedef struct \hyperlink{structpacket__struct}{packet\-\_\-struct} \hyperlink{BaseStation_8h_ac91629f79f1c798be2e225e87ee3bb64}{packet}
+\end{DoxyCompactItemize}
+\subsection*{\-Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892}{\-P\-K\-T\-\_\-value} \{ \*
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a263457d3501f9aa58bde640f7d7d8a69}{\-P\-K\-T\-\_\-\-H\-E\-L\-L\-O} =  1, 
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892abfb7d3a35481d4f98b35e30a49af12cc}{\-P\-K\-T\-\_\-\-G\-D\-B\-Y}, 
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a6e3c7ba124273d0a1c6a98d5e93ae614}{\-P\-K\-T\-\_\-\-S\-T\-D\-B\-Y}, 
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892adf88b45b4e905fd8a02472b47c03848f}{\-P\-K\-T\-\_\-\-M\-O\-V\-E}, 
+\*
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a2869d5fa0093b703ccd96f8a3b259a50}{\-P\-K\-T\-\_\-\-T\-U\-R\-N}, 
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a30374da330b529bab506a2370da26d62}{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-H}, 
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a49b952a2804eecf9dcae051a4709cde4}{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-V}, 
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a4a12ae64642ef520de22818bf3d800a7}{\-P\-K\-T\-\_\-\-F\-I\-R\-E}, 
+\*
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892aa50c7ac772b9293883d8d8471bd13d80}{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-L}, 
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892ac3a8d5cd7b2529d6677e74991307c6e8}{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-R}, 
+\hyperlink{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a67f3fc7212220f6d318460f68c68ae59}{\-P\-K\-T\-\_\-\-R\-D\-Y}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_aada5761fb7103b619de8b89ec4a36a24}{\-C\-T\-R\-L\-\_\-mode} \{ \hyperlink{BaseStation_8h_aada5761fb7103b619de8b89ec4a36a24a46d4ee95cd1ea6815ace495890416ee2}{\-C\-T\-R\-L\-\_\-\-K\-E\-Y\-B\-O\-A\-R\-D}, 
+\hyperlink{BaseStation_8h_aada5761fb7103b619de8b89ec4a36a24a4a8d56f5f82a4e2c1263d941b5f3cb41}{\-C\-T\-R\-L\-\_\-\-G\-A\-M\-E\-P\-A\-D}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_ae3d57928b7a8012e273632125b6ec41f}{\-C\-O\-M\-M\-\_\-mode} \{ \hyperlink{BaseStation_8h_ae3d57928b7a8012e273632125b6ec41fa91aecf400e14aa327861f67587c5ff6d}{\-C\-O\-M\-M\-\_\-\-O\-N\-L\-I\-N\-E}, 
+\hyperlink{BaseStation_8h_ae3d57928b7a8012e273632125b6ec41fa3416f31a64e0548d6db5a5610d03661d}{\-C\-O\-M\-M\-\_\-\-O\-F\-F\-L\-I\-N\-E}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_a718d6acc4f327cf0156b9b4b177f0b61}{\-U\-I\-\_\-mode} \{ \hyperlink{BaseStation_8h_a718d6acc4f327cf0156b9b4b177f0b61a4ebabf27387ede673076dc519d12de1d}{\-U\-I\-\_\-\-C\-L\-I\-N\-E}, 
+\hyperlink{BaseStation_8h_a718d6acc4f327cf0156b9b4b177f0b61a0687dca5d1bbd1fee256db3e98ee2bd2}{\-U\-I\-\_\-\-G\-R\-A\-P\-H}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_a99c186c9414945ebcdfdd6f7106417c6}{\-P\-R\-I\-N\-T\-\_\-mode} \{ \hyperlink{BaseStation_8h_a99c186c9414945ebcdfdd6f7106417c6aa1e73da303176025a025d90c7aae4b85}{\-P\-R\-N\-T\-\_\-\-Q\-U\-I\-E\-T}, 
+\hyperlink{BaseStation_8h_a99c186c9414945ebcdfdd6f7106417c6a5e000f2d8c31c3d6b48345a464232d8a}{\-P\-R\-N\-T\-\_\-\-V\-E\-R\-B}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7}{\-M\-O\-V\-\_\-val} \{ \hyperlink{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7aff02bd8bc6ad5a7bf8e209ed4185ddb8}{\-M\-O\-V\-\_\-\-S\-T\-O\-P} =  1, 
+\hyperlink{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7ad80161f77336486a720b5fc85286c8fc}{\-M\-O\-V\-\_\-\-F\-W\-D}, 
+\hyperlink{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7a582b1ed54c71c016079543c1475b4320}{\-M\-O\-V\-\_\-\-B\-K\-D}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_a5387029f42e62821b2350840a2e73264}{\-T\-R\-N\-\_\-val} \{ \hyperlink{BaseStation_8h_a5387029f42e62821b2350840a2e73264a794aa4e43350bfea2accc36a4ad9aa7e}{\-T\-R\-N\-\_\-\-N\-O\-N\-E} =  1, 
+\hyperlink{BaseStation_8h_a5387029f42e62821b2350840a2e73264aae0a8c256a68672ee7dac548871e1ea5}{\-T\-R\-N\-\_\-\-L\-E\-F\-T}, 
+\hyperlink{BaseStation_8h_a5387029f42e62821b2350840a2e73264afa2ba991b965e43175331db37da230c9}{\-T\-R\-N\-\_\-\-R\-I\-G\-H\-T}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74}{\-A\-I\-M\-\_\-\-H\-\_\-val} \{ \hyperlink{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74a56f355c79dac066641b3c43c4362f705}{\-A\-I\-M\-\_\-\-H\-\_\-\-S\-T\-R\-G\-H\-T} =  1, 
+\hyperlink{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74a36b7693857bdb5d15da803819014abc5}{\-A\-I\-M\-\_\-\-H\-\_\-\-L\-E\-F\-T}, 
+\hyperlink{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74ab1832af56996502a9b91ec7d56dd6416}{\-A\-I\-M\-\_\-\-H\-\_\-\-R\-I\-G\-H\-T}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4}{\-A\-I\-M\-\_\-\-V\-\_\-val} \{ \hyperlink{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4aec8cac07600d8f8f91ca508651e6b0b6}{\-A\-I\-M\-\_\-\-V\-\_\-\-S\-T\-R\-G\-H\-T} =  1, 
+\hyperlink{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4a19215a93b644be039a43c20e4348b46e}{\-A\-I\-M\-\_\-\-V\-\_\-\-D\-W\-N}, 
+\hyperlink{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4afd4496f86f2efeb52a1c7efec00df13d}{\-A\-I\-M\-\_\-\-V\-\_\-\-U\-P}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_acb92333f79172a9ac755737defa351ac}{\-F\-I\-R\-E\-\_\-val} \{ \hyperlink{BaseStation_8h_acb92333f79172a9ac755737defa351acaef2241a054115a16381eb07696bd7cd0}{\-F\-I\-R\-E\-\_\-\-O\-N} =  1, 
+\hyperlink{BaseStation_8h_acb92333f79172a9ac755737defa351acad8797ab93333a89a6ba29e1e4fa596b8}{\-F\-I\-R\-E\-\_\-\-O\-F\-F}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_a7638ca6d3b47e4795cd1cd05652e45f6}{\-S\-T\-R\-F\-\_\-\-L\-\_\-val} \{ {\bfseries \-S\-T\-R\-F\-\_\-\-L\-\_\-\-O\-F\-F} =  1, 
+{\bfseries \-S\-T\-R\-F\-\_\-\-L\-\_\-\-O\-N}
+ \}
+\item 
+enum \hyperlink{BaseStation_8h_a701a16930cb585916abb7a878916d6e8}{\-S\-T\-R\-F\-\_\-\-R\-\_\-val} \{ {\bfseries \-S\-T\-R\-F\-\_\-\-R\-\_\-\-O\-F\-F} =  1, 
+{\bfseries \-S\-T\-R\-F\-\_\-\-R\-\_\-\-O\-N}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{BaseStation_8h_af07e829165fe23b1317803d335ac92e5}{printmsg} (void)
+\item 
+void \hyperlink{BaseStation_8h_a1703407cc04b0e7ef522cbcd6be3d40c}{quit\-\_\-base} (void)
+\end{DoxyCompactItemize}
+\subsection*{\-Variables}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{BaseStation_8h_aebcd350bac01c84a8644b36eac569e4a}{termbuf} \mbox{[}\-B\-U\-F\-S\-I\-Z\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\-Main header file for \-Base\-Station.
+
+\-This header file contains the communication packet structure, enumerations for packet components, and enumerations for different modes of operation for the program. 
+
+\subsection{\-Typedef \-Documentation}
+\hypertarget{BaseStation_8h_ac91629f79f1c798be2e225e87ee3bb64}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!packet@{packet}}
+\index{packet@{packet}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{packet}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf packet\-\_\-struct}  {\bf packet}}}\label{BaseStation_8h_ac91629f79f1c798be2e225e87ee3bb64}
+\-Packet structure definition.
+
+\-Packet bounds should always be set to 0x\-F\-F. \-Packet type should be set to a \-P\-K\-T\-\_\-\-Type. \-Values must be specified for every type except \-H\-E\-L\-L\-O, \-G\-D\-B\-Y, \-S\-T\-D\-B\-Y, and \-R\-D\-Y. 
+
+\subsection{\-Enumeration \-Type \-Documentation}
+\hypertarget{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-A\-I\-M\-\_\-\-H\-\_\-val@{\-A\-I\-M\-\_\-\-H\-\_\-val}}
+\index{\-A\-I\-M\-\_\-\-H\-\_\-val@{\-A\-I\-M\-\_\-\-H\-\_\-val}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-A\-I\-M\-\_\-\-H\-\_\-val}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-A\-I\-M\-\_\-\-H\-\_\-val}}}\label{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74}
+\-Horizontal robot turrent aim adjustment packet values.
+
+\-This enumeration provides possible values for a packet of type \-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-H that will direct the robot to turn its turrent to either the left or right or not at all. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-A\-I\-M\-\_\-\-H\-\_\-\-S\-T\-R\-G\-H\-T@{\-A\-I\-M\-\_\-\-H\-\_\-\-S\-T\-R\-G\-H\-T}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-A\-I\-M\-\_\-\-H\-\_\-\-S\-T\-R\-G\-H\-T@{\-A\-I\-M\-\_\-\-H\-\_\-\-S\-T\-R\-G\-H\-T}}\item[{\em 
+\hypertarget{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74a56f355c79dac066641b3c43c4362f705}{\-A\-I\-M\-\_\-\-H\-\_\-\-S\-T\-R\-G\-H\-T}\label{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74a56f355c79dac066641b3c43c4362f705}
+}]\-Do not turn the turret in any direction \index{\-A\-I\-M\-\_\-\-H\-\_\-\-L\-E\-F\-T@{\-A\-I\-M\-\_\-\-H\-\_\-\-L\-E\-F\-T}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-A\-I\-M\-\_\-\-H\-\_\-\-L\-E\-F\-T@{\-A\-I\-M\-\_\-\-H\-\_\-\-L\-E\-F\-T}}\item[{\em 
+\hypertarget{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74a36b7693857bdb5d15da803819014abc5}{\-A\-I\-M\-\_\-\-H\-\_\-\-L\-E\-F\-T}\label{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74a36b7693857bdb5d15da803819014abc5}
+}]\-Turn the turret to the left \index{\-A\-I\-M\-\_\-\-H\-\_\-\-R\-I\-G\-H\-T@{\-A\-I\-M\-\_\-\-H\-\_\-\-R\-I\-G\-H\-T}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-A\-I\-M\-\_\-\-H\-\_\-\-R\-I\-G\-H\-T@{\-A\-I\-M\-\_\-\-H\-\_\-\-R\-I\-G\-H\-T}}\item[{\em 
+\hypertarget{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74ab1832af56996502a9b91ec7d56dd6416}{\-A\-I\-M\-\_\-\-H\-\_\-\-R\-I\-G\-H\-T}\label{BaseStation_8h_a0e5b49e9c8c25ebc1f8f5a3d7f064b74ab1832af56996502a9b91ec7d56dd6416}
+}]\-Turn the turret to the right \end{description}
+\end{Desc}
+
+\hypertarget{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-A\-I\-M\-\_\-\-V\-\_\-val@{\-A\-I\-M\-\_\-\-V\-\_\-val}}
+\index{\-A\-I\-M\-\_\-\-V\-\_\-val@{\-A\-I\-M\-\_\-\-V\-\_\-val}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-A\-I\-M\-\_\-\-V\-\_\-val}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-A\-I\-M\-\_\-\-V\-\_\-val}}}\label{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4}
+\-Horizontal robot turrent aim adjustment packet values.
+
+\-This enumeration provides possible values for a packet of type \-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-V that will direct the robot to raise, lower, or keep still its turret. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-A\-I\-M\-\_\-\-V\-\_\-\-S\-T\-R\-G\-H\-T@{\-A\-I\-M\-\_\-\-V\-\_\-\-S\-T\-R\-G\-H\-T}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-A\-I\-M\-\_\-\-V\-\_\-\-S\-T\-R\-G\-H\-T@{\-A\-I\-M\-\_\-\-V\-\_\-\-S\-T\-R\-G\-H\-T}}\item[{\em 
+\hypertarget{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4aec8cac07600d8f8f91ca508651e6b0b6}{\-A\-I\-M\-\_\-\-V\-\_\-\-S\-T\-R\-G\-H\-T}\label{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4aec8cac07600d8f8f91ca508651e6b0b6}
+}]\-Do not raise or lower the turret \index{\-A\-I\-M\-\_\-\-V\-\_\-\-D\-W\-N@{\-A\-I\-M\-\_\-\-V\-\_\-\-D\-W\-N}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-A\-I\-M\-\_\-\-V\-\_\-\-D\-W\-N@{\-A\-I\-M\-\_\-\-V\-\_\-\-D\-W\-N}}\item[{\em 
+\hypertarget{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4a19215a93b644be039a43c20e4348b46e}{\-A\-I\-M\-\_\-\-V\-\_\-\-D\-W\-N}\label{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4a19215a93b644be039a43c20e4348b46e}
+}]\-Lower the turret \index{\-A\-I\-M\-\_\-\-V\-\_\-\-U\-P@{\-A\-I\-M\-\_\-\-V\-\_\-\-U\-P}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-A\-I\-M\-\_\-\-V\-\_\-\-U\-P@{\-A\-I\-M\-\_\-\-V\-\_\-\-U\-P}}\item[{\em 
+\hypertarget{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4afd4496f86f2efeb52a1c7efec00df13d}{\-A\-I\-M\-\_\-\-V\-\_\-\-U\-P}\label{BaseStation_8h_a4f80de97adcd7d4752b90a9c5e1298b4afd4496f86f2efeb52a1c7efec00df13d}
+}]\-Raise the turret \end{description}
+\end{Desc}
+
+\hypertarget{BaseStation_8h_ae3d57928b7a8012e273632125b6ec41f}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-C\-O\-M\-M\-\_\-mode@{\-C\-O\-M\-M\-\_\-mode}}
+\index{\-C\-O\-M\-M\-\_\-mode@{\-C\-O\-M\-M\-\_\-mode}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-C\-O\-M\-M\-\_\-mode}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-C\-O\-M\-M\-\_\-mode}}}\label{BaseStation_8h_ae3d57928b7a8012e273632125b6ec41f}
+\-Base\-Station-\/to-\/\-Robot communication mode.
+
+\-This enumeration specifies possible modes for communicating with the robot. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-C\-O\-M\-M\-\_\-\-O\-N\-L\-I\-N\-E@{\-C\-O\-M\-M\-\_\-\-O\-N\-L\-I\-N\-E}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-C\-O\-M\-M\-\_\-\-O\-N\-L\-I\-N\-E@{\-C\-O\-M\-M\-\_\-\-O\-N\-L\-I\-N\-E}}\item[{\em 
+\hypertarget{BaseStation_8h_ae3d57928b7a8012e273632125b6ec41fa91aecf400e14aa327861f67587c5ff6d}{\-C\-O\-M\-M\-\_\-\-O\-N\-L\-I\-N\-E}\label{BaseStation_8h_ae3d57928b7a8012e273632125b6ec41fa91aecf400e14aa327861f67587c5ff6d}
+}]\-Attempt to establish connection to robot \index{\-C\-O\-M\-M\-\_\-\-O\-F\-F\-L\-I\-N\-E@{\-C\-O\-M\-M\-\_\-\-O\-F\-F\-L\-I\-N\-E}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-C\-O\-M\-M\-\_\-\-O\-F\-F\-L\-I\-N\-E@{\-C\-O\-M\-M\-\_\-\-O\-F\-F\-L\-I\-N\-E}}\item[{\em 
+\hypertarget{BaseStation_8h_ae3d57928b7a8012e273632125b6ec41fa3416f31a64e0548d6db5a5610d03661d}{\-C\-O\-M\-M\-\_\-\-O\-F\-F\-L\-I\-N\-E}\label{BaseStation_8h_ae3d57928b7a8012e273632125b6ec41fa3416f31a64e0548d6db5a5610d03661d}
+}]\-Do not attempt to establish connection to robot \end{description}
+\end{Desc}
+
+\hypertarget{BaseStation_8h_aada5761fb7103b619de8b89ec4a36a24}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-C\-T\-R\-L\-\_\-mode@{\-C\-T\-R\-L\-\_\-mode}}
+\index{\-C\-T\-R\-L\-\_\-mode@{\-C\-T\-R\-L\-\_\-mode}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-C\-T\-R\-L\-\_\-mode}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-C\-T\-R\-L\-\_\-mode}}}\label{BaseStation_8h_aada5761fb7103b619de8b89ec4a36a24}
+\-Controller mode values.
+
+\-This enumeration specifies possible modes for controlling the robot. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-C\-T\-R\-L\-\_\-\-K\-E\-Y\-B\-O\-A\-R\-D@{\-C\-T\-R\-L\-\_\-\-K\-E\-Y\-B\-O\-A\-R\-D}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-C\-T\-R\-L\-\_\-\-K\-E\-Y\-B\-O\-A\-R\-D@{\-C\-T\-R\-L\-\_\-\-K\-E\-Y\-B\-O\-A\-R\-D}}\item[{\em 
+\hypertarget{BaseStation_8h_aada5761fb7103b619de8b89ec4a36a24a46d4ee95cd1ea6815ace495890416ee2}{\-C\-T\-R\-L\-\_\-\-K\-E\-Y\-B\-O\-A\-R\-D}\label{BaseStation_8h_aada5761fb7103b619de8b89ec4a36a24a46d4ee95cd1ea6815ace495890416ee2}
+}]\-Use keyboard keys to control robot \index{\-C\-T\-R\-L\-\_\-\-G\-A\-M\-E\-P\-A\-D@{\-C\-T\-R\-L\-\_\-\-G\-A\-M\-E\-P\-A\-D}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-C\-T\-R\-L\-\_\-\-G\-A\-M\-E\-P\-A\-D@{\-C\-T\-R\-L\-\_\-\-G\-A\-M\-E\-P\-A\-D}}\item[{\em 
+\hypertarget{BaseStation_8h_aada5761fb7103b619de8b89ec4a36a24a4a8d56f5f82a4e2c1263d941b5f3cb41}{\-C\-T\-R\-L\-\_\-\-G\-A\-M\-E\-P\-A\-D}\label{BaseStation_8h_aada5761fb7103b619de8b89ec4a36a24a4a8d56f5f82a4e2c1263d941b5f3cb41}
+}]\-Use gamepad's joystick and buttons to control robot \end{description}
+\end{Desc}
+
+\hypertarget{BaseStation_8h_acb92333f79172a9ac755737defa351ac}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-F\-I\-R\-E\-\_\-val@{\-F\-I\-R\-E\-\_\-val}}
+\index{\-F\-I\-R\-E\-\_\-val@{\-F\-I\-R\-E\-\_\-val}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-F\-I\-R\-E\-\_\-val}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-F\-I\-R\-E\-\_\-val}}}\label{BaseStation_8h_acb92333f79172a9ac755737defa351ac}
+\-Robot turret firing mode values.
+
+\-This enumeration provides possible values for a packet of type \-P\-K\-T\-\_\-\-F\-I\-R\-E that will direct the robot to either fire or not fire the gun on its turret. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-F\-I\-R\-E\-\_\-\-O\-N@{\-F\-I\-R\-E\-\_\-\-O\-N}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-F\-I\-R\-E\-\_\-\-O\-N@{\-F\-I\-R\-E\-\_\-\-O\-N}}\item[{\em 
+\hypertarget{BaseStation_8h_acb92333f79172a9ac755737defa351acaef2241a054115a16381eb07696bd7cd0}{\-F\-I\-R\-E\-\_\-\-O\-N}\label{BaseStation_8h_acb92333f79172a9ac755737defa351acaef2241a054115a16381eb07696bd7cd0}
+}]\-Fire the gun \index{\-F\-I\-R\-E\-\_\-\-O\-F\-F@{\-F\-I\-R\-E\-\_\-\-O\-F\-F}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-F\-I\-R\-E\-\_\-\-O\-F\-F@{\-F\-I\-R\-E\-\_\-\-O\-F\-F}}\item[{\em 
+\hypertarget{BaseStation_8h_acb92333f79172a9ac755737defa351acad8797ab93333a89a6ba29e1e4fa596b8}{\-F\-I\-R\-E\-\_\-\-O\-F\-F}\label{BaseStation_8h_acb92333f79172a9ac755737defa351acad8797ab93333a89a6ba29e1e4fa596b8}
+}]\-Do not fire the gun \end{description}
+\end{Desc}
+
+\hypertarget{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-M\-O\-V\-\_\-val@{\-M\-O\-V\-\_\-val}}
+\index{\-M\-O\-V\-\_\-val@{\-M\-O\-V\-\_\-val}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-M\-O\-V\-\_\-val}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-M\-O\-V\-\_\-val}}}\label{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7}
+\-Robot movement packet values.
+
+\-This enumeration provides possible values for a packet of type \-P\-K\-T\-\_\-\-M\-O\-V\-E that will direct the robot to move either forwards or backwards or not at all. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-M\-O\-V\-\_\-\-S\-T\-O\-P@{\-M\-O\-V\-\_\-\-S\-T\-O\-P}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-M\-O\-V\-\_\-\-S\-T\-O\-P@{\-M\-O\-V\-\_\-\-S\-T\-O\-P}}\item[{\em 
+\hypertarget{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7aff02bd8bc6ad5a7bf8e209ed4185ddb8}{\-M\-O\-V\-\_\-\-S\-T\-O\-P}\label{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7aff02bd8bc6ad5a7bf8e209ed4185ddb8}
+}]\-Do not move the robot in any direction \index{\-M\-O\-V\-\_\-\-F\-W\-D@{\-M\-O\-V\-\_\-\-F\-W\-D}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-M\-O\-V\-\_\-\-F\-W\-D@{\-M\-O\-V\-\_\-\-F\-W\-D}}\item[{\em 
+\hypertarget{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7ad80161f77336486a720b5fc85286c8fc}{\-M\-O\-V\-\_\-\-F\-W\-D}\label{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7ad80161f77336486a720b5fc85286c8fc}
+}]\-Move the robot forward \index{\-M\-O\-V\-\_\-\-B\-K\-D@{\-M\-O\-V\-\_\-\-B\-K\-D}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-M\-O\-V\-\_\-\-B\-K\-D@{\-M\-O\-V\-\_\-\-B\-K\-D}}\item[{\em 
+\hypertarget{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7a582b1ed54c71c016079543c1475b4320}{\-M\-O\-V\-\_\-\-B\-K\-D}\label{BaseStation_8h_a3f886d0be6fef289daf12592b9082fd7a582b1ed54c71c016079543c1475b4320}
+}]\-Move the robot backward \end{description}
+\end{Desc}
+
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-value@{\-P\-K\-T\-\_\-value}}
+\index{\-P\-K\-T\-\_\-value@{\-P\-K\-T\-\_\-value}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-P\-K\-T\-\_\-value}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-P\-K\-T\-\_\-value}}}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892}
+\-Available packet types.
+
+\-These are the different types of packets available for communication with the robot. \-P\-K\-T\-\_\-\-H\-E\-L\-L\-O, \-P\-K\-T\-\_\-\-G\-D\-B\-Y, \-P\-K\-T\-\_\-\-S\-T\-D\-B\-Y, and \-P\-K\-T\-\_\-\-R\-D\-Y are used to regulate communication and do not need corresponding values. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-P\-K\-T\-\_\-\-H\-E\-L\-L\-O@{\-P\-K\-T\-\_\-\-H\-E\-L\-L\-O}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-H\-E\-L\-L\-O@{\-P\-K\-T\-\_\-\-H\-E\-L\-L\-O}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a263457d3501f9aa58bde640f7d7d8a69}{\-P\-K\-T\-\_\-\-H\-E\-L\-L\-O}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a263457d3501f9aa58bde640f7d7d8a69}
+}]\-Hello packet\-: used to initialize communications \index{\-P\-K\-T\-\_\-\-G\-D\-B\-Y@{\-P\-K\-T\-\_\-\-G\-D\-B\-Y}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-G\-D\-B\-Y@{\-P\-K\-T\-\_\-\-G\-D\-B\-Y}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892abfb7d3a35481d4f98b35e30a49af12cc}{\-P\-K\-T\-\_\-\-G\-D\-B\-Y}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892abfb7d3a35481d4f98b35e30a49af12cc}
+}]\-Goodbye packet\-: used to close connections \index{\-P\-K\-T\-\_\-\-S\-T\-D\-B\-Y@{\-P\-K\-T\-\_\-\-S\-T\-D\-B\-Y}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-S\-T\-D\-B\-Y@{\-P\-K\-T\-\_\-\-S\-T\-D\-B\-Y}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a6e3c7ba124273d0a1c6a98d5e93ae614}{\-P\-K\-T\-\_\-\-S\-T\-D\-B\-Y}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a6e3c7ba124273d0a1c6a98d5e93ae614}
+}]\-Standby packet\-: no robot updates (most common) \index{\-P\-K\-T\-\_\-\-M\-O\-V\-E@{\-P\-K\-T\-\_\-\-M\-O\-V\-E}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-M\-O\-V\-E@{\-P\-K\-T\-\_\-\-M\-O\-V\-E}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892adf88b45b4e905fd8a02472b47c03848f}{\-P\-K\-T\-\_\-\-M\-O\-V\-E}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892adf88b45b4e905fd8a02472b47c03848f}
+}]\-Move packet\-: update moving \index{\-P\-K\-T\-\_\-\-T\-U\-R\-N@{\-P\-K\-T\-\_\-\-T\-U\-R\-N}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-T\-U\-R\-N@{\-P\-K\-T\-\_\-\-T\-U\-R\-N}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a2869d5fa0093b703ccd96f8a3b259a50}{\-P\-K\-T\-\_\-\-T\-U\-R\-N}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a2869d5fa0093b703ccd96f8a3b259a50}
+}]\-Turn packet\-: update turning \index{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-H@{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-H}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-H@{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-H}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a30374da330b529bab506a2370da26d62}{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-H}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a30374da330b529bab506a2370da26d62}
+}]\-Horizontal aim packet\-: update horizontal aim adjustment \index{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-V@{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-V}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-V@{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-V}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a49b952a2804eecf9dcae051a4709cde4}{\-P\-K\-T\-\_\-\-A\-I\-M\-\_\-\-V}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a49b952a2804eecf9dcae051a4709cde4}
+}]\-Vertical aim packet\-: update vertical aim adjustment \index{\-P\-K\-T\-\_\-\-F\-I\-R\-E@{\-P\-K\-T\-\_\-\-F\-I\-R\-E}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-F\-I\-R\-E@{\-P\-K\-T\-\_\-\-F\-I\-R\-E}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a4a12ae64642ef520de22818bf3d800a7}{\-P\-K\-T\-\_\-\-F\-I\-R\-E}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a4a12ae64642ef520de22818bf3d800a7}
+}]\-Fire packet\-: update gun-\/firing status \index{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-L@{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-L}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-L@{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-L}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892aa50c7ac772b9293883d8d8471bd13d80}{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-L}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892aa50c7ac772b9293883d8d8471bd13d80}
+}]\-Strafe packet\-: update left strafe status \index{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-R@{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-R}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-R@{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-R}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892ac3a8d5cd7b2529d6677e74991307c6e8}{\-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-R}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892ac3a8d5cd7b2529d6677e74991307c6e8}
+}]\-Strafe packet\-: update right strafe status \index{\-P\-K\-T\-\_\-\-R\-D\-Y@{\-P\-K\-T\-\_\-\-R\-D\-Y}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-K\-T\-\_\-\-R\-D\-Y@{\-P\-K\-T\-\_\-\-R\-D\-Y}}\item[{\em 
+\hypertarget{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a67f3fc7212220f6d318460f68c68ae59}{\-P\-K\-T\-\_\-\-R\-D\-Y}\label{BaseStation_8h_a6ef17c89f88b05ea4c6ca2d80a2cc892a67f3fc7212220f6d318460f68c68ae59}
+}]\-Ready packet\-: indication that robot is ready for next packet \end{description}
+\end{Desc}
+
+\hypertarget{BaseStation_8h_a99c186c9414945ebcdfdd6f7106417c6}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-R\-I\-N\-T\-\_\-mode@{\-P\-R\-I\-N\-T\-\_\-mode}}
+\index{\-P\-R\-I\-N\-T\-\_\-mode@{\-P\-R\-I\-N\-T\-\_\-mode}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-P\-R\-I\-N\-T\-\_\-mode}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-P\-R\-I\-N\-T\-\_\-mode}}}\label{BaseStation_8h_a99c186c9414945ebcdfdd6f7106417c6}
+\-Error and warning printing mode.
+
+\-This enumeration specifies modes for quiet or verbose modes for reporting minor errors and warnings during runtime. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-P\-R\-N\-T\-\_\-\-Q\-U\-I\-E\-T@{\-P\-R\-N\-T\-\_\-\-Q\-U\-I\-E\-T}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-R\-N\-T\-\_\-\-Q\-U\-I\-E\-T@{\-P\-R\-N\-T\-\_\-\-Q\-U\-I\-E\-T}}\item[{\em 
+\hypertarget{BaseStation_8h_a99c186c9414945ebcdfdd6f7106417c6aa1e73da303176025a025d90c7aae4b85}{\-P\-R\-N\-T\-\_\-\-Q\-U\-I\-E\-T}\label{BaseStation_8h_a99c186c9414945ebcdfdd6f7106417c6aa1e73da303176025a025d90c7aae4b85}
+}]\-Do not print messages about minor communication and input errors. \index{\-P\-R\-N\-T\-\_\-\-V\-E\-R\-B@{\-P\-R\-N\-T\-\_\-\-V\-E\-R\-B}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-P\-R\-N\-T\-\_\-\-V\-E\-R\-B@{\-P\-R\-N\-T\-\_\-\-V\-E\-R\-B}}\item[{\em 
+\hypertarget{BaseStation_8h_a99c186c9414945ebcdfdd6f7106417c6a5e000f2d8c31c3d6b48345a464232d8a}{\-P\-R\-N\-T\-\_\-\-V\-E\-R\-B}\label{BaseStation_8h_a99c186c9414945ebcdfdd6f7106417c6a5e000f2d8c31c3d6b48345a464232d8a}
+}]\-Print messages about minor communication and input errors. \end{description}
+\end{Desc}
+
+\hypertarget{BaseStation_8h_a7638ca6d3b47e4795cd1cd05652e45f6}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-S\-T\-R\-F\-\_\-\-L\-\_\-val@{\-S\-T\-R\-F\-\_\-\-L\-\_\-val}}
+\index{\-S\-T\-R\-F\-\_\-\-L\-\_\-val@{\-S\-T\-R\-F\-\_\-\-L\-\_\-val}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-S\-T\-R\-F\-\_\-\-L\-\_\-val}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-S\-T\-R\-F\-\_\-\-L\-\_\-val}}}\label{BaseStation_8h_a7638ca6d3b47e4795cd1cd05652e45f6}
+\-Robot left-\/strafing packet values.
+
+\-This enumeration provides possible values for a packet of type \-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-L that will direct the robot to strafe to the left or not. \hypertarget{BaseStation_8h_a701a16930cb585916abb7a878916d6e8}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-S\-T\-R\-F\-\_\-\-R\-\_\-val@{\-S\-T\-R\-F\-\_\-\-R\-\_\-val}}
+\index{\-S\-T\-R\-F\-\_\-\-R\-\_\-val@{\-S\-T\-R\-F\-\_\-\-R\-\_\-val}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-S\-T\-R\-F\-\_\-\-R\-\_\-val}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-S\-T\-R\-F\-\_\-\-R\-\_\-val}}}\label{BaseStation_8h_a701a16930cb585916abb7a878916d6e8}
+\-Robot right-\/strafing packet values.
+
+\-This enumeration provides possible values for a packet of type \-P\-K\-T\-\_\-\-S\-T\-R\-F\-\_\-\-L that will direct the robot to strafe to the right or not. \hypertarget{BaseStation_8h_a5387029f42e62821b2350840a2e73264}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-T\-R\-N\-\_\-val@{\-T\-R\-N\-\_\-val}}
+\index{\-T\-R\-N\-\_\-val@{\-T\-R\-N\-\_\-val}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-T\-R\-N\-\_\-val}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-T\-R\-N\-\_\-val}}}\label{BaseStation_8h_a5387029f42e62821b2350840a2e73264}
+\-Robot turning packet values.
+
+\-This enumeration provides possible values for a packet of type \-P\-K\-T\-\_\-\-T\-U\-R\-N that will direct the robot to turn to the left or the right or not at all. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-T\-R\-N\-\_\-\-N\-O\-N\-E@{\-T\-R\-N\-\_\-\-N\-O\-N\-E}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-T\-R\-N\-\_\-\-N\-O\-N\-E@{\-T\-R\-N\-\_\-\-N\-O\-N\-E}}\item[{\em 
+\hypertarget{BaseStation_8h_a5387029f42e62821b2350840a2e73264a794aa4e43350bfea2accc36a4ad9aa7e}{\-T\-R\-N\-\_\-\-N\-O\-N\-E}\label{BaseStation_8h_a5387029f42e62821b2350840a2e73264a794aa4e43350bfea2accc36a4ad9aa7e}
+}]\-Do not turn the robot in any direction \index{\-T\-R\-N\-\_\-\-L\-E\-F\-T@{\-T\-R\-N\-\_\-\-L\-E\-F\-T}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-T\-R\-N\-\_\-\-L\-E\-F\-T@{\-T\-R\-N\-\_\-\-L\-E\-F\-T}}\item[{\em 
+\hypertarget{BaseStation_8h_a5387029f42e62821b2350840a2e73264aae0a8c256a68672ee7dac548871e1ea5}{\-T\-R\-N\-\_\-\-L\-E\-F\-T}\label{BaseStation_8h_a5387029f42e62821b2350840a2e73264aae0a8c256a68672ee7dac548871e1ea5}
+}]\-Turn the robot to the left \index{\-T\-R\-N\-\_\-\-R\-I\-G\-H\-T@{\-T\-R\-N\-\_\-\-R\-I\-G\-H\-T}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-T\-R\-N\-\_\-\-R\-I\-G\-H\-T@{\-T\-R\-N\-\_\-\-R\-I\-G\-H\-T}}\item[{\em 
+\hypertarget{BaseStation_8h_a5387029f42e62821b2350840a2e73264afa2ba991b965e43175331db37da230c9}{\-T\-R\-N\-\_\-\-R\-I\-G\-H\-T}\label{BaseStation_8h_a5387029f42e62821b2350840a2e73264afa2ba991b965e43175331db37da230c9}
+}]\-Turn the robot to the right \end{description}
+\end{Desc}
+
+\hypertarget{BaseStation_8h_a718d6acc4f327cf0156b9b4b177f0b61}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-U\-I\-\_\-mode@{\-U\-I\-\_\-mode}}
+\index{\-U\-I\-\_\-mode@{\-U\-I\-\_\-mode}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{\-U\-I\-\_\-mode}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-U\-I\-\_\-mode}}}\label{BaseStation_8h_a718d6acc4f327cf0156b9b4b177f0b61}
+\-User interface mode.
+
+\-This enumeration specifies modes for command-\/line interface or graphical interface. \begin{Desc}
+\item[\-Enumerator\-: ]\par
+\begin{description}
+\index{\-U\-I\-\_\-\-C\-L\-I\-N\-E@{\-U\-I\-\_\-\-C\-L\-I\-N\-E}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-U\-I\-\_\-\-C\-L\-I\-N\-E@{\-U\-I\-\_\-\-C\-L\-I\-N\-E}}\item[{\em 
+\hypertarget{BaseStation_8h_a718d6acc4f327cf0156b9b4b177f0b61a4ebabf27387ede673076dc519d12de1d}{\-U\-I\-\_\-\-C\-L\-I\-N\-E}\label{BaseStation_8h_a718d6acc4f327cf0156b9b4b177f0b61a4ebabf27387ede673076dc519d12de1d}
+}]\-Do not initialize \-G\-U\-I, stay in command line. \index{\-U\-I\-\_\-\-G\-R\-A\-P\-H@{\-U\-I\-\_\-\-G\-R\-A\-P\-H}!\-Base\-Station.\-h@{\-Base\-Station.\-h}}\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!\-U\-I\-\_\-\-G\-R\-A\-P\-H@{\-U\-I\-\_\-\-G\-R\-A\-P\-H}}\item[{\em 
+\hypertarget{BaseStation_8h_a718d6acc4f327cf0156b9b4b177f0b61a0687dca5d1bbd1fee256db3e98ee2bd2}{\-U\-I\-\_\-\-G\-R\-A\-P\-H}\label{BaseStation_8h_a718d6acc4f327cf0156b9b4b177f0b61a0687dca5d1bbd1fee256db3e98ee2bd2}
+}]\-Initialize \-G\-U\-I. \end{description}
+\end{Desc}
+
+
+
+\subsection{\-Function \-Documentation}
+\hypertarget{BaseStation_8h_af07e829165fe23b1317803d335ac92e5}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!printmsg@{printmsg}}
+\index{printmsg@{printmsg}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{printmsg}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf printmsg} (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{BaseStation_8h_af07e829165fe23b1317803d335ac92e5}
+\-Message printing/logging function.
+
+\-This function will print and/or write to a log file error and warning messages, depending on what the print mode variable is set to. \hypertarget{BaseStation_8h_a1703407cc04b0e7ef522cbcd6be3d40c}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!quit\-\_\-base@{quit\-\_\-base}}
+\index{quit\-\_\-base@{quit\-\_\-base}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{quit\-\_\-base}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf quit\-\_\-base} (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{BaseStation_8h_a1703407cc04b0e7ef522cbcd6be3d40c}
+\-Quit \-Base\-Station function.
+
+\-This function properly closes all subsystems and communication channels before terminating the \-Base\-Station program. 
+
+\subsection{\-Variable \-Documentation}
+\hypertarget{BaseStation_8h_aebcd350bac01c84a8644b36eac569e4a}{\index{\-Base\-Station.\-h@{\-Base\-Station.\-h}!termbuf@{termbuf}}
+\index{termbuf@{termbuf}!BaseStation.h@{\-Base\-Station.\-h}}
+\subsubsection[{termbuf}]{\setlength{\rightskip}{0pt plus 5cm}char {\bf termbuf}\mbox{[}\-B\-U\-F\-S\-I\-Z\mbox{]}}}\label{BaseStation_8h_aebcd350bac01c84a8644b36eac569e4a}
+\-Message printing buffer 
