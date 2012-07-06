@@ -1,7 +1,8 @@
 #include "BaseStation.h"
 #include "Serial.h"
 
-#define MAXERRORS	10
+#define MAXERRORS	10      /**< Maximum number of errors before serial
+                              functions terminate */
 
 FILE *dev;
 byte inbuf [BUFSIZ];
