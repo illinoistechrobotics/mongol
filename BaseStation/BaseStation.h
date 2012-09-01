@@ -1,68 +1,69 @@
 /**
  * \file BaseStation.h
  *
- * \brief Main header file for BaseStation.
+ * Main header file for BaseStation.
  *
- * \details This header file contains the communication packet structure,
+ * This header file contains the communication packet structure,
  * enumerations for packet components, and enumerations for different modes of
  * operation for the program.
  */
 
 #include <stdio.h>
 
-typedef char byte;
-
 /**
- * \brief Packet structure definition.
+ * Packet structure definition.
  *
- * \details Packet bounds should always be set to 0xFF. Packet type should be
+ * Packet bounds should always be set to 0xFF. Packet type should be
  * set to a PKT_Type. Values must be specified for every type except HELLO,
  * GDBY, STDBY, and RDY.
  */
-typedef struct packet_struct
+typedef
+struct Msg_Struct
 {
-    byte front_bnd;         /**< Fill with PKT_BND */
-    PKT_type type;          /**< Type of packet */
-    int value;              /**< Relevant value for type of packet */
-    byte end_bnd;           /**< Fill with PKT_BND */
-    byte null_term;         /**< Null terminator to ensure proper operation with string functions */
-} packet;
+    byte     c_front_bound; /**< Fill with PKT_BND */
+    Msg_Type type;          /**< Type of packet */
+    int      n_value;       /**< Relevant value for type of packet */
+    byte     c_end_bound;   /**< Fill with PKT_BND */
+    byte     c_null_term;   /**< Null terminator to ensure proper operation
+                                 with string functions */
+}
+Msg;
 
 /**
- * \brief Available packet types.
+ * Available packet types.
  *
- * \details These are the different types of packets available for
+ * These are the different types of packets available for
  * communication with the robot. PKT_HELLO, PKT_GDBY, PKT_STDBY, and PKT_RDY
  * are used to regulate communication and do not need corresponding values.
  */
-enum PKT_type
+enum Msg_Type
 {
-    PKT_HELLO = 1,          /**< Hello packet: used to initialize
-                              communications */
-    PKT_GDBY,               /**< Goodbye packet: used to close connections */
-    PKT_STDBY,              /**< Standby packet: no robot updates (most common) */
-    PKT_MOVE,               /**< Move packet: update moving */
-    PKT_TURN,               /**< Turn packet: update turning */
-    PKT_AIM_H,              /**< Horizontal aim packet: update horizontal aim
-                              adjustment */
-    PKT_AIM_V,              /**< Vertical aim packet: update vertical aim adjustment */
-    PKT_FIRE,               /**< Fire packet: update gun-firing status */
-    PKT_STRF_L,             /**< Strafe packet: update left strafe status */
-    PKT_STRF_R,             /**< Strafe packet: update right strafe status */
-    PKT_RDY                 /**< Ready packet: indication that robot is ready
-                              for next packet */
+    Msg_Type_Hello = 1,    /**< Hello packet: used to initialize
+                                communications */
+    Msg_Type_Goodbye,      /**< Goodbye packet: used to close connections */
+    Msg_Type_Standby,      /**< Standby packet: no robot updates (most common) */
+    Msg_Type_Move,         /**< Move packet: update moving */
+    Msg_Type_Turn,         /**< Turn packet: update turning */
+    Msg_Type_Aim_Horz,     /**< Horizontal aim packet: update horizontal aim
+                                adjustment */
+    Msg_Type_Aim_Vert,     /**< Vertical aim packet: update vertical aim adjustment */
+    Msg_Type_Fire,         /**< Fire packet: update gun-firing status */
+    Msg_Type_Strafe_Left,  /**< Strafe packet: update left strafe status */
+    Msg_Type_Strafe_Right, /**< Strafe packet: update right strafe status */
+    Msg_Type_Ready         /**< Ready packet: indication that robot is ready
+                                for next packet */
 };
 
 /**
- * \brief Controller mode values.
+ * Controller mode values.
  *
- * \details This enumeration specifies possible modes for controlling the
+ * This enumeration specifies possible modes for controlling the
  * robot.
  */
-enum CTRL_mode
+enum Ctrl_Mode
 {
-    CTRL_KEYBOARD,          /**< Use keyboard keys to control robot */
-    CTRL_GAMEPAD            /**< Use gamepad's joystick and buttons to control robot */
+    Ctrl_Mode_Keyboard, /**< Use keyboard keys to control robot */
+    Ctrl_Mode_Gamepad   /**< Use gamepad's joystick and buttons to control robot */
 };
 
 /**
@@ -70,10 +71,10 @@ enum CTRL_mode
  *
  * This enumeration specifies possible modes for communicating with the robot.
  */
-enum COMM_mode
+enum Comm_Mode
 {
-    COMM_ONLINE,            /**< Attempt to establish connection to robot */
-    COMM_OFFLINE            /**< Do not attempt to establish connection to robot */
+    Comm_Mode_Online, /**< Attempt to establish connection to robot */
+    Comm_Mode_Offline /**< Do not attempt to establish connection to robot */
 };
 
 /**
@@ -82,10 +83,10 @@ enum COMM_mode
  * This enumeration specifies modes for command-line interface or graphical
  * interface.
  */
-enum UI_mode
+enum UI_Mode
 {
-    UI_CLINE,               /**< Do not initialize GUI, stay in command line. */
-    UI_GRAPH                /**< Initialize GUI. */
+    UI_Mode_Cmd_Line, /**< Do not initialize GUI, stay in command line. */
+    UI_Mode_Graphical /**< Initialize GUI. */
 };
 
 /**
@@ -94,10 +95,12 @@ enum UI_mode
  * This enumeration specifies modes for quiet or verbose modes for reporting
  * minor errors and warnings during runtime.
  */
-enum PRINT_mode
+enum Warn_Mode
 {
-    PRNT_QUIET,             /**< Do not print messages about minor communication and input errors. */
-    PRNT_VERB               /**< Print messages about minor communication and input errors. */
+    Warn_Mode_Quiet, /**< Do not print messages about minor communication and
+                          input errors. */
+    Warn_Mode_All    /**< Print messages about minor communication and input
+                          errors. */
 };
 
 /**
@@ -107,11 +110,11 @@ enum PRINT_mode
  * that will direct the robot to move either forwards or backwards or not at
  * all.
  */
-enum MOV_val
+enum Move_Val
 {
-    MOV_STOP = 1,           /**< Do not move the robot in any direction */
-    MOV_FWD,                /**< Move the robot forward */
-    MOV_BKD                 /**< Move the robot backward */
+    Move_Val_Stop = 1, /**< Do not move the robot in any direction */
+    Move_Val_Forward,  /**< Move the robot forward */
+    Move_Val_Backward  /**< Move the robot backward */
 };
 
 /**
@@ -120,11 +123,11 @@ enum MOV_val
  * This enumeration provides possible values for a packet of type PKT_TURN
  * that will direct the robot to turn to the left or the right or not at all.
  */
-enum TRN_val
+enum Turn_Val
 {
-    TRN_NONE = 1,           /**< Do not turn the robot in any direction */
-    TRN_LEFT,               /**< Turn the robot to the left */
-    TRN_RIGHT               /**< Turn the robot to the right */
+    Turn_Val_None = 1, /**< Do not turn the robot in any direction */
+    Turn_Val_Left,     /**< Turn the robot to the left */
+    Turn_Val_Right     /**< Turn the robot to the right */
 };
 
 /**
@@ -134,11 +137,11 @@ enum TRN_val
  * that will direct the robot to turn its turrent to either the left or right
  * or not at all.
  */
-enum AIM_H_val
+enum Aim_Horz_Val
 {
-    AIM_H_STRGHT = 1,       /**< Do not turn the turret in any direction */
-    AIM_H_LEFT,             /**< Turn the turret to the left */
-    AIM_H_RIGHT             /**< Turn the turret to the right */
+    Aim_Horz_Val_Straight = 1, /**< Do not turn the turret in any direction */
+    Aim_Horz_Val_Left,         /**< Turn the turret to the left */
+    Aim_Horz_Val_Right         /**< Turn the turret to the right */
 };
 
 /**
@@ -147,11 +150,11 @@ enum AIM_H_val
  * This enumeration provides possible values for a packet of type PKT_AIM_V
  * that will direct the robot to raise, lower, or keep still its turret.
  */
-enum AIM_V_val
+enum Aim_Vert_Val
 {
-    AIM_V_STRGHT = 1,       /**< Do not raise or lower the turret */
-    AIM_V_DWN,              /**< Lower the turret */
-    AIM_V_UP                /**< Raise the turret */
+    Aim_Vert_Val_Straight = 1, /**< Do not raise or lower the turret */
+    Aim_Vert_Val_Down,         /**< Lower the turret */
+    Aim_Vert_Val_Up            /**< Raise the turret */
 };
 
 /**
@@ -161,10 +164,10 @@ enum AIM_V_val
  * that will direct the robot to either fire or not fire the gun on its
  * turret.
  */
-enum FIRE_val
+enum Fire_Val
 {
-    FIRE_ON = 1,            /**< Fire the gun */
-    FIRE_OFF                /**< Do not fire the gun */
+    Fire_Val_On = 1, /**< Fire the gun */
+    Fire_Val_Off     /**< Do not fire the gun */
 };
 
 /**
@@ -173,10 +176,10 @@ enum FIRE_val
  * This enumeration provides possible values for a packet of type PKT_STRF_L
  * that will direct the robot to strafe to the left or not.
  */
-enum STRF_L_val
+enum Strafe_Left_Val
 {
-    STRF_L_OFF = 1,
-    STRF_L_ON
+    Strafe_Left_Val_Off = 1,
+    Strafe_Left_Val_On
 };
 
 /**
@@ -185,10 +188,10 @@ enum STRF_L_val
  * This enumeration provides possible values for a packet of type PKT_STRF_L
  * that will direct the robot to strafe to the right or not.
  */
-enum STRF_R_val
+enum Strafe_Right_Val
 {
-    STRF_R_OFF = 1,
-    STRF_R_ON
+    Strafe_Right_Val_Off = 1,
+    Strafe_Right_Val_On
 };
 
 /**
@@ -196,19 +199,23 @@ enum STRF_R_val
  *
  * \todo Make private so that only printmsg() can access.
  */
-char termbuf[ BUFSIZ ];
+char
+terminal_buf [BUFSIZ];
 
 /**
- * \brief Message printing/logging function.
+ * Message printing/logging function.
  */
-void printmsg( void );
+void
+print_to_terminal (void);
 
 /**
- * \brief Packet-type to string conversion function.
+ * Packet-type to string conversion function.
  */
-void type_to_str( char* str, PKT_type type );
+void
+type_to_str (char* str, PKT_type type);
 
 /**
- * \brief Quit BaseStation function.
+ * Quit BaseStation function.
  */
-void quit_base( void );
+void
+quit_basestation (void);
