@@ -17,7 +17,7 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#define	PKT_BND	0xFF        /**< Value to fill the front_bnd and end_bnd fields
+#define	MSG_BND	0xFF        /**< Value to fill the front_bnd and end_bnd fields
                               of packet with */
 #define VAL_NUL 0x55        /**< Value filler for PKT_HELLO, PKT_STDBY,
                               PKT_GDBY, and PKT_RDY packets */
@@ -25,19 +25,19 @@
 /**
  * \brief Serial communication intialization function.
  */
-int init_serial( char* port );
+int serial_init (char* comm_device);
 
 /**
  * \brief Read-from-serial function.
  */
-packet* read_serial( void );
+int serial_read (Msg* in_msg);
 
 /**
  * \brief Write-to-serial function.
  */
-int write_serial( packet* msg );
+int serial_write (Msg* out_msg);
 
 /**
  * \brief Serial communication termination function.
  */
-void close_serial( void );
+void serial_close (void);

@@ -1,4 +1,4 @@
-#include "SDL/SDL.h"
+#include <SDL/SDL.h>
 
 // Joystick mode thresholds
 #define JOY_THRESH_UP       -16384
@@ -8,35 +8,43 @@
 #define TRIG_THRESH         0
 
 // XBOX gamepad button index
-enum{
+typedef
+enum XBOX_Button_Enum{
     XBTN_A,
     XBTN_B,
     XBTN_X,
     XBTN_Y,
     XBTN_LBUMP,
     XBTN_RBUMP
-};
+}
+XBOX_Button;
 
 // XBOX joystick/button axis index
-enum{
+typedef
+enum XBOX_Joystick_Enum{
     XLSTICK_X,
     XLSTICK_Y,
     XLTRIG,
     XRSTICK_X,
     XRSTICK_Y,
     XRTRIG
-};
+}
+XBOX_Joystick;
 
 // Gamepad index variable
 int pad_index;
 
 // Gamepad SDL struct pointer
-SDL_Joystick * pad;
+SDL_Joystick* pad;
 
-int initCtrl (void);
+int
+ctrl_init (void);
 
-void next_event (packet * next_pkt);
+void
+ctrl_next_event (Msg* next_msg);
 
-void printEventInfo (SDL_Event * event, int flags);
+void
+ctrl_print_info (SDL_Event * event, int flags);
 
-void close_ctrl (void);
+void
+ctrl_close (void);

@@ -11,166 +11,169 @@
 #include "BaseStation.h"
 #include "Controller.h"
 #include "Serial.h"
-#include "GUI.h"
 
-char* comm_dev;             /**< Communications port device name. */
-CTRL_mode pres_CTRL_mode;   /**< Present control mode of program.
-                              \see CTRL_mode */
-COMM_mode pres_COMM_mode;   /**< Present communication mode of program.
-                              \see COMM_mode */
-UI_mode pres_UI_mode;       /**< Present user interface mode of program.
-                              \see UI_mode */
-PRINT_mode pres_PRINT_mode; /**< Present error/warning output mode of program.
-                              \see PRINT_mode */
+char* ms_comm_device; /**< Communications port device name. */
+
+Ctrl_Mode  m_ctrl_mode;  /**< Present control mode of program. */
+Comm_Mode  m_comm_mode;  /**< Present communication mode of program. */
+UI_Mode    m_ui_mode;    /**< Present user interface mode of program. */
+Print_Mode m_print_mode; /**< Present error/warning output mode of program. */
 
 /**
- * \brief Wait function.
+ * Wait function.
  *
- * \details This function prints a prompt to the terminal and waits for input
+ * This function prints a prompt to the terminal and waits for input
  * from the user. Used mainly for debugging.
  */
-void wait_for_user()
+void
+wait_for_user ()
 {
-	sprintf( termbuf, "Press enter to continue..." );
-    print_msg();
-	fgetc( stdin );
+    print_log ("Press enter to continue...", Log_Level_High);
+    fgetc (stdin);
 
     return;
 }
 
 /**
- * \details This global function is for the use of subsystems to output error
+ * This global function is for the use of subsystems to output error
  * and warning messages to the terminal and/or log file. Whether or not it
  * ignores messages of minor severity is determined by the value of
  * pres_PRNT_Mode, which is set by command line argument in ::parse_args()
  *
  * \todo Add routine to redirect output for GUI mode.
  */
-void print_msg()
+void
+print_log (char* s_log, Log_Level level)
 {
-    if( uiMode == CMD_LINE )
+    if (m_ui_mode == UI_Mode_Terminal)
     {
-        puts( termbuf );
+        if (level >= m_print_mode)
+        {
+            puts (s_log);
+        }
     }
 
     return;
 }
 
 /**
- * \details This function accepts a PKT_type variable and a pointer to a buffer
- * to store a string representation of the packet type. Useful for debugging.
- *
  * \param str Pointer to buffer to store string representation of type.
  * \param type The PKT_type to be converted.
+ *
+ * This function accepts a PKT_type variable and a pointer to a buffer
+ * to store a string representation of the packet type. Useful for debugging.
  */
-void type_to_str( char* str, PKT_type type )
+void
+type_to_str (char* pc_str, Msg_Type type)
 {
-    switch( type )
+    switch (type)
     {
-        case PKT_HELLO : sprintf( str, "HELLO" );  break;
-        case PKT_GDBY  : sprintf( str, "GDBY" );   break;
-        case PKT_STDBY : sprintf( str, "STDBY");   break;
-        case PKT_MOVE  : sprintf( str, "MOVE" );   break;
-        case PKT_TURN  : sprintf( str, "TURN" );   break;
-        case PKT_AIM_H : sprintf( str, "AIM_H" );  break;
-        case PKT_AIM_V : sprintf( str, "AIM_V" );  break;
-        case PKT_FIRE  : sprintf( str, "FIRE" );   break;
-        case PKT_STRF_L: sprintf( str, "STRF_L" ); break;
-        case PKT_STRF_R: sprintf( str, "STRF_R" ); break;
-        case PKT_RDY   : sprintf( str, "RDY" );    break;
+        case Msg_Type_Hello        : sprintf (pc_str, "HELLO" );  break;
+        case Msg_Type_Goodbye      : sprintf (pc_str, "GDBY" );   break;
+        case Msg_Type_Standby      : sprintf (pc_str, "STDBY");   break;
+        case Msg_Type_Move         : sprintf (pc_str, "MOVE" );   break;
+        case Msg_Type_Turn         : sprintf (pc_str, "TURN" );   break;
+        case Msg_Type_Aim_Horz     : sprintf (pc_str, "AIM_H" );  break;
+        case Msg_Type_Aim_Vert     : sprintf (pc_str, "AIM_V" );  break;
+        case Msg_Type_Fire         : sprintf (pc_str, "FIRE" );   break;
+        case Msg_Type_Strafe_Left  : sprintf (pc_str, "STRF_L" ); break;
+        case Msg_Type_Strafe_Right : sprintf (pc_str, "STRF_R" ); break;
+        case Msg_Type_Ready        : sprintf (pc_str, "RDY" );    break;
     }
 
     return;
 }
 
 /**
- * \details This function properly closes all subsystems and communication
+ * This function properly closes all subsystems and communication
  * channels before terminating the BaseStation program.
  */
-void quit_base()
+void
+quit_basestation ()
 {
-    sprintf( termbuf, "Exiting...\n" );
-    printmsg();
+    print_log ("Exiting...", Log_Level_High);
 
-    close_ctrl();
+    close_ctrl ();
 
-    if( commMode == ONLINE )
-        close_serial();
+    if (m_comm_mode == Comm_Mode_Offline)
+    {
+        close_serial ();
+    }
 
-	exit( 0 );
+	exit (0);
 }
 
 /**
- * \brief Command-line argument parser.
+ * Command-line argument parser.
+ * \param argc Number of arguments to parse.
+ * \param argv Array of pointers to individual arguments.
  *
  * \details This function takes the arguments given to the program via the
  * command line, validates them, and sets the values of pres_CTRL_mode,
  * pres_COMM_mode, pres_UI_mode, and pres_PRINT_mode appropriately. Any
  * variables that aren't modified by arguments are set to initial values for
  * normal operation of the robot.
- *
- * \param argc Number of arguments to parse.
- * \param argv Array of pointers to individual arguments.
  */
-void parse_args ( int argc, char* argv[] ){
-
-    int a;
-    for( a = 1; a < argc; a ++ )
+void
+parse_args (int n_argc, char* s_argv[])
+{
+    int i;
+    for (i = 1; i < n_argc; i++)
     {
         // Get character after dash
-        switch( argv[ a ][ 1 ] )
+        switch (s_argv [i][1])
         {
         // Port specifier flag (-d): defaults to /dev/ttyUSB0 if not used (for Linux)
         case 'd':
-            dev = argv[++a];
-            printf("Port specified: %s\n", dev);
+            ms_comm_device = s_argv [++i];
+            printf ("Device specified: %s\n", ms_comm_device);
             break;
 
-        // Joystick mode flag (-j): If not specified, defaults to keyboard control
+        // Gamepad mode flag (-j): If not specified, defaults to keyboard control
         case 'j':
-            ctrlmode = GAMEPAD;
-            printf("Joystick mode activated.\n");
+            m_ctrl_mode = Ctrl_Mode_Gamepad;
+            printf ("Gamepad mode activated.\n");
             break;
 
         // Calibrate flag (-c): Do not attempt to connect; used for testing input devices
         case 'c':
-            commMode = OFFLINE;
-            printMode = VERBOSE;
-            printf("Controller calibration activated.\n");
+            m_comm_mode = Comm_Mode_Offline;
+            m_print_mode = Print_Mode_All;
+            printf ("Controller calibration activated.\n");
             break;
 
         // GUI mode flag (-g)
         case 'g':
-            uiMode = GRAPH_UI;
-            printf("Graphical mode activated.\n");
+            m_ui_mode = UI_Mode_Graphical;
+            printf ("Graphical mode activated.\n");
             break;
      
         // Verbose mode flag (-v): prints all non-critical error messages
         case 'v':  
-            printMode = VERBOSE;    
-            printf("Verbose mode activated.\n");    
+            m_print_mode = Print_Mode_All;
+            printf ("Verbose mode activated.\n");    
             break;
 
         // Print help flag (-h)
         case 'h':
-            printf("\nRobotic Control BaseStation Program\n");
-            printf("Written by Allen Baker for Illinois Tech Robotics\n\n");
-            printf("Usage:\n");
-            printf("BaseStation [-d <port-name>] [-v] [-h]\n\n");
-            printf("***** Arguements *****\n");
-            printf(" -d <port-name>  : Specify port to use (default is /dev/ttyUSB0)\n");
-            printf(" -j              : Activate joystick mode (default is keyboard mode)\n");
-            printf(" -v              : Set verbose mode\n");
-            printf(" -h              : Print help information\n\n");
-            exit(0);
+            printf ("\nRobotic Control BaseStation Program\n");
+            printf ("Written by Allen Baker for Illinois Tech Robotics\n\n");
+            printf ("Usage:\n");
+            printf ("BaseStation [-d <port-name>] [-v] [-h]\n\n");
+            printf ("***** Arguements *****\n");
+            printf (" -d <port-name>  : Specify port to use (default is /dev/ttyUSB0)\n");
+            printf (" -j              : Activate joystick mode (default is keyboard mode)\n");
+            printf (" -v              : Set verbose mode\n");
+            printf (" -h              : Print help information\n\n");
+            exit (0);
         }
     }
 }
 
 /**
- * \brief The main function of BaseStation for Mongol.
+ * The main function of BaseStation for Mongol.
  *
- * \details Entry point of program. Upon starting with normal mode values set,
+ * Entry point of program. Upon starting with normal mode values set,
  * this function parses any command line arguments, initializes the controller
  * interface (\sa Controller.h), intitializes the robot communication interface
  * (\sa Serial.h), and then enters the main control loop of the program. There,
@@ -179,72 +182,67 @@ void parse_args ( int argc, char* argv[] ){
  * confirmation from the robot in the form of a PKT_RDY packet type before
  * looping again.
  */
-
-int main (int argc, char* argv[]){
-
+int
+main (int argc, char* argv[])
+{
     // Set default values
-    ctrlmode = GAMEPAD;
-    commMode = ONLINE;
-    uiMode = CMD_LINE;
-    printMode = QUIET; 
+    m_ctrl_mode = Ctrl_Mode_Keyboard;
+    m_comm_mode = Comm_Mode_Offline;
+    m_ui_mode   = UI_Mode_Terminal;
 
     // Parse command line arguements
-    parseArgs(argc, argv);
-
-    if(uiMode == GRAPH_UI){
-        initGUI(&argc, &argv);
-    } 
+    parse_args (argc, argv);
 
     // Initialize SDL (VIDEO flag also initializes event handling)
-    sprintf(termbuf,"Initializing Controller... ");
-    printmsg();
-    if(!(initCtrl())){
-
-        sprintf(termbuf,"\nERROR: Controller Failed to initialize.\n");
-        quit_base();
+    print_log ("Initializing controller... ", Log_Level_Med);
+    if (!(initCtrl()))
+    {
+        print_log ("Controller failed to intialize.\n", Log_Level_High);
+        quit_basestation ();
     }
-    sprintf(termbuf,"Controller Initialized.\n");
-    printmsg();
+    print_log ("Controller Initialized.\n", Log_Level_Med);
 
     // Initialize serial port (includes looking for HELLO packet
     // If not port name specified, default to /dev/ttyUSB0 (for Linux)
-    if(commMode == ONLINE){
-        sprintf(termbuf,"Connecting to robot...\n");
-        printmsg();
-        if((dev ? init_serial(dev) : init_serial("/dev/ttyUSB0")) < 0){
-            
-            commMode = OFFLINE;
-            quit_base();
+    if (m_comm_mode == Comm_Mode_Online)
+    {
+        print_log ("Connecting to robot... ", Log_Level_Med);
+        if ((ms_comm_device ? init_serial (ms_comm_device) : init_serial ("/dev/ttyUSB0")) < 0)
+        {
+            print_log ("Failed to connect\n", Log_Level_High);
+            m_comm_mode = Comm_Mode_Offline;
+            quit_basestation ();
         }
-        sprintf(termbuf,"Connected!\n\n");
-        printmsg();
+        print_log ("Robot connected.\n", Log_Level_Med);
     }
 
-    packet out_pkt;
-    packet * in_pkt;
+    Msg out_msg;
+    Msg in_msg;
     char intype_buf [128];
     char outtype_buf [128];
     int print_nxt_received = 0;
 
-    // Main loop
-    for(;;){
+    // Main program loop
+    for(;;)
+    {
+        next_event (&out_msg);
 
-        next_event(&out_pkt);
+        if(m_comm_mode == Comm_Mode_Online)
+        {
+            do
+            {
+                serial_write (&out_msg);
+                usleep (10);
+            }
+            while (serial_read (&in_msg) ||
+                   (in_msg.type != Msg_Type_Ready));
 
-        if(commMode == ONLINE){
-
-            do{
-                write_serial(&out_pkt);
-                usleep(10);
-            } while (((in_pkt = read_serial()) == NULL) ||
-                     (in_pkt->type != PKT_RDY));
-
-            if(out_pkt.type != PKT_STDBY){
-
-                type2str(intype_buf, out_pkt.type);
-                printf("Sent: %s\n", intype_buf);
-                type2str(outtype_buf, in_pkt->type);
-                printf("Received: %s\n", outtype_buf);
+            if (out_msg.type != Msg_Type_Standby)
+            {
+                type_to_str (intype_buf, out_msg.type);
+                printf ("Sent: %s\n", intype_buf);
+                type_to_str (outtype_buf, in_msg.type);
+                printf ("Received: %s\n", outtype_buf);
             }
         }
     }
